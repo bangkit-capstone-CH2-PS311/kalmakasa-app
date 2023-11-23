@@ -23,6 +23,7 @@ object Destinations {
     const val REGISTER_ROUTE = "register"
     const val HOME_ROUTE = "home"
     const val SWITCHER_ROUTE = "switchers"
+
     const val APP_GRAPH = "app-graph"
     const val AUTH_GRAPH = "auth-graph"
 }
