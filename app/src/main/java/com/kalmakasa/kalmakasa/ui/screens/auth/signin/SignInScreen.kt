@@ -16,7 +16,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,7 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.data.ResultState
 import com.kalmakasa.kalmakasa.ui.component.EmailTextField
@@ -43,12 +41,13 @@ import com.kalmakasa.kalmakasa.ui.theme.KalmakasaTheme
 
 @Composable
 fun SignInScreen(
+    loginState: ResultState<String>,
+    onSubmitted: (String, String) -> Unit,
     onSignInSuccess: () -> Unit,
     onForgotPasswordClicked: () -> Unit,
     onGotoRegisterButtonClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val viewModel: SignInViewModel = hiltViewModel()
 
     val focusRequester = remember { FocusRequester() }
     val emailState by rememberSaveable(stateSaver = EmailStateSaver) {
@@ -57,23 +56,22 @@ fun SignInScreen(
     val passwordState by rememberSaveable(stateSaver = PasswordStateSaver) {
         mutableStateOf(PasswordState())
     }
-    val isValidated = emailState.isValid && passwordState.isValid
 
     // validate to form
+    val isValidated = emailState.isValid && passwordState.isValid
     val onSubmit = {
         if (isValidated) {
-            viewModel.login(emailState.text, passwordState.text)
+            onSubmitted(emailState.text, passwordState.text)
         }
     }
 
     val context = LocalContext.current
-    val loginState by viewModel.loginState.collectAsState()
     LaunchedEffect(loginState) {
         when (loginState) {
             is ResultState.Error -> {
                 Toast.makeText(
                     context,
-                    (loginState as ResultState.Error).error,
+                    loginState.error,
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -81,7 +79,7 @@ fun SignInScreen(
             is ResultState.Success -> {
                 Toast.makeText(
                     context,
-                    (loginState as ResultState.Success).data,
+                    loginState.data,
                     Toast.LENGTH_SHORT
                 ).show()
                 onSignInSuccess()
@@ -158,8 +156,10 @@ fun SignInScreen(
 fun SignInPreview() {
     KalmakasaTheme {
         SignInScreen(
+            loginState = ResultState.None,
             onForgotPasswordClicked = {},
             onSignInSuccess = {},
+            onSubmitted = { _, _ -> },
             onGotoRegisterButtonClicked = {}
         )
     }

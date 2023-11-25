@@ -23,6 +23,7 @@ import androidx.navigation.navigation
 import com.kalmakasa.kalmakasa.ui.screens.auth.register.RegisterScreen
 import com.kalmakasa.kalmakasa.ui.screens.auth.register.RegisterViewModel
 import com.kalmakasa.kalmakasa.ui.screens.auth.signin.SignInScreen
+import com.kalmakasa.kalmakasa.ui.screens.auth.signin.SignInViewModel
 import com.kalmakasa.kalmakasa.ui.screens.auth.welcome.WelcomeScreen
 import com.kalmakasa.kalmakasa.ui.screens.home.HomeScreen
 import com.kalmakasa.kalmakasa.ui.screens.home.HomeViewModel
@@ -62,7 +63,12 @@ fun KalmakasaApp() {
                 )
             }
             composable(Destinations.SIGN_IN_ROUTE) {
+                val viewModel: SignInViewModel = hiltViewModel()
+
+                val loginState by viewModel.loginState.collectAsStateWithLifecycle()
                 SignInScreen(
+                    loginState = loginState,
+                    onSubmitted = viewModel::login,
                     onGotoRegisterButtonClicked = {
                         navController.navigate(Destinations.REGISTER_ROUTE) {
                             popUpTo(Destinations.SIGN_IN_ROUTE) { inclusive = true }
