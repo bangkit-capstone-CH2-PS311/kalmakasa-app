@@ -51,6 +51,7 @@ fun KalmakasaApp() {
         navController = navController,
         startDestination = Destinations.HOME_ROUTE,
     ) {
+        // AUTH GRAPH
         navigation(Destinations.WELCOME_ROUTE, Destinations.AUTH_GRAPH) {
             composable(Destinations.WELCOME_ROUTE) {
                 WelcomeScreen(

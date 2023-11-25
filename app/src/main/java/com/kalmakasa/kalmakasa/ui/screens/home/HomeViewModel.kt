@@ -2,8 +2,8 @@ package com.kalmakasa.kalmakasa.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kalmakasa.kalmakasa.ui.state.SessionState
 import com.kalmakasa.kalmakasa.data.repository.UserRepository
+import com.kalmakasa.kalmakasa.ui.state.SessionState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,11 +19,7 @@ class HomeViewModel @Inject constructor(
 
     val homeState = userRepository.getSession().map {
         delay(2000)
-        if (it.isLogin) {
-            SessionState.LoggedIn(it)
-        } else {
-            SessionState.NotLoggedIn
-        }
+        if (it.isLogin) SessionState.LoggedIn(it) else SessionState.NotLoggedIn
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),

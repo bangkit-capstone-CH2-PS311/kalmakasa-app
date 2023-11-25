@@ -3,7 +3,9 @@ package com.kalmakasa.kalmakasa.di
 import android.content.Context
 import com.kalmakasa.kalmakasa.data.UserPreferences
 import com.kalmakasa.kalmakasa.data.dataStore
-import com.kalmakasa.kalmakasa.data.repository.FakeUserRepository
+import com.kalmakasa.kalmakasa.data.fake.FakeApiService
+import com.kalmakasa.kalmakasa.data.fake.FakeUserRepository
+import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
 import com.kalmakasa.kalmakasa.data.repository.UserRepository
 import dagger.Module
 import dagger.Provides
@@ -22,9 +24,21 @@ object AppModule {
         return UserPreferences(context.dataStore)
     }
 
+//    @Provides
+//    @Singleton
+//    fun provideApiService(): ApiService {
+//        return RetrofitFactory.makeRetrofitService()
+//    }
+
     @Provides
     @Singleton
-    fun provideUserRepository(pref: UserPreferences): UserRepository {
-        return FakeUserRepository(pref)
+    fun provideFakeApiService(): ApiService {
+        return FakeApiService()
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserRepository(pref: UserPreferences, apiService: ApiService): UserRepository {
+        return FakeUserRepository(pref, apiService)
     }
 }
