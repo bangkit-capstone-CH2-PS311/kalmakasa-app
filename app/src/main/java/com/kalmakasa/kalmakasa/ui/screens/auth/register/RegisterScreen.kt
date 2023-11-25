@@ -27,8 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.data.ResultState
 import com.kalmakasa.kalmakasa.ui.component.EmailTextField
@@ -45,12 +43,12 @@ import com.kalmakasa.kalmakasa.ui.theme.KalmakasaTheme
 
 @Composable
 fun RegisterScreen(
+    registerState: ResultState<String>,
     onGotoSignInButtonClicked: () -> Unit,
+    onSubmitted: (String, String, String) -> Unit,
     onRegisterSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val viewModel: RegisterViewModel = hiltViewModel()
-
     val focusRequester = remember { FocusRequester() }
     val nameState by remember {
         mutableStateOf(
@@ -71,18 +69,17 @@ fun RegisterScreen(
     val isValidated = nameState.isValid && emailState.isValid && passwordState.isValid
     val onSubmit = {
         if (isValidated) {
-            viewModel.register(nameState.text, emailState.text, passwordState.text)
+            onSubmitted(nameState.text, emailState.text, passwordState.text)
         }
     }
 
-    val registerState by viewModel.registerState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     LaunchedEffect(registerState) {
         when (registerState) {
             is ResultState.Error -> {
                 Toast.makeText(
                     context,
-                    (registerState as ResultState.Error).error,
+                    registerState.error,
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -90,7 +87,7 @@ fun RegisterScreen(
             is ResultState.Success -> {
                 Toast.makeText(
                     context,
-                    (registerState as ResultState.Success).data,
+                    registerState.data,
                     Toast.LENGTH_SHORT
                 ).show()
                 onRegisterSuccess()
@@ -154,7 +151,7 @@ fun RegisterScreen(
             PasswordTextField(
                 label = stringResource(R.string.password),
                 passwordState = passwordState,
-                onImeAction = {},
+                onImeAction = onSubmit,
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -176,7 +173,9 @@ fun RegisterScreen(
 fun RegisterPreview() {
     KalmakasaTheme {
         RegisterScreen(
+            registerState = ResultState.Success("Successful"),
             onRegisterSuccess = { },
+            onSubmitted = { _, _, _ -> },
             onGotoSignInButtonClicked = { }
         )
     }

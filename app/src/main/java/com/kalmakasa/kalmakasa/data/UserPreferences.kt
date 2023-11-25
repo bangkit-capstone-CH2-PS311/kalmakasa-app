@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.kalmakasa.kalmakasa.data.model.PrefUser
+import com.kalmakasa.kalmakasa.data.model.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -15,7 +15,7 @@ val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "se
 
 class UserPreferences constructor(private val dataStore: DataStore<Preferences>) {
 
-    suspend fun setSession(user: PrefUser) {
+    suspend fun setSession(user: User) {
         dataStore.edit { preferences ->
             preferences[ID_KEY] = user.id
             preferences[NAME_KEY] = user.name
@@ -24,13 +24,14 @@ class UserPreferences constructor(private val dataStore: DataStore<Preferences>)
         }
     }
 
-    fun getSession(): Flow<PrefUser> {
+
+    fun getSession(): Flow<User> {
         return dataStore.data.map { preferences ->
-            PrefUser(
+            User(
                 preferences[ID_KEY] ?: "",
                 preferences[NAME_KEY] ?: "",
                 preferences[TOKEN_KEY] ?: "",
-                preferences[IS_LOGIN_KEY] ?: false
+                preferences[IS_LOGIN_KEY] ?: false,
             )
         }
     }

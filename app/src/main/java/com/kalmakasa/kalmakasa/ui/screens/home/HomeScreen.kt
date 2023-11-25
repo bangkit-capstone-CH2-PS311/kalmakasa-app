@@ -8,23 +8,24 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.kalmakasa.kalmakasa.data.model.PrefUser
+import com.kalmakasa.kalmakasa.ui.state.SessionState
+import com.kalmakasa.kalmakasa.data.model.User
+import com.kalmakasa.kalmakasa.ui.LoadingScreen
 import com.kalmakasa.kalmakasa.ui.theme.KalmakasaTheme
 
 @Composable
 fun HomeScreen(
+    homeState: SessionState,
     onLogoutClicked: () -> Unit,
+    onUserIsNotLoggedIn: () -> Unit,
+    navigateToAssessment: (Boolean) -> Unit,
+    isNewUser: Boolean,
     modifier: Modifier = Modifier,
 ) {
-
-    val viewModel: HomeViewModel = hiltViewModel()
-    val user by viewModel.user.collectAsStateWithLifecycle(PrefUser())
 
     Scaffold { innerPadding ->
         Box(
@@ -33,17 +34,57 @@ fun HomeScreen(
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Column {
-                Text(user.name)
-                Text(user.token)
-                Text(text = "Home Screen")
-                Button(onClick = {
-                    viewModel.logout()
-                    onLogoutClicked()
-                }) {
-                    Text("Logout")
+            when (homeState) {
+                SessionState.Loading -> {
+                    LoadingScreen()
                 }
+
+                SessionState.NotLoggedIn -> {
+                    LaunchedEffect(homeState) {
+                        onUserIsNotLoggedIn()
+                    }
+                }
+
+                is SessionState.LoggedIn -> {
+                    if (isNewUser) {
+                        LaunchedEffect(true) {
+                            navigateToAssessment(true)
+                        }
+                    } else {
+                        HomeContent(
+                            homeState.session,
+                            onLogoutClicked = onLogoutClicked,
+                            navigateToAssessment = { navigateToAssessment(false) }
+                        )
+                    }
+                }
+
             }
+
+        }
+    }
+}
+
+@Composable
+fun HomeContent(
+    user: User,
+    onLogoutClicked: () -> Unit,
+    navigateToAssessment: () -> Unit,
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(user.name)
+        Text(user.token)
+        Text(user.isLogin.toString())
+        Text(text = "Home Screen")
+        Button(onClick = onLogoutClicked) {
+            Text("Logout")
+        }
+        Button(onClick = {
+            navigateToAssessment()
+        }) {
+            Text("Assessment")
         }
     }
 }
@@ -52,6 +93,12 @@ fun HomeScreen(
 @Composable
 fun HomePreview() {
     KalmakasaTheme {
-        HomeScreen(onLogoutClicked = {})
+        HomeScreen(
+            homeState = SessionState.Loading,
+            onLogoutClicked = {},
+            onUserIsNotLoggedIn = {},
+            navigateToAssessment = { _ -> },
+            isNewUser = false
+        )
     }
 }

@@ -2,8 +2,9 @@ package com.kalmakasa.kalmakasa.data.repository
 
 import com.kalmakasa.kalmakasa.data.ResultState
 import com.kalmakasa.kalmakasa.data.UserPreferences
-import com.kalmakasa.kalmakasa.data.model.PrefUser
+import com.kalmakasa.kalmakasa.data.model.User
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlin.random.Random
 
@@ -15,18 +16,19 @@ class FakeUserRepository(
         emit(ResultState.Loading)
         // TODO: Make API Call to login
         delay(2000)
-        val user = PrefUser(
+
+        val user = User(
             id = "123",
             name = email,
             token = "token",
-            isLogin = true
+            isLogin = true,
         )
         if (Random.nextInt(1, 4) == 3) {
             emit(ResultState.Error("Login Error"))
             pref.logout()
         } else {
-            emit(ResultState.Success("Login Success"))
             pref.setSession(user)
+            emit(ResultState.Success("Login Success"))
         }
     }
 
@@ -34,20 +36,20 @@ class FakeUserRepository(
         emit(ResultState.Loading)
         // TODO: Make API Call to login
         delay(2000)
-        val user = PrefUser(
+        val user = User(
             id = "123",
             name = email,
             token = "token",
-            isLogin = true
+            isLogin = true,
         )
-        if (Random.nextBoolean()) {
+        if (Random.nextInt(1, 4) == 3) {
             // Error
-            emit(ResultState.Error("Login Error"))
+            emit(ResultState.Error("Register Error"))
         } else {
             // Success
-            emit(ResultState.Success("Login Success"))
+            pref.setSession(user)
+            emit(ResultState.Success("Register Success"))
         }
-        pref.setSession(user)
     }
 
 
@@ -55,5 +57,5 @@ class FakeUserRepository(
         pref.logout()
     }
 
-    override fun getSession() = pref.getSession()
+    override fun getSession(): Flow<User> = pref.getSession()
 }
