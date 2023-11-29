@@ -30,18 +30,21 @@ import com.kalmakasa.kalmakasa.ui.screens.home.HomeViewModel
 import com.kalmakasa.kalmakasa.ui.screens.question.QuestionScreen
 import com.kalmakasa.kalmakasa.ui.screens.question.QuestionViewModel
 
-object Destinations {
-    const val WELCOME_ROUTE = "welcome"
-    const val SIGN_IN_ROUTE = "sign-in"
-    const val REGISTER_ROUTE = "register"
-    const val HOME_ROUTE = "home/{isNewUser}"
-    const val QUESTION_ROUTE = "question/{isSkippable}"
+sealed class Screen(val route: String) {
+    object Welcome : Screen("welcome")
+    object SignIn : Screen("sign-in")
+    object Register : Screen("register")
+    object Home : Screen("home/{isNewUser}") {
+        fun createRoute(isNewUser: Boolean = true) = "home/$isNewUser"
+    }
 
-    const val AUTH_GRAPH = "auth-graph"
+    object Question : Screen("question/{isSkippable}") {
+        fun createRoute(isSkippable: Boolean) = "question/$isSkippable"
+    }
 
-    fun questionRoute(isSkippable: Boolean) = "question/$isSkippable"
-    fun homeRoute(isNewUser: Boolean = true) = "home/$isNewUser"
+    object AuthGraph : Screen("auth-graph")
 }
+
 
 @Composable
 fun KalmakasaApp() {
@@ -49,21 +52,21 @@ fun KalmakasaApp() {
 
     NavHost(
         navController = navController,
-        startDestination = Destinations.HOME_ROUTE,
+        startDestination = Screen.Home.route,
     ) {
         // AUTH GRAPH
-        navigation(Destinations.WELCOME_ROUTE, Destinations.AUTH_GRAPH) {
-            composable(Destinations.WELCOME_ROUTE) {
+        navigation(Screen.Welcome.route, Screen.AuthGraph.route) {
+            composable(Screen.Welcome.route) {
                 WelcomeScreen(
                     onSignInClicked = {
-                        navController.navigate(Destinations.SIGN_IN_ROUTE)
+                        navController.navigate(Screen.SignIn.route)
                     },
                     onRegisterClicked = {
-                        navController.navigate(Destinations.REGISTER_ROUTE)
+                        navController.navigate(Screen.Register.route)
                     }
                 )
             }
-            composable(Destinations.SIGN_IN_ROUTE) {
+            composable(Screen.SignIn.route) {
                 val viewModel: SignInViewModel = hiltViewModel()
 
                 val loginState by viewModel.loginState.collectAsStateWithLifecycle()
@@ -71,35 +74,35 @@ fun KalmakasaApp() {
                     loginState = loginState,
                     onSubmitted = viewModel::login,
                     onGotoRegisterButtonClicked = {
-                        navController.navigate(Destinations.REGISTER_ROUTE) {
-                            popUpTo(Destinations.SIGN_IN_ROUTE) { inclusive = true }
+                        navController.navigate(Screen.Register.route) {
+                            popUpTo(Screen.SignIn.route) { inclusive = true }
                         }
                     },
                     onForgotPasswordClicked = {
-                        navController.navigate(Destinations.homeRoute())
+                        navController.navigate(Screen.Home.route)
                     },
                     onSignInSuccess = {
-                        navController.navigate(Destinations.homeRoute()) {
-                            popUpTo(Destinations.AUTH_GRAPH) { inclusive = true }
+                        navController.navigate(Screen.Home.route) {
+                            popUpTo(Screen.AuthGraph.route) { inclusive = true }
                         }
                     }
                 )
             }
-            composable(Destinations.REGISTER_ROUTE) {
+            composable(Screen.Register.route) {
                 val viewModel: RegisterViewModel = hiltViewModel()
                 val registerState by viewModel.registerState.collectAsStateWithLifecycle()
 
                 RegisterScreen(
                     registerState = registerState,
                     onGotoSignInButtonClicked = {
-                        navController.navigate(Destinations.SIGN_IN_ROUTE) {
-                            popUpTo(Destinations.REGISTER_ROUTE) { inclusive = true }
+                        navController.navigate(Screen.SignIn.route) {
+                            popUpTo(Screen.Register.route) { inclusive = true }
                         }
                     },
                     onSubmitted = viewModel::register,
                     onRegisterSuccess = {
-                        navController.navigate(Destinations.homeRoute(true)) {
-                            popUpTo(Destinations.AUTH_GRAPH) { inclusive = true }
+                        navController.navigate(Screen.Home.createRoute(true)) {
+                            popUpTo(Screen.AuthGraph.route) { inclusive = true }
                         }
                     }
                 )
@@ -108,7 +111,7 @@ fun KalmakasaApp() {
 
         // APP GRAPH
         composable(
-            Destinations.HOME_ROUTE,
+            Screen.Home.route,
             arguments = listOf(navArgument("isNewUser") { type = NavType.BoolType })
         ) {
             val viewModel: HomeViewModel = hiltViewModel()
@@ -119,24 +122,24 @@ fun KalmakasaApp() {
                 homeState,
                 isNewUser = isNewUser,
                 onUserIsNotLoggedIn = {
-                    navController.navigate(Destinations.AUTH_GRAPH) {
-                        popUpTo(Destinations.HOME_ROUTE) { inclusive = true }
+                    navController.navigate(Screen.AuthGraph.route) {
+                        popUpTo(Screen.Home.route) { inclusive = true }
                     }
                 },
                 onLogoutClicked = {
                     viewModel.logout()
-                    navController.navigate(Destinations.AUTH_GRAPH) {
-                        popUpTo(Destinations.HOME_ROUTE) { inclusive = true }
+                    navController.navigate(Screen.AuthGraph.route) {
+                        popUpTo(Screen.Home.route) { inclusive = true }
                     }
                 },
                 navigateToAssessment = { isSkippable ->
-                    navController.navigate(Destinations.questionRoute(isSkippable))
+                    navController.navigate(Screen.Question.createRoute(isSkippable))
                 }
             )
         }
 
         composable(
-            route = Destinations.QUESTION_ROUTE,
+            route = Screen.Question.route,
             arguments = listOf(navArgument("isSkippable") { type = NavType.BoolType })
         ) {
             val viewModel: QuestionViewModel = hiltViewModel()
@@ -150,15 +153,15 @@ fun KalmakasaApp() {
                 onNextQuestion = viewModel::nextQuestion,
                 onSubmit = {
                     Toast.makeText(context, "Submitted", Toast.LENGTH_SHORT).show()
-                    navController.navigate(Destinations.homeRoute()) {
-                        popUpTo(Destinations.QUESTION_ROUTE) { inclusive = true }
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Question.route) { inclusive = true }
                     }
                 },
                 onNavUp = {
                     navController.navigateUp()
                 },
                 onSkipAssessment = {
-                    navController.navigate(Destinations.homeRoute(false))
+                    navController.navigate(Screen.Home.createRoute(false))
                 },
                 updateAnswer = viewModel::updateAnswer,
                 options = viewModel.options,
