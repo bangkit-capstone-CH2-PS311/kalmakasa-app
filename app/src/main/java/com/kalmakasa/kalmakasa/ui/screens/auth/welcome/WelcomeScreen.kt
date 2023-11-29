@@ -1,18 +1,23 @@
 package com.kalmakasa.kalmakasa.ui.screens.auth.welcome
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,14 +38,25 @@ fun WelcomeScreen(
         Box(
             modifier = modifier
                 .padding(innerPadding)
+                .padding(horizontal = 32.dp)
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            Text(
-                text = "Welcome Screen",
-                style = MaterialTheme.typography.displayLarge,
-                textAlign = TextAlign.Center
-            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                    painterResource(R.drawable.welcome_image),
+                    modifier = Modifier.width(320.dp),
+                    contentDescription = null
+                )
+                Spacer(Modifier.height(16.dp))
+                Text(
+                    "Let's start our journey towards better mental wellbeing.",
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
         }
     }
 }
@@ -53,23 +69,29 @@ fun WelcomeOptionButtons(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 16.dp),
+            .padding(horizontal = 32.dp)
+            .padding(bottom = 32.dp),
         contentAlignment = Alignment.Center,
     ) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
             Button(
-                onClick = onSignInClicked,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(text = stringResource(R.string.sign_in))
-            }
-            OutlinedButton(
                 onClick = onRegisterClicked,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
             ) {
-                Text(text = stringResource(R.string.register))
+                Text(text = "Getting Started")
+            }
+            Spacer(Modifier.height(8.dp))
+            TextButton(
+                onClick = onSignInClicked,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+            ) {
+                Text(text = stringResource(R.string.already_have_an_account))
             }
         }
     }
