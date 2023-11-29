@@ -1,4 +1,4 @@
-package com.kalmakasa.kalmakasa.ui.component
+package com.kalmakasa.kalmakasa.ui.screens.auth.common
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.text.KeyboardActions
