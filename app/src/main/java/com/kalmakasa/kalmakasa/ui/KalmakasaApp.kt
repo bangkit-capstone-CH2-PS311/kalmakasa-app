@@ -25,7 +25,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.kalmakasa.kalmakasa.ui.navigation.BottomBar
+import com.kalmakasa.kalmakasa.ui.component.BottomBar
 import com.kalmakasa.kalmakasa.ui.navigation.Screen
 import com.kalmakasa.kalmakasa.ui.screens.auth.register.RegisterScreen
 import com.kalmakasa.kalmakasa.ui.screens.auth.register.RegisterViewModel
