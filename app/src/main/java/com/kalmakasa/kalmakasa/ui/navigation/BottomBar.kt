@@ -1,4 +1,4 @@
-package com.kalmakasa.kalmakasa.ui.component
+package com.kalmakasa.kalmakasa.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.HistoryEdu
@@ -15,7 +15,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.kalmakasa.kalmakasa.ui.navigation.Screen
 
 @Composable
 fun BottomBar(

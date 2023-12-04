@@ -16,4 +16,8 @@
     <string name="done">Done</string>
     <string name="previous">Previous</string>
     <string name="of_questions">%1$s of %2$s questions</string>
+    <string name="biography">Biography</string>
+    <string name="schedule_consultation">Schedule Consultation</string>
+    <string name="time">Time</string>
+    <string name="book_appointment">Book Appointment</string>
 </resources>

@@ -2,6 +2,7 @@ package com.kalmakasa.kalmakasa.ui.screens.question
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -61,17 +62,17 @@ fun QuestionScreen(
         label = "progress"
     ).value
 
-//    BackHandler {
-//        if (questionData.currentQuestionIndex > 1)
-//            onPreviousQuestion()
-//        else
-//            onNavUp()
-//    }
+    BackHandler {
+        if (questionData.currentQuestionIndex > 1)
+            onPreviousQuestion()
+        else
+            onNavUp()
+    }
 
     Scaffold(
         topBar = {
             QuestionTopAppbar(
-                title = "$isSkippable",
+                title = "Questionnaire",
                 onBackButtonClicked = if (isSkippable) onSkipAssessment
                 else if (questionData.currentQuestionIndex > 1) onPreviousQuestion
                 else onNavUp,
