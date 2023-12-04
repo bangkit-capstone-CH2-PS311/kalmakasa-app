@@ -51,7 +51,7 @@ fun KalmakasaApp() {
             if (Screen.withBottomBar.contains(currentRoute)) {
                 BottomBar(navController = navController)
             }
-        }
+        },
     ) { paddingValues ->
         NavHost(
             navController = navController,
@@ -61,7 +61,7 @@ fun KalmakasaApp() {
             composable(Screen.Launcher.route) {
                 val viewModel: LauncherViewModel = hiltViewModel()
                 val state by viewModel.sessionState.collectAsStateWithLifecycle()
-
+                
                 when (state) {
                     SessionState.Loading -> {
                         LoadingScreen()

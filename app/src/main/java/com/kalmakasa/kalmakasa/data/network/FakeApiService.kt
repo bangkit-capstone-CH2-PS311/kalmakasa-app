@@ -1,4 +1,4 @@
-package com.kalmakasa.kalmakasa.data.fake
+package com.kalmakasa.kalmakasa.data.network
 
 import com.kalmakasa.kalmakasa.data.network.response.AuthData
 import com.kalmakasa.kalmakasa.data.network.response.AuthResponse
@@ -26,10 +26,10 @@ class FakeApiService : ApiService {
     override suspend fun register(name: String, email: String, password: String): AuthResponse {
         delay(500)
         return if (Random.nextInt(1, 4) == 3) {
-            AuthResponse(true, "Login Error")
+            AuthResponse(true, "Register Error")
         } else {
             AuthResponse(
-                false, "Login Success", AuthData(
+                false, "Register Success", AuthData(
                     "User Full Name",
                     "123",
                     "AjkdhasjhToken"

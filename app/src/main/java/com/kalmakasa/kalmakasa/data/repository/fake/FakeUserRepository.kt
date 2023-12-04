@@ -1,4 +1,4 @@
-package com.kalmakasa.kalmakasa.data.fake
+package com.kalmakasa.kalmakasa.data.repository.fake
 
 import com.kalmakasa.kalmakasa.data.ResultState
 import com.kalmakasa.kalmakasa.data.UserPreferences
@@ -28,11 +28,12 @@ class FakeUserRepository(
 
     override suspend fun register(name: String, email: String, password: String) = flow {
         emit(ResultState.Loading)
-        val response = apiService.login(email, password)
+        val response = apiService.register(name, email, password)
         if (response.error) {
-            emit(ResultState.Success(response.message))
-        } else {
             emit(ResultState.Error(response.message))
+        } else {
+            response.userData?.let { pref.setSession(it.toSession()) }
+            emit(ResultState.Success(response.message))
         }
     }.catch { emit(ResultState.Error(it.message ?: "Unknown Error")) }
 

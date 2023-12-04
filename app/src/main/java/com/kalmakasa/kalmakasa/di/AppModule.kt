@@ -3,10 +3,10 @@ package com.kalmakasa.kalmakasa.di
 import android.content.Context
 import com.kalmakasa.kalmakasa.data.UserPreferences
 import com.kalmakasa.kalmakasa.data.dataStore
-import com.kalmakasa.kalmakasa.data.fake.FakeApiService
-import com.kalmakasa.kalmakasa.data.fake.FakeUserRepository
+import com.kalmakasa.kalmakasa.data.network.FakeApiService
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
 import com.kalmakasa.kalmakasa.data.repository.UserRepository
+import com.kalmakasa.kalmakasa.data.repository.fake.FakeUserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

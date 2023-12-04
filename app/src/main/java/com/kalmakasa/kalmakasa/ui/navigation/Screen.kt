@@ -9,7 +9,7 @@ sealed class Screen(val route: String) {
     object Register : Screen("register")
 
     object Home : Screen("home?isNewUser={isNewUser}") {
-        fun createRoute(isNewUser: Boolean = false) = "home/isNewUser=$isNewUser"
+        fun createRoute(isNewUser: Boolean = false) = "home?isNewUser=$isNewUser"
     }
 
     object History : Screen("history")
