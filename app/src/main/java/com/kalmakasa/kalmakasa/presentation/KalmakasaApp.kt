@@ -241,7 +241,11 @@ fun KalmakasaApp() {
                 }
 
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-                DetailDoctorScreen(uiState)
+                DetailDoctorScreen(
+                    uiState = uiState,
+                    onBackButtonClicked = { navController.navigateUp() },
+                    onAppointmentBooked = {}
+                )
             }
         }
     }

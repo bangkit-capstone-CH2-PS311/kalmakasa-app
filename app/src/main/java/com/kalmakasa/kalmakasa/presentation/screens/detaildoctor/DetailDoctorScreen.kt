@@ -18,8 +18,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.BusinessCenter
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
@@ -27,7 +29,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -35,7 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,6 +63,8 @@ import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 @Composable
 fun DetailDoctorScreen(
     uiState: DetailDoctorState,
+    onBackButtonClicked: () -> Unit,
+    onAppointmentBooked: () -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -71,11 +77,9 @@ fun DetailDoctorScreen(
                     )
                 },
                 navigationIcon = {
-                    Icon(
-                        Icons.Default.ArrowBackIosNew,
-                        contentDescription = null,
-                        modifier = Modifier.padding(end = 12.dp)
-                    )
+                    IconButton(onClick = onBackButtonClicked) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
                 }
             )
         }
@@ -100,6 +104,7 @@ fun DetailDoctorScreen(
                     uiState.timeSlots,
                     uiState.currentTime,
                     uiState.dates,
+                    onAppointmentBooked,
                     Modifier.padding(paddingValues)
                 )
             }
@@ -113,13 +118,19 @@ fun DetailDoctorContent(
     timeSlots: List<String>,
     currentTime: Long,
     dates: List<ConsultationDate>,
+    onAppointmentBooked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var selectedDate by remember { mutableIntStateOf(0) }
-    var selectedTime by remember { mutableStateOf("") }
+    var selectedDate by rememberSaveable { mutableIntStateOf(0) }
+    var selectedTime by rememberSaveable { mutableStateOf("") }
+    var userNotes by rememberSaveable { mutableStateOf("") }
+
+    val isValidated = (selectedDate != 0 && selectedTime.isNotEmpty() && userNotes.isNotEmpty())
 
     Column(
         modifier = modifier
+            .verticalScroll(rememberScrollState())
+            .padding(bottom = 32.dp),
     ) {
         // Doctor Section
         Row(
@@ -226,10 +237,29 @@ fun DetailDoctorContent(
                 )
             }
         }
+        Spacer(modifier = Modifier.height(12.dp))
+        TitleText(
+            text = "Your Notes",
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        OutlinedTextField(
+            value = userNotes,
+            onValueChange = { userNotes = it },
+            maxLines = 5,
+            placeholder = { Text("insert your notes for the doctor here.") },
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .fillMaxWidth()
+                .height(120.dp)
+        )
+
         Spacer(Modifier.height(32.dp))
         // Book Session
         Button(
-            onClick = { },
+            onClick = onAppointmentBooked,
+            enabled = isValidated,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp)
@@ -354,7 +384,30 @@ fun DoctorPerks(
 @Composable
 fun DetailDoctorPreview() {
     KalmakasaTheme {
-        DetailDoctorScreen(DetailDoctorState())
+        DetailDoctorScreen(
+            DetailDoctorState(
+                doctor = Doctor(
+                    "dsada",
+                    "Dzaky Nashshar",
+                    "Kanker",
+                    2,
+                    100,
+                    "lorem goblok"
+                ),
+                timeSlots = listOf("08.00", "09.00", "10.00", "11.00", "12.00"),
+                dates = listOf(
+                    ConsultationDate(200, 12, "Sen"),
+                    ConsultationDate(201, 13, "Sel"),
+                    ConsultationDate(202, 14, "Rab"),
+                    ConsultationDate(203, 15, "Kam"),
+                    ConsultationDate(204, 16, "Jum"),
+                    ConsultationDate(205, 17, "Sab"),
+                    ConsultationDate(206, 18, "Min"),
+                )
+            ),
+            {},
+            {},
+        )
     }
 
 }

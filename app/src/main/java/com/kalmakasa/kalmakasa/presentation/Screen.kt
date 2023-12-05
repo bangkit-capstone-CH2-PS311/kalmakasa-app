@@ -24,6 +24,8 @@ sealed class Screen(val route: String) {
         fun createRoute(id: String) = "doctor-detail/$id"
     }
 
+    object AddJournal : Screen("journal-add")
+
     companion object {
         val withBottomBar = listOf(
             Home.route,
