@@ -1,5 +1,6 @@
 package com.kalmakasa.kalmakasa.presentation.screens.addjournal
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,7 +27,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -45,9 +45,18 @@ import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddJournalScreen() {
-    var step by rememberSaveable { mutableIntStateOf(1) }
+fun AddJournalScreen(
+    navBack: () -> Unit,
+) {
+    var isFinal by rememberSaveable { mutableStateOf(false) }
     var value by rememberSaveable { mutableStateOf("") }
+    var sliderValue by rememberSaveable { mutableFloatStateOf(2f) }
+    val prevEnable = isFinal
+    val nextEnable = !isFinal
+
+    BackHandler {
+        navBack()
+    }
 
     Scaffold(
         topBar = {
@@ -55,13 +64,13 @@ fun AddJournalScreen() {
                 TopAppBar(
                     title = { Text("Create Journal") },
                     navigationIcon = {
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = navBack) {
                             Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
                         }
                     }
                 )
                 LinearProgressIndicator(
-                    progress = step / 2f,
+                    progress = if (isFinal) 1f else 0.5f,
                     modifier = Modifier
                         .padding(vertical = 8.dp, horizontal = 24.dp)
                         .height(8.dp)
@@ -78,66 +87,85 @@ fun AddJournalScreen() {
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 OutlinedButton(
-                    onClick = { step++ },
+                    onClick = {
+                        isFinal = false
+                    },
                     modifier = Modifier.weight(1f),
-                    enabled = true,
+                    enabled = prevEnable,
                 ) {
                     Text(text = stringResource(R.string.previous))
                 }
                 Button(
-                    onClick = { step-- },
+                    onClick = { isFinal = true },
                     modifier = Modifier.weight(1f),
-                    enabled = true
+                    enabled = nextEnable
                 ) {
                     Text(stringResource(R.string.next))
                 }
             }
         }
     ) { paddingValues ->
-        when (step) {
-            1 -> MoodSlider(Modifier.padding(paddingValues))
-            else -> {
-                Column(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .padding(vertical = 16.dp)
-                        .fillMaxSize()
-                ) {
-                    Text(
-                        text = "What could be the reason behind your mood today?",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier
-                            .padding(horizontal = 24.dp)
-                    )
+        when (isFinal) {
+            false -> MoodSlider(
+                sliderValue = sliderValue,
+                onSliderChange = { sliderValue = it },
+                modifier = Modifier.padding(paddingValues)
+            )
 
-                    OutlinedTextField(
-                        value = value,
-                        onValueChange = { value = it },
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .fillMaxSize(),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = Color.Transparent,
-                            unfocusedBorderColor = Color.Transparent,
-                        ),
-                        placeholder = {
-                            Text(
-                                text = "The main reason is...",
-                                color = Color.Gray,
-                                fontWeight = FontWeight.Medium,
-                            )
-                        }
-                    )
-                }
-            }
+            true -> MoodJournal(
+                value = value,
+                onValueChange = { value = it },
+                modifier = Modifier.padding(paddingValues)
+            )
         }
 
     }
 }
 
 @Composable
+fun MoodJournal(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .padding(vertical = 16.dp)
+            .fillMaxSize()
+    ) {
+        Text(
+            text = "What could be the reason behind your mood today?",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+        )
+
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChange,
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .fillMaxSize(),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = Color.Transparent,
+                unfocusedBorderColor = Color.Transparent,
+            ),
+            placeholder = {
+                Text(
+                    text = "The main reason is...",
+                    color = Color.Gray,
+                    fontWeight = FontWeight.Medium,
+                )
+            }
+        )
+    }
+}
+
+@Composable
 fun MoodSlider(
+    sliderValue: Float,
+    onSliderChange: (Float) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -148,7 +176,6 @@ fun MoodSlider(
     ) {
         Column(verticalArrangement = Arrangement.Center) {
 
-            var sliderValue by rememberSaveable { mutableFloatStateOf(2f) }
             val emoticon = listOf(
                 "Very Sad",
                 "Sad",
@@ -169,7 +196,7 @@ fun MoodSlider(
 
             Slider(
                 value = sliderValue,
-                onValueChange = { sliderValue = it },
+                onValueChange = onSliderChange,
                 valueRange = 0f..4f,
                 steps = 3
             )
@@ -182,6 +209,6 @@ fun MoodSlider(
 @Composable
 fun AddJournalPreview() {
     KalmakasaTheme {
-        AddJournalScreen()
+        AddJournalScreen({})
     }
 }

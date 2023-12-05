@@ -26,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.kalmakasa.kalmakasa.presentation.component.BottomBar
+import com.kalmakasa.kalmakasa.presentation.screens.addjournal.AddJournalScreen
 import com.kalmakasa.kalmakasa.presentation.screens.auth.register.RegisterScreen
 import com.kalmakasa.kalmakasa.presentation.screens.auth.register.RegisterViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.auth.signin.SignInScreen
@@ -175,6 +176,9 @@ fun KalmakasaApp() {
                     },
                     navigateToAssessment = { isSkippable ->
                         navController.navigate(Screen.Question.createRoute(isSkippable))
+                    },
+                    navigateToAddJournal = {
+                        navController.navigate(Screen.AddJournal.route)
                     }
                 )
             }
@@ -246,6 +250,12 @@ fun KalmakasaApp() {
                     onBackButtonClicked = { navController.navigateUp() },
                     onAppointmentBooked = {}
                 )
+            }
+
+            composable(Screen.AddJournal.route) {
+                AddJournalScreen(navBack = {
+                    navController.navigateUp()
+                })
             }
         }
     }
