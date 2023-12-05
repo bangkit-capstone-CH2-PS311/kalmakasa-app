@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Kalmakasa"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Kalmakasa">
             <intent-filter>

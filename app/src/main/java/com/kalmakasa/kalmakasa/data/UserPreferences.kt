@@ -7,13 +7,13 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.kalmakasa.kalmakasa.data.model.User
+import com.kalmakasa.kalmakasa.domain.model.User
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "session")
 
-class UserPreferences constructor(private val dataStore: DataStore<Preferences>) {
+class UserPreferences(private val dataStore: DataStore<Preferences>) {
 
     suspend fun setSession(user: User) {
         dataStore.edit { preferences ->

@@ -1,6 +1,6 @@
 package com.kalmakasa.kalmakasa.data.network.response
 
-import com.kalmakasa.kalmakasa.data.model.User
+import com.kalmakasa.kalmakasa.domain.model.User
 
 data class AuthResponse(
     val error: Boolean,

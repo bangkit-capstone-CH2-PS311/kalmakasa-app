@@ -5,8 +5,8 @@ import com.kalmakasa.kalmakasa.data.UserPreferences
 import com.kalmakasa.kalmakasa.data.dataStore
 import com.kalmakasa.kalmakasa.data.network.FakeApiService
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
-import com.kalmakasa.kalmakasa.data.repository.UserRepository
-import com.kalmakasa.kalmakasa.data.repository.fake.FakeUserRepository
+import com.kalmakasa.kalmakasa.domain.repository.UserRepository
+import com.kalmakasa.kalmakasa.data.repository.FakeUserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
