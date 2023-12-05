@@ -1,17 +1,56 @@
 package com.kalmakasa.kalmakasa.presentation.screens.detaildoctor
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.common.util.ConsultationDate
+import com.kalmakasa.kalmakasa.domain.model.Doctor
+import com.kalmakasa.kalmakasa.domain.repository.DoctorRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.util.Calendar
+import javax.inject.Inject
 
-class DetailDoctorViewModel : ViewModel() {
+@HiltViewModel
+class DetailDoctorViewModel @Inject constructor(
+    private val doctorRepository: DoctorRepository,
+) : ViewModel() {
 
+    private val timeSlots = listOf("09.00", "10.00", "13.00", "14.00", "16.00", "17.00", "19.00")
     private val calendar = Calendar.getInstance()
-    val currentTime = calendar.timeInMillis
+    private val currentTime = calendar.timeInMillis
 
-    val timeSlots = listOf("09.00", "10.00", "13.00", "14.00", "16.00", "17.00", "19.00")
+    private val _uiState = MutableStateFlow(DetailDoctorState())
+    val uiState: StateFlow<DetailDoctorState> = _uiState.asStateFlow()
+    fun getDoctorDetail(id: String) {
+        viewModelScope.launch {
+            doctorRepository.getDoctorDetailById(id).collect { doctor ->
+                when (doctor) {
+                    is Resource.Loading -> {
+                        _uiState.value = DetailDoctorState(isLoading = true)
+                    }
 
-    fun getCurrentWeek(): MutableList<ConsultationDate> {
+                    is Resource.Success -> {
+                        _uiState.value = DetailDoctorState(
+                            doctor = doctor.data,
+                            timeSlots = timeSlots,
+                            currentTime = currentTime,
+                            dates = getDates()
+                        )
+                    }
+
+                    else -> {
+                        _uiState.value = DetailDoctorState(isError = true)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getDates(): MutableList<ConsultationDate> {
         val consultationDates = mutableListOf<ConsultationDate>()
 
         val calendar = Calendar.getInstance()
@@ -47,3 +86,12 @@ class DetailDoctorViewModel : ViewModel() {
         )
     }
 }
+
+data class DetailDoctorState(
+    val doctor: Doctor? = null,
+    val timeSlots: List<String> = emptyList(),
+    val currentTime: Long = 0,
+    val dates: List<ConsultationDate> = emptyList(),
+    val isLoading: Boolean = false,
+    val isError: Boolean = false,
+)

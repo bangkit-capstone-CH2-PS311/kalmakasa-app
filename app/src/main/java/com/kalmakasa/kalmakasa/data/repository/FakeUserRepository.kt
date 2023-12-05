@@ -2,9 +2,9 @@ package com.kalmakasa.kalmakasa.data.repository
 
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.data.UserPreferences
-import com.kalmakasa.kalmakasa.domain.model.User
-import com.kalmakasa.kalmakasa.data.network.response.toSession
+import com.kalmakasa.kalmakasa.data.network.model.toUser
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
+import com.kalmakasa.kalmakasa.domain.model.User
 import com.kalmakasa.kalmakasa.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -21,7 +21,7 @@ class FakeUserRepository(
         if (response.error) {
             emit(Resource.Error(response.message))
         } else {
-            response.userData?.let { pref.setSession(it.toSession()) }
+            response.userData?.let { pref.setSession(it.toUser()) }
             emit(Resource.Success(response.message))
         }
     }.catch { emit(Resource.Error(it.message ?: "Unknown Error")) }
@@ -32,7 +32,7 @@ class FakeUserRepository(
         if (response.error) {
             emit(Resource.Error(response.message))
         } else {
-            response.userData?.let { pref.setSession(it.toSession()) }
+            response.userData?.let { pref.setSession(it.toUser()) }
             emit(Resource.Success(response.message))
         }
     }.catch { emit(Resource.Error(it.message ?: "Unknown Error")) }

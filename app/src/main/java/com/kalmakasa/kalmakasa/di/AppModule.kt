@@ -5,8 +5,10 @@ import com.kalmakasa.kalmakasa.data.UserPreferences
 import com.kalmakasa.kalmakasa.data.dataStore
 import com.kalmakasa.kalmakasa.data.network.FakeApiService
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
-import com.kalmakasa.kalmakasa.domain.repository.UserRepository
+import com.kalmakasa.kalmakasa.data.repository.FakeDoctorRepository
 import com.kalmakasa.kalmakasa.data.repository.FakeUserRepository
+import com.kalmakasa.kalmakasa.domain.repository.DoctorRepository
+import com.kalmakasa.kalmakasa.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,5 +42,11 @@ object AppModule {
     @Singleton
     fun provideUserRepository(pref: UserPreferences, apiService: ApiService): UserRepository {
         return FakeUserRepository(pref, apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDoctorRepository(apiService: ApiService): DoctorRepository {
+        return FakeDoctorRepository(apiService)
     }
 }

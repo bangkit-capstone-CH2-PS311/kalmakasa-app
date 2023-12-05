@@ -45,7 +45,6 @@ class QuestionViewModel : ViewModel() {
 
     private val _answers = MutableStateFlow(emptyMap<Int, String>())
 
-
     val uiState: StateFlow<QuestionScreenData> =
         combine(_currentQuestionIndex, _answers) { currentIndex, answers ->
             QuestionScreenData(

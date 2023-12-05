@@ -6,4 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface DoctorRepository {
     fun getDoctorDetailById(id: String): Flow<Resource<Doctor>>
+
+    fun getListDoctor(): Flow<Resource<List<Doctor>>>
 }

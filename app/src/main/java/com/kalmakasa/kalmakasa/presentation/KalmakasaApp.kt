@@ -31,8 +31,13 @@ import com.kalmakasa.kalmakasa.presentation.screens.auth.register.RegisterViewMo
 import com.kalmakasa.kalmakasa.presentation.screens.auth.signin.SignInScreen
 import com.kalmakasa.kalmakasa.presentation.screens.auth.signin.SignInViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.auth.welcome.WelcomeScreen
+import com.kalmakasa.kalmakasa.presentation.screens.detaildoctor.DetailDoctorScreen
+import com.kalmakasa.kalmakasa.presentation.screens.detaildoctor.DetailDoctorViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.home.HomeScreen
 import com.kalmakasa.kalmakasa.presentation.screens.home.HomeViewModel
+import com.kalmakasa.kalmakasa.presentation.screens.launcher.LauncherViewModel
+import com.kalmakasa.kalmakasa.presentation.screens.listdoctor.ListDoctorScreen
+import com.kalmakasa.kalmakasa.presentation.screens.listdoctor.ListDoctorViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.question.QuestionScreen
 import com.kalmakasa.kalmakasa.presentation.screens.question.QuestionViewModel
 import com.kalmakasa.kalmakasa.presentation.state.SessionState
@@ -165,6 +170,9 @@ fun KalmakasaApp() {
                             popUpTo(Screen.Home.route) { inclusive = true }
                         }
                     },
+                    navigateToListDoctor = {
+                        navController.navigate(Screen.ListDoctor.route)
+                    },
                     navigateToAssessment = { isSkippable ->
                         navController.navigate(Screen.Question.createRoute(isSkippable))
                     }
@@ -209,6 +217,31 @@ fun KalmakasaApp() {
 
             composable(Screen.History.route) {
                 Text("History Screen")
+            }
+
+            composable(Screen.ListDoctor.route) {
+                val viewModel: ListDoctorViewModel = hiltViewModel()
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+                ListDoctorScreen(
+                    uiState
+                ) { doctor ->
+                    navController.navigate(Screen.DoctorDetail.createRoute(doctor.id))
+                }
+            }
+
+            composable(
+                route = Screen.DoctorDetail.route,
+                arguments = listOf(navArgument("id") { type = NavType.StringType })
+            ) {
+                val viewModel: DetailDoctorViewModel = hiltViewModel()
+                val id = it.arguments?.getString("id") ?: ""
+                LaunchedEffect(true) {
+                    viewModel.getDoctorDetail(id)
+                }
+
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                DetailDoctorScreen(uiState)
             }
         }
     }

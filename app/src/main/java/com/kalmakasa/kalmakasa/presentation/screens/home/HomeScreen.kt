@@ -19,6 +19,7 @@ fun HomeScreen(
     homeState: SessionState,
     onLogoutClicked: () -> Unit,
     onUserIsNotLoggedIn: () -> Unit,
+    navigateToListDoctor: () -> Unit,
     navigateToAssessment: (Boolean) -> Unit,
     isNewUser: Boolean,
     modifier: Modifier = Modifier,
@@ -45,7 +46,8 @@ fun HomeScreen(
                     homeState.session,
                     onLogoutClicked = onLogoutClicked,
                     navigateToAssessment = { navigateToAssessment(false) },
-                    modifier = modifier
+                    navigateToListDoctor = navigateToListDoctor,
+                    modifier = modifier,
                 )
             }
         }
@@ -57,6 +59,7 @@ fun HomeContent(
     user: User,
     onLogoutClicked: () -> Unit,
     navigateToAssessment: () -> Unit,
+    navigateToListDoctor: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -70,10 +73,11 @@ fun HomeContent(
         Button(onClick = onLogoutClicked) {
             Text("Logout")
         }
-        Button(onClick = {
-            navigateToAssessment()
-        }) {
+        Button(onClick = { navigateToAssessment() }) {
             Text("Assessment")
+        }
+        Button(onClick = navigateToListDoctor) {
+            Text("Doctor List")
         }
     }
 }
@@ -86,6 +90,7 @@ fun HomePreview() {
             homeState = SessionState.Loading,
             onLogoutClicked = {},
             onUserIsNotLoggedIn = {},
+            navigateToListDoctor = {},
             navigateToAssessment = { _ -> },
             isNewUser = false
         )

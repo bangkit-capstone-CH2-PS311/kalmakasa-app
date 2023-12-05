@@ -19,6 +19,11 @@ sealed class Screen(val route: String) {
         fun createRoute(isSkippable: Boolean) = "question/$isSkippable"
     }
 
+    object ListDoctor : Screen("list-doctor")
+    object DoctorDetail : Screen("doctor-detail/{id}") {
+        fun createRoute(id: String) = "doctor-detail/$id"
+    }
+
     companion object {
         val withBottomBar = listOf(
             Home.route,

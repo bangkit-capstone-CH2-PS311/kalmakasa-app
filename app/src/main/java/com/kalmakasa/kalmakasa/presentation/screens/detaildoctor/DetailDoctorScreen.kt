@@ -1,5 +1,6 @@
 package com.kalmakasa.kalmakasa.presentation.screens.detaildoctor
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -48,16 +49,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kalmakasa.kalmakasa.R
-import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 import com.kalmakasa.kalmakasa.common.util.ConsultationDate
+import com.kalmakasa.kalmakasa.domain.model.Doctor
+import com.kalmakasa.kalmakasa.presentation.LoadingScreen
+import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailDoctorScreen() {
-    val viewModel: DetailDoctorViewModel = viewModel()
-
+fun DetailDoctorScreen(
+    uiState: DetailDoctorState,
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -78,130 +80,162 @@ fun DetailDoctorScreen() {
             )
         }
     ) { paddingValues ->
+        Log.d("state", uiState.toString())
+        when {
+            uiState.isError -> {
+                Text(text = "Error")
+            }
+
+            uiState.isLoading -> {
+                LoadingScreen(Modifier.padding(paddingValues))
+            }
+
+            uiState.doctor == null -> {
+                Text(text = "Doctor not found")
+            }
+
+            else -> {
+                DetailDoctorContent(
+                    uiState.doctor,
+                    uiState.timeSlots,
+                    uiState.currentTime,
+                    uiState.dates,
+                    Modifier.padding(paddingValues)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun DetailDoctorContent(
+    doctor: Doctor,
+    timeSlots: List<String>,
+    currentTime: Long,
+    dates: List<ConsultationDate>,
+    modifier: Modifier = Modifier,
+) {
+    var selectedDate by remember { mutableIntStateOf(0) }
+    var selectedTime by remember { mutableStateOf("") }
+
+    Column(
+        modifier = modifier
+    ) {
+        // Doctor Section
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+                .padding(bottom = 16.dp)
+        ) {
+            Image(
+                painter = painterResource(R.drawable.placeholder_doctor_img),
+                contentDescription = null,
+                modifier = Modifier
+                    .width(144.dp)
+                    .height(160.dp)
+                    .border(1.dp, Color.LightGray, MaterialTheme.shapes.medium),
+                contentScale = ContentScale.Crop
+            )
+            Spacer(Modifier.width(16.dp))
+            Column {
+                Text(
+                    text = doctor.name,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 18.sp,
+                )
+                Text(
+                    text = "Psychology Specialist",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = Color.Gray
+                )
+
+                DoctorPerks(
+                    title = "Experience",
+                    value = "2 Year(s)",
+                    icon = Icons.Rounded.BusinessCenter,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+                DoctorPerks(
+                    title = "Patients",
+                    value = "215",
+                    icon = Icons.Rounded.Person,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+        }
+
+        // Biography Section
         Column(
             modifier = Modifier
-                .padding(paddingValues)
+                .padding(horizontal = 24.dp)
         ) {
-            // Doctor Section
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 24.dp)
-                    .padding(bottom = 16.dp)
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.placeholder_doctor_img),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(144.dp)
-                        .height(160.dp)
-                        .border(1.dp, Color.LightGray, MaterialTheme.shapes.medium),
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(Modifier.width(16.dp))
-                Column {
-                    Text(
-                        text = "Dr. Dzaky Nashshar",
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 18.sp,
-                    )
-                    Text(
-                        text = "Psychology Specialist",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = Color.Gray
-                    )
-
-                    DoctorPerks(
-                        title = "Experience",
-                        value = "2 Year(s)",
-                        icon = Icons.Rounded.BusinessCenter,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                    DoctorPerks(
-                        title = "Patients",
-                        value = "215",
-                        icon = Icons.Rounded.Person,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
-                }
-            }
-
-            // Biography Section
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 24.dp)
-            ) {
-                TitleText(stringResource(R.string.biography))
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellen tesque in imperdiet augue. Mauris in purus lorem. In egestas ultrices hendrerit. In fringilla magna in odio semper iaculis.",
-                    textAlign = TextAlign.Justify,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-            }
-            // Schedule Section
+            TitleText(stringResource(R.string.biography))
             Spacer(modifier = Modifier.height(8.dp))
-            TitleText(
-                text = stringResource(R.string.schedule_consultation),
-                modifier = Modifier
-                    .padding(horizontal = 24.dp)
+            Text(
+                text = doctor.biography,
+                textAlign = TextAlign.Justify,
+                style = MaterialTheme.typography.bodyMedium
             )
+        }
+        // Schedule Section
+        Spacer(modifier = Modifier.height(8.dp))
+        TitleText(
+            text = stringResource(R.string.schedule_consultation),
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+        )
 
-            Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
-            var selectedDate by remember { mutableIntStateOf(0) }
-            val dates = viewModel.getCurrentWeek()
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 24.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(items = dates, key = { it.dateInMillis }) { consultationDate ->
-                    ScheduleDate(
-                        consultationDate = consultationDate,
-                        selected = consultationDate.date == selectedDate,
-                        enabled = consultationDate.dateInMillis > viewModel.currentTime,
-                        onClick = {
-                            selectedDate = consultationDate.date
-                        })
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(items = dates, key = { it.dateInMillis }) { consultationDate ->
+                ScheduleDate(
+                    consultationDate = consultationDate,
+                    selected = consultationDate.date == selectedDate,
+                    enabled = consultationDate.dateInMillis > currentTime,
+                    onClick = {
+                        selectedDate = consultationDate.date
+                    })
 
-                }
             }
-            Spacer(modifier = Modifier.height(12.dp))
-            // Time Section
-            TitleText(
-                text = stringResource(R.string.time),
-                modifier = Modifier
-                    .padding(horizontal = 24.dp)
-            )
-            Spacer(modifier = Modifier.height(12.dp))
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        // Time Section
+        TitleText(
+            text = stringResource(R.string.time),
+            modifier = Modifier
+                .padding(horizontal = 24.dp)
+        )
+        Spacer(modifier = Modifier.height(12.dp))
 
-            val times = viewModel.timeSlots
-            var selectedTime by remember { mutableStateOf("") }
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 24.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier.height(32.dp)
-            ) {
-                items(items = times, key = null) { time ->
-                    ScheduleTime(
-                        time = time,
-                        selected = selectedTime == time,
-                        enabled = true,
-                        onClick = { selectedTime = time }
-                    )
-                }
+        LazyRow(
+            contentPadding = PaddingValues(horizontal = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.height(32.dp)
+        ) {
+            items(items = timeSlots, key = null) { time ->
+                ScheduleTime(
+                    time = time,
+                    selected = selectedTime == time,
+                    enabled = true,
+                    onClick = { selectedTime = time }
+                )
             }
-            Spacer(Modifier.height(32.dp))
-            // Book Session
-            Button(
-                onClick = { },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp)
-                    .height(48.dp)
-            ) {
-                Text(stringResource(R.string.book_appointment))
-            }
+        }
+        Spacer(Modifier.height(32.dp))
+        // Book Session
+        Button(
+            onClick = { },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .height(48.dp)
+        ) {
+            Text(stringResource(R.string.book_appointment))
         }
     }
 }
@@ -320,7 +354,7 @@ fun DoctorPerks(
 @Composable
 fun DetailDoctorPreview() {
     KalmakasaTheme {
-        DetailDoctorScreen()
+        DetailDoctorScreen(DetailDoctorState())
     }
 
 }

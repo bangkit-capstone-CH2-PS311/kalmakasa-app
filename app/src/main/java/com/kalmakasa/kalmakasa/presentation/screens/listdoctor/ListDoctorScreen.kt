@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -39,13 +40,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.domain.model.Doctor
+import com.kalmakasa.kalmakasa.presentation.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.VerticalDivider
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
-import kotlin.random.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DoctorListScreen() {
+fun ListDoctorScreen(
+    uiState: ListDoctorState,
+    onDoctorClicked: (Doctor) -> Unit,
+) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
@@ -57,7 +61,7 @@ fun DoctorListScreen() {
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 OutlinedTextField(
-                    value = "",
+                    value = uiState.searchQuery,
                     shape = MaterialTheme.shapes.extraLarge,
                     onValueChange = {},
                     leadingIcon = {
@@ -95,51 +99,68 @@ fun DoctorListScreen() {
             }
         }
     ) { paddingValues ->
-        val doctorsList = listOf(
-            createDoctor("Dr. Dzaky Nashshar"),
-            createDoctor("Dr. Muhammad Dzaky"),
-            createDoctor("Dr. Muhammad Nashshar"),
-        )
+        if (uiState.isLoading) {
+            LoadingScreen(Modifier.padding(paddingValues))
+        } else if (uiState.isError) {
+            Box(modifier = Modifier.padding(paddingValues)) {
+                Text("Error")
+            }
+        } else {
+            ListDoctorContent(
+                listDoctor = uiState.listDoctor,
+                onDoctorClicked = onDoctorClicked,
+                modifier = Modifier.padding(paddingValues)
+            )
+        }
+    }
+}
 
-        LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
-        ) {
-            items(doctorsList, { it.name }) { doctor ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.background,
-                        contentColor = MaterialTheme.colorScheme.onBackground
-                    ),
-                    shape = MaterialTheme.shapes.small,
-                    onClick = {}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ListDoctorContent(
+    listDoctor: List<Doctor>,
+    onDoctorClicked: (Doctor) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
+    ) {
+        items(listDoctor, {
+            it.id
+        }) { doctor ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    contentColor = MaterialTheme.colorScheme.onBackground
+                ),
+                shape = MaterialTheme.shapes.small,
+                onClick = { onDoctorClicked(doctor) }
+            ) {
+                Row(
+                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 12.dp),
                 ) {
-                    Row(
-                        modifier = Modifier.padding(vertical = 16.dp, horizontal = 12.dp),
-                    ) {
-                        Image(
-                            modifier = Modifier
-                                .clip(MaterialTheme.shapes.large)
-                                .width(80.dp),
-                            painter = painterResource(R.drawable.placeholder_doctor_img),
-                            contentDescription = null,
+                    Image(
+                        modifier = Modifier
+                            .clip(MaterialTheme.shapes.large)
+                            .width(80.dp),
+                        painter = painterResource(R.drawable.placeholder_doctor_img),
+                        contentDescription = null,
+                    )
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Column {
+                        Text(
+                            text = doctor.name,
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold,
                         )
-                        Spacer(modifier = Modifier.width(16.dp))
-                        Column {
-                            Text(
-                                text = doctor.name,
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                            Text(
-                                text = doctor.speciality,
-                                style = MaterialTheme.typography.bodySmall,
-                            )
-                        }
+                        Text(
+                            text = doctor.speciality,
+                            style = MaterialTheme.typography.bodySmall,
+                        )
                     }
                 }
             }
@@ -151,16 +172,5 @@ fun DoctorListScreen() {
 @Composable
 fun DoctorListPreview() {
     KalmakasaTheme {
-        DoctorListScreen()
     }
 }
-
-fun createDoctor(name: String): Doctor =
-    Doctor(
-        "test",
-        name,
-        "Depression",
-        Random.nextInt(1, 5),
-        Random.nextInt(100, 1000),
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vel mi diam. Nunc fermentum, sem id tempor ultricies, neque sapien consectetur neque, eget efficitur est purus ac urna. Praesent volutpat et massa vel lacinia. Quisque laoreet vehicula magna eget eleifend. Cras vel commodo ex. Sed fermentum erat et facilisis posuere. Cras gravida nibh a posuere pulvinar. Nullam varius purus quam, eget imperdiet nisl rutrum pretium. Integer scelerisque cursus tortor, vel mattis neque eleifend id."
-    )

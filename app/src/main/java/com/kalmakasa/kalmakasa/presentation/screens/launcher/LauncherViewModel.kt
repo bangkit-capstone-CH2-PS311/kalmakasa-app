@@ -1,4 +1,4 @@
-package com.kalmakasa.kalmakasa.presentation
+package com.kalmakasa.kalmakasa.presentation.screens.launcher
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
