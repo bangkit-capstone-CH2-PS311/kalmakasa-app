@@ -4,16 +4,16 @@ import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.data.network.response.toConsultant
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
 import com.kalmakasa.kalmakasa.domain.model.Consultant
-import com.kalmakasa.kalmakasa.domain.repository.DoctorRepository
+import com.kalmakasa.kalmakasa.domain.repository.ConsultantRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
 
-class ConsultantRepository(
+class ConsultantRepositoryImpl(
     private val api: ApiService,
-) : DoctorRepository {
+) : ConsultantRepository {
 
     override fun getListConsultant(): Flow<Resource<List<Consultant>>> = flow {
         emit(Resource.Loading)

@@ -1,11 +1,11 @@
-package com.kalmakasa.kalmakasa.presentation.screens.detaildoctor
+package com.kalmakasa.kalmakasa.presentation.screens.consultant_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.common.util.ConsultationDate
 import com.kalmakasa.kalmakasa.domain.model.Consultant
-import com.kalmakasa.kalmakasa.domain.repository.DoctorRepository
+import com.kalmakasa.kalmakasa.domain.repository.ConsultantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailDoctorViewModel @Inject constructor(
-    private val doctorRepository: DoctorRepository,
+    private val consultantRepository: ConsultantRepository,
 ) : ViewModel() {
 
     private val timeSlots = listOf("09.00", "10.00", "13.00", "14.00", "16.00", "17.00", "19.00")
@@ -27,15 +27,15 @@ class DetailDoctorViewModel @Inject constructor(
     val uiState: StateFlow<DetailDoctorState> = _uiState.asStateFlow()
     fun getDoctorDetail(id: String) {
         viewModelScope.launch {
-            doctorRepository.getDoctorDetailById(id).collect { doctor ->
-                when (doctor) {
+            consultantRepository.getDoctorDetailById(id).collect { consultant ->
+                when (consultant) {
                     is Resource.Loading -> {
                         _uiState.value = DetailDoctorState(isLoading = true)
                     }
 
                     is Resource.Success -> {
                         _uiState.value = DetailDoctorState(
-                            consultant = doctor.data,
+                            consultant = consultant.data,
                             timeSlots = timeSlots,
                             currentTime = currentTime,
                             dates = getDates()

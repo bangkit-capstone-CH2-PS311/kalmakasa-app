@@ -1,4 +1,4 @@
-package com.kalmakasa.kalmakasa.presentation.screens.listdoctor
+package com.kalmakasa.kalmakasa.presentation.screens.consultant_list
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
@@ -47,8 +47,8 @@ import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListDoctorScreen(
-    uiState: ListDoctorState,
-    onDoctorClicked: (Consultant) -> Unit,
+    uiState: ListConsultantState,
+    onConsultantClicked: (Consultant) -> Unit,
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -108,7 +108,7 @@ fun ListDoctorScreen(
         } else {
             ListDoctorContent(
                 listConsultant = uiState.listConsultant,
-                onDoctorClicked = onDoctorClicked,
+                onDoctorClicked = onConsultantClicked,
                 modifier = Modifier.padding(paddingValues)
             )
         }
@@ -129,7 +129,7 @@ fun ListDoctorContent(
     ) {
         items(listConsultant, {
             it.id
-        }) { doctor ->
+        }) { consultant ->
             Card(
                 modifier = Modifier
                     .fillMaxWidth(),
@@ -138,7 +138,7 @@ fun ListDoctorContent(
                     contentColor = MaterialTheme.colorScheme.onBackground
                 ),
                 shape = MaterialTheme.shapes.small,
-                onClick = { onDoctorClicked(doctor) }
+                onClick = { onDoctorClicked(consultant) }
             ) {
                 Row(
                     modifier = Modifier.padding(vertical = 16.dp, horizontal = 12.dp),
@@ -147,18 +147,18 @@ fun ListDoctorContent(
                         modifier = Modifier
                             .clip(MaterialTheme.shapes.large)
                             .width(80.dp),
-                        painter = painterResource(R.drawable.placeholder_doctor_img),
+                        painter = painterResource(R.drawable.placeholder_consultant_img),
                         contentDescription = null,
                     )
                     Spacer(modifier = Modifier.width(16.dp))
                     Column {
                         Text(
-                            text = doctor.name,
+                            text = consultant.name,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold,
                         )
                         Text(
-                            text = doctor.speciality,
+                            text = consultant.speciality,
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }

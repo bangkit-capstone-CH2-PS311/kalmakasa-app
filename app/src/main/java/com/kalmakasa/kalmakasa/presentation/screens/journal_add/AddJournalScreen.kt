@@ -1,4 +1,4 @@
-package com.kalmakasa.kalmakasa.presentation.screens.addjournal
+package com.kalmakasa.kalmakasa.presentation.screens.journal_add
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

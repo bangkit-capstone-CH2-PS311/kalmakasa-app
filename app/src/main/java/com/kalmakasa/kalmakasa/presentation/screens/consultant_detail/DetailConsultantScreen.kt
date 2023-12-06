@@ -1,4 +1,4 @@
-package com.kalmakasa.kalmakasa.presentation.screens.detaildoctor
+package com.kalmakasa.kalmakasa.presentation.screens.consultant_detail
 
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
@@ -139,7 +139,7 @@ fun DetailDoctorContent(
                 .padding(bottom = 16.dp)
         ) {
             Image(
-                painter = painterResource(R.drawable.placeholder_doctor_img),
+                painter = painterResource(R.drawable.placeholder_consultant_img),
                 contentDescription = null,
                 modifier = Modifier
                     .width(144.dp)
@@ -248,7 +248,7 @@ fun DetailDoctorContent(
             value = userNotes,
             onValueChange = { userNotes = it },
             maxLines = 5,
-            placeholder = { Text(stringResource(R.string.hint_doctor_note)) },
+            placeholder = { Text(stringResource(R.string.hint_consultant_note)) },
             modifier = Modifier
                 .padding(horizontal = 24.dp)
                 .fillMaxWidth()

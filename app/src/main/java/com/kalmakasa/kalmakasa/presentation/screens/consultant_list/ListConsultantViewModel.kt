@@ -1,10 +1,10 @@
-package com.kalmakasa.kalmakasa.presentation.screens.listdoctor
+package com.kalmakasa.kalmakasa.presentation.screens.consultant_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.Consultant
-import com.kalmakasa.kalmakasa.domain.repository.DoctorRepository
+import com.kalmakasa.kalmakasa.domain.repository.ConsultantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,32 +17,32 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ListDoctorViewModel @Inject constructor(
-    private val doctorRepository: DoctorRepository,
+    private val consultantRepository: ConsultantRepository,
 ) : ViewModel() {
 
     private val _listConsultant = MutableStateFlow<Resource<List<Consultant>>>(Resource.Loading)
 
     private val _searchQuery = MutableStateFlow("")
 
-    val uiState: StateFlow<ListDoctorState> =
-        combine(_listConsultant, _searchQuery) { listDoctor, query ->
-            when (listDoctor) {
+    val uiState: StateFlow<ListConsultantState> =
+        combine(_listConsultant, _searchQuery) { listConsultant, query ->
+            when (listConsultant) {
                 is Resource.Loading -> {
-                    ListDoctorState(
+                    ListConsultantState(
                         searchQuery = query,
                         isLoading = true
                     )
                 }
 
                 is Resource.Success -> {
-                    ListDoctorState(
+                    ListConsultantState(
                         searchQuery = query,
-                        listConsultant = listDoctor.data
+                        listConsultant = listConsultant.data
                     )
                 }
 
                 else -> {
-                    ListDoctorState(
+                    ListConsultantState(
                         searchQuery = query,
                         isError = true
                     )
@@ -51,23 +51,23 @@ class ListDoctorViewModel @Inject constructor(
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = ListDoctorState()
+            initialValue = ListConsultantState()
         )
 
     init {
-        getListDoctor()
+        getListConsultant()
     }
 
-    private fun getListDoctor() {
+    private fun getListConsultant() {
         viewModelScope.launch {
-            doctorRepository.getListConsultant().collect {
+            consultantRepository.getListConsultant().collect {
                 _listConsultant.value = it
             }
         }
     }
 }
 
-data class ListDoctorState(
+data class ListConsultantState(
     val listConsultant: List<Consultant> = emptyList(),
     val searchQuery: String = "",
     val isError: Boolean = false,
