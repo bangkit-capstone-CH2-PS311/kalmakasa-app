@@ -70,7 +70,7 @@ fun HomeContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(user.name)
-        Text(user.token)
+        Text(user.accessToken)
         Text(user.isLogin.toString())
         Text(text = "Home Screen")
         Button(onClick = onLogoutClicked) {

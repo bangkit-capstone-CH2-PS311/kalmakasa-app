@@ -1,6 +1,5 @@
 package com.kalmakasa.kalmakasa.presentation.screens.addjournal
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,10 +52,6 @@ fun AddJournalScreen(
     var sliderValue by rememberSaveable { mutableFloatStateOf(2f) }
     val prevEnable = isFinal
     val nextEnable = !isFinal
-
-    BackHandler {
-        navBack()
-    }
 
     Scaffold(
         topBar = {
@@ -209,6 +204,6 @@ fun MoodSlider(
 @Composable
 fun AddJournalPreview() {
     KalmakasaTheme {
-        AddJournalScreen({})
+        AddJournalScreen {}
     }
 }

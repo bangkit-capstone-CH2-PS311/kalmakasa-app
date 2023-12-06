@@ -248,7 +248,7 @@ fun DetailDoctorContent(
             value = userNotes,
             onValueChange = { userNotes = it },
             maxLines = 5,
-            placeholder = { Text("insert your notes for the doctor here.") },
+            placeholder = { Text(stringResource(R.string.hint_doctor_note)) },
             modifier = Modifier
                 .padding(horizontal = 24.dp)
                 .fillMaxWidth()

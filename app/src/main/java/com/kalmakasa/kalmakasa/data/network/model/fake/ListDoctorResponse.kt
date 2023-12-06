@@ -1,4 +1,4 @@
-package com.kalmakasa.kalmakasa.data.network.response
+package com.kalmakasa.kalmakasa.data.network.model.fake
 
 import com.kalmakasa.kalmakasa.data.network.model.ApiDoctor
 

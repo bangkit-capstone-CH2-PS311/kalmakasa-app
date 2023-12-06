@@ -19,7 +19,8 @@ class UserPreferences(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { preferences ->
             preferences[ID_KEY] = user.id
             preferences[NAME_KEY] = user.name
-            preferences[TOKEN_KEY] = user.token
+            preferences[ACCESS_TOKEN_KEY] = user.accessToken
+            preferences[REFRESH_TOKEN_KEY] = user.accessToken
             preferences[IS_LOGIN_KEY] = true
         }
     }
@@ -30,7 +31,8 @@ class UserPreferences(private val dataStore: DataStore<Preferences>) {
             User(
                 preferences[ID_KEY] ?: "",
                 preferences[NAME_KEY] ?: "",
-                preferences[TOKEN_KEY] ?: "",
+                preferences[ACCESS_TOKEN_KEY] ?: "",
+                preferences[REFRESH_TOKEN_KEY] ?: "",
                 preferences[IS_LOGIN_KEY] ?: false,
             )
         }
@@ -45,7 +47,8 @@ class UserPreferences(private val dataStore: DataStore<Preferences>) {
     companion object {
         private val ID_KEY = stringPreferencesKey("id")
         private val NAME_KEY = stringPreferencesKey("name")
-        private val TOKEN_KEY = stringPreferencesKey("token")
+        private val ACCESS_TOKEN_KEY = stringPreferencesKey("access-token")
+        private val REFRESH_TOKEN_KEY = stringPreferencesKey("refresh-token")
         private val IS_LOGIN_KEY = booleanPreferencesKey("isLogin")
     }
 }

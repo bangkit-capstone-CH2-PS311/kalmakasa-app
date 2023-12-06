@@ -9,34 +9,38 @@ import com.kalmakasa.kalmakasa.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import retrofit2.HttpException
+import java.io.IOException
 
 
-class FakeUserRepository(
+class UserRepositoryImpl(
     private val pref: UserPreferences,
     private val apiService: ApiService,
 ) : UserRepository {
     override suspend fun login(email: String, password: String) = flow {
         emit(Resource.Loading)
         val response = apiService.login(email, password)
-        if (response.error) {
-            emit(Resource.Error(response.message))
-        } else {
-            response.userData?.let { pref.setSession(it.toUser()) }
-            emit(Resource.Success(response.message))
+        pref.setSession(response.toUser())
+        emit(Resource.Success("Sign In Success"))
+    }.catch {
+        when (it) {
+            is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
+            is IOException -> emit(Resource.Error(it.localizedMessage ?: "No Internet"))
         }
-    }.catch { emit(Resource.Error(it.message ?: "Unknown Error")) }
+
+    }
 
     override suspend fun register(name: String, email: String, password: String) = flow {
         emit(Resource.Loading)
         val response = apiService.register(name, email, password)
-        if (response.error) {
-            emit(Resource.Error(response.message))
-        } else {
-            response.userData?.let { pref.setSession(it.toUser()) }
-            emit(Resource.Success(response.message))
+        pref.setSession(response.toUser())
+        emit(Resource.Success("Register Success"))
+    }.catch {
+        when (it) {
+            is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
+            is IOException -> emit(Resource.Error(it.localizedMessage ?: "No Internet"))
         }
-    }.catch { emit(Resource.Error(it.message ?: "Unknown Error")) }
-
+    }
 
     override suspend fun logout() {
         pref.logout()

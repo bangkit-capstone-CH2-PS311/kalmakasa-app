@@ -20,4 +20,5 @@
     <string name="schedule_consultation">Schedule Consultation</string>
     <string name="time">Time</string>
     <string name="book_appointment">Book Appointment</string>
+    <string name="hint_doctor_note">insert your notes for the doctor here.</string>
 </resources>
