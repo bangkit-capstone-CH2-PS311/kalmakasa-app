@@ -55,7 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.common.util.ConsultationDate
-import com.kalmakasa.kalmakasa.domain.model.Doctor
+import com.kalmakasa.kalmakasa.domain.model.Consultant
 import com.kalmakasa.kalmakasa.presentation.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 
@@ -94,13 +94,13 @@ fun DetailDoctorScreen(
                 LoadingScreen(Modifier.padding(paddingValues))
             }
 
-            uiState.doctor == null -> {
+            uiState.consultant == null -> {
                 Text(text = "Doctor not found")
             }
 
             else -> {
                 DetailDoctorContent(
-                    uiState.doctor,
+                    uiState.consultant,
                     uiState.timeSlots,
                     uiState.currentTime,
                     uiState.dates,
@@ -114,7 +114,7 @@ fun DetailDoctorScreen(
 
 @Composable
 fun DetailDoctorContent(
-    doctor: Doctor,
+    consultant: Consultant,
     timeSlots: List<String>,
     currentTime: Long,
     dates: List<ConsultationDate>,
@@ -150,7 +150,7 @@ fun DetailDoctorContent(
             Spacer(Modifier.width(16.dp))
             Column {
                 Text(
-                    text = doctor.name,
+                    text = consultant.name,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 18.sp,
@@ -184,7 +184,7 @@ fun DetailDoctorContent(
             TitleText(stringResource(R.string.biography))
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = doctor.biography,
+                text = consultant.biography,
                 textAlign = TextAlign.Justify,
                 style = MaterialTheme.typography.bodyMedium
             )
@@ -386,7 +386,7 @@ fun DetailDoctorPreview() {
     KalmakasaTheme {
         DetailDoctorScreen(
             DetailDoctorState(
-                doctor = Doctor(
+                consultant = Consultant(
                     "dsada",
                     "Dzaky Nashshar",
                     "Kanker",

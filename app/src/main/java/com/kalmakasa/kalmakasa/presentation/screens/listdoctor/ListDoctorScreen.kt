@@ -39,7 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
-import com.kalmakasa.kalmakasa.domain.model.Doctor
+import com.kalmakasa.kalmakasa.domain.model.Consultant
 import com.kalmakasa.kalmakasa.presentation.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.VerticalDivider
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
@@ -48,7 +48,7 @@ import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 @Composable
 fun ListDoctorScreen(
     uiState: ListDoctorState,
-    onDoctorClicked: (Doctor) -> Unit,
+    onDoctorClicked: (Consultant) -> Unit,
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
@@ -107,7 +107,7 @@ fun ListDoctorScreen(
             }
         } else {
             ListDoctorContent(
-                listDoctor = uiState.listDoctor,
+                listConsultant = uiState.listConsultant,
                 onDoctorClicked = onDoctorClicked,
                 modifier = Modifier.padding(paddingValues)
             )
@@ -118,8 +118,8 @@ fun ListDoctorScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListDoctorContent(
-    listDoctor: List<Doctor>,
-    onDoctorClicked: (Doctor) -> Unit,
+    listConsultant: List<Consultant>,
+    onDoctorClicked: (Consultant) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -127,7 +127,7 @@ fun ListDoctorContent(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
     ) {
-        items(listDoctor, {
+        items(listConsultant, {
             it.id
         }) { doctor ->
             Card(

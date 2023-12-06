@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.common.util.ConsultationDate
-import com.kalmakasa.kalmakasa.domain.model.Doctor
+import com.kalmakasa.kalmakasa.domain.model.Consultant
 import com.kalmakasa.kalmakasa.domain.repository.DoctorRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,7 +35,7 @@ class DetailDoctorViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         _uiState.value = DetailDoctorState(
-                            doctor = doctor.data,
+                            consultant = doctor.data,
                             timeSlots = timeSlots,
                             currentTime = currentTime,
                             dates = getDates()
@@ -88,7 +88,7 @@ class DetailDoctorViewModel @Inject constructor(
 }
 
 data class DetailDoctorState(
-    val doctor: Doctor? = null,
+    val consultant: Consultant? = null,
     val timeSlots: List<String> = emptyList(),
     val currentTime: Long = 0,
     val dates: List<ConsultationDate> = emptyList(),

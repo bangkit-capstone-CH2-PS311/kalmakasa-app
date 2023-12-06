@@ -3,7 +3,7 @@ package com.kalmakasa.kalmakasa.presentation.screens.listdoctor
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kalmakasa.kalmakasa.common.Resource
-import com.kalmakasa.kalmakasa.domain.model.Doctor
+import com.kalmakasa.kalmakasa.domain.model.Consultant
 import com.kalmakasa.kalmakasa.domain.repository.DoctorRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,12 +20,12 @@ class ListDoctorViewModel @Inject constructor(
     private val doctorRepository: DoctorRepository,
 ) : ViewModel() {
 
-    private val _listDoctor = MutableStateFlow<Resource<List<Doctor>>>(Resource.Loading)
+    private val _listConsultant = MutableStateFlow<Resource<List<Consultant>>>(Resource.Loading)
 
     private val _searchQuery = MutableStateFlow("")
 
     val uiState: StateFlow<ListDoctorState> =
-        combine(_listDoctor, _searchQuery) { listDoctor, query ->
+        combine(_listConsultant, _searchQuery) { listDoctor, query ->
             when (listDoctor) {
                 is Resource.Loading -> {
                     ListDoctorState(
@@ -37,7 +37,7 @@ class ListDoctorViewModel @Inject constructor(
                 is Resource.Success -> {
                     ListDoctorState(
                         searchQuery = query,
-                        listDoctor = listDoctor.data
+                        listConsultant = listDoctor.data
                     )
                 }
 
@@ -60,15 +60,15 @@ class ListDoctorViewModel @Inject constructor(
 
     private fun getListDoctor() {
         viewModelScope.launch {
-            doctorRepository.getListDoctor().collect {
-                _listDoctor.value = it
+            doctorRepository.getListConsultant().collect {
+                _listConsultant.value = it
             }
         }
     }
 }
 
 data class ListDoctorState(
-    val listDoctor: List<Doctor> = emptyList(),
+    val listConsultant: List<Consultant> = emptyList(),
     val searchQuery: String = "",
     val isError: Boolean = false,
     val isLoading: Boolean = false,

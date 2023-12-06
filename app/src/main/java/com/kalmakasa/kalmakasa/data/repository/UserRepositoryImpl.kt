@@ -2,7 +2,7 @@ package com.kalmakasa.kalmakasa.data.repository
 
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.data.UserPreferences
-import com.kalmakasa.kalmakasa.data.network.model.toUser
+import com.kalmakasa.kalmakasa.data.network.response.toUser
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
 import com.kalmakasa.kalmakasa.domain.model.User
 import com.kalmakasa.kalmakasa.domain.repository.UserRepository

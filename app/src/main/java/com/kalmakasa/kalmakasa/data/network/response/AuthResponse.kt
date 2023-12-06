@@ -1,4 +1,4 @@
-package com.kalmakasa.kalmakasa.data.network.model
+package com.kalmakasa.kalmakasa.data.network.response
 
 import com.google.gson.annotations.SerializedName
 import com.kalmakasa.kalmakasa.domain.model.User

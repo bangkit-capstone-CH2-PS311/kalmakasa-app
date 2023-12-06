@@ -1,8 +1,8 @@
 package com.kalmakasa.kalmakasa.data.network.retrofit
 
-import com.kalmakasa.kalmakasa.data.network.model.AuthResponse
-import com.kalmakasa.kalmakasa.data.network.model.fake.DoctorResponse
-import com.kalmakasa.kalmakasa.data.network.model.fake.ListDoctorResponse
+import com.kalmakasa.kalmakasa.data.network.response.ApiConsultant
+import com.kalmakasa.kalmakasa.data.network.response.AuthResponse
+import com.kalmakasa.kalmakasa.data.network.response.ConsultantsResponse
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -25,11 +25,11 @@ interface ApiService {
         @Field("password") password: String,
     ): AuthResponse
 
-    @GET("doctors")
-    suspend fun getListDoctor(): ListDoctorResponse
+    @GET("consultants")
+    suspend fun getListConsultants(): ConsultantsResponse
 
-    @GET("doctors/{id}")
-    suspend fun getDoctorById(
+    @GET("consultants/{id}")
+    suspend fun getConsultantDetail(
         @Path("id") id: String,
-    ): DoctorResponse
+    ): ApiConsultant
 }

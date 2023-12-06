@@ -1,11 +1,11 @@
 package com.kalmakasa.kalmakasa.domain.repository
 
 import com.kalmakasa.kalmakasa.common.Resource
-import com.kalmakasa.kalmakasa.domain.model.Doctor
+import com.kalmakasa.kalmakasa.domain.model.Consultant
 import kotlinx.coroutines.flow.Flow
 
 interface DoctorRepository {
-    fun getDoctorDetailById(id: String): Flow<Resource<Doctor>>
+    fun getDoctorDetailById(id: String): Flow<Resource<Consultant>>
 
-    fun getListDoctor(): Flow<Resource<List<Doctor>>>
+    fun getListConsultant(): Flow<Resource<List<Consultant>>>
 }

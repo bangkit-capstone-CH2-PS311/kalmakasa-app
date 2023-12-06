@@ -5,7 +5,7 @@ import com.kalmakasa.kalmakasa.data.UserPreferences
 import com.kalmakasa.kalmakasa.data.dataStore
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
 import com.kalmakasa.kalmakasa.data.network.retrofit.RetrofitFactory
-import com.kalmakasa.kalmakasa.data.repository.FakeDoctorRepository
+import com.kalmakasa.kalmakasa.data.repository.ConsultantRepository
 import com.kalmakasa.kalmakasa.data.repository.UserRepositoryImpl
 import com.kalmakasa.kalmakasa.domain.repository.DoctorRepository
 import com.kalmakasa.kalmakasa.domain.repository.UserRepository
@@ -43,6 +43,6 @@ object AppModule {
     @Provides
     @Singleton
     fun provideDoctorRepository(apiService: ApiService): DoctorRepository {
-        return FakeDoctorRepository(apiService)
+        return ConsultantRepository(apiService)
     }
 }
