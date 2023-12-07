@@ -91,7 +91,6 @@ fun HomeScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeContent(
     user: User,
@@ -103,11 +102,10 @@ fun HomeContent(
 ) {
     Column(
         modifier = modifier
-            .padding(top = 24.dp)
             .padding(horizontal = 24.dp)
             .verticalScroll(rememberScrollState())
     ) {
-
+        Spacer(modifier = Modifier.height(16.dp))
         val features = listOf(
             Feature(
                 icon = Icons.Outlined.Favorite,
@@ -188,30 +186,7 @@ fun HomeContent(
         }
 
         // Assessment
-        Card(
-            onClick = { navigateToAssessment() },
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Column(
-                modifier = Modifier.padding(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "Ketahui Kesehatan Mentalmu",
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Text(
-                    text = "Dapatkan gambaran kesehatan mentalmu dengan mengerjakan Tes Kesehatan",
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                ElevatedButton(onClick = navigateToAssessment) {
-                    Text("Start My Test")
-                }
-            }
-        }
+        AssessmentCard(navigateToAssessment)
 
         // Article
         Row(
@@ -268,6 +243,38 @@ fun HomeContent(
         }
 
         Spacer(modifier = Modifier.height(24.dp))
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AssessmentCard(
+    navigateToAssessment: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        onClick = navigateToAssessment,
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(R.string.know_your_mental_health),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Text(
+                text = stringResource(R.string.get_an_overview_of_your_mental_health_by_taking_the_health_test),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodySmall
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            ElevatedButton(onClick = navigateToAssessment) {
+                Text(stringResource(R.string.start_my_test))
+            }
+        }
     }
 }
 

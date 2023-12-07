@@ -249,13 +249,13 @@ fun KalmakasaApp() {
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 DetailDoctorScreen(
                     uiState = uiState,
-                    onBackButtonClicked = { navController.navigateUp() },
+                    navUp = { navController.navigateUp() },
                     onAppointmentBooked = {}
                 )
             }
 
             composable(Screen.AddJournal.route) {
-                AddJournalScreen(navBack = {
+                AddJournalScreen(navUp = {
                     navController.navigateUp()
                 })
             }

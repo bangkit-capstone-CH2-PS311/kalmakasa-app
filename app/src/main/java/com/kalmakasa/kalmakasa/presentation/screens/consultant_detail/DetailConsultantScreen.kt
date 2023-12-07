@@ -21,7 +21,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.BusinessCenter
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
@@ -29,12 +28,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -57,30 +54,20 @@ import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.common.util.ConsultationDate
 import com.kalmakasa.kalmakasa.domain.model.Consultant
 import com.kalmakasa.kalmakasa.presentation.LoadingScreen
+import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailDoctorScreen(
     uiState: DetailDoctorState,
-    onBackButtonClicked: () -> Unit,
+    navUp: () -> Unit,
     onAppointmentBooked: () -> Unit,
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                title = {
-                    Text(
-                        text = "Detail Doctor",
-                        fontWeight = FontWeight.Medium
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBackButtonClicked) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                }
+            TitleTopAppBar(
+                title = "Detail Consultant",
+                onBackButtonClicked = navUp
             )
         }
     ) { paddingValues ->
