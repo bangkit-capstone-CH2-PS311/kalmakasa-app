@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.domain.model.Consultant
-import com.kalmakasa.kalmakasa.presentation.LoadingScreen
+import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.SearchTopAppBar
 
 @Composable
@@ -36,7 +36,7 @@ fun ListDoctorScreen(
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.surface,
-        topBar = { SearchTopAppBar(query = uiState.searchQuery) }
+        topBar = { SearchTopAppBar(query = uiState.searchQuery, placeholder = "Search...") }
     ) { paddingValues ->
         if (uiState.isLoading) {
             LoadingScreen(Modifier.padding(paddingValues))

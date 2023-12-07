@@ -25,4 +25,10 @@
     <string name="know_your_mental_health">Know Your Mental Health</string>
     <string name="get_an_overview_of_your_mental_health_by_taking_the_health_test">Get an overview of your mental health by taking the Health Test.</string>
     <string name="start_my_test">Start My Test</string>
+    <string name="see_more">See More</string>
+    <string name="article">Article</string>
+    <string name="journal">Journal</string>
+    <string name="consultation">Consultation</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
 </resources>

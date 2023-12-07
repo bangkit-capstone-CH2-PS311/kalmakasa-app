@@ -15,8 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.presentation.Screen
 
 @Composable
@@ -32,19 +34,19 @@ fun BottomBar(
     ) {
         val navigationItems = listOf(
             NavigationItem(
-                title = "Home",
+                title = stringResource(R.string.home),
                 icon = Icons.Default.Home,
                 iconOutline = Icons.Outlined.Home,
                 screen = Screen.Home
             ),
             NavigationItem(
-                title = "Consultation",
+                title = stringResource(R.string.consultation),
                 icon = Icons.Default.QuestionAnswer,
                 iconOutline = Icons.Outlined.QuestionAnswer,
                 screen = Screen.ListConsultant
             ),
             NavigationItem(
-                title = "Profile",
+                title = stringResource(R.string.profile),
                 icon = Icons.Default.Person,
                 iconOutline = Icons.Outlined.Person,
                 screen = Screen.Profile

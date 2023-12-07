@@ -1,6 +1,5 @@
 package com.kalmakasa.kalmakasa.presentation.screens.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,19 +31,19 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
+import com.kalmakasa.kalmakasa.domain.model.Article
 import com.kalmakasa.kalmakasa.domain.model.User
-import com.kalmakasa.kalmakasa.presentation.LoadingScreen
+import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
+import com.kalmakasa.kalmakasa.presentation.screens.article_list.ArticleCard
+import com.kalmakasa.kalmakasa.presentation.screens.article_list.ListArticleState
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_detail.TitleText
 import com.kalmakasa.kalmakasa.presentation.state.SessionState
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
@@ -52,11 +51,14 @@ import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 @Composable
 fun HomeScreen(
     homeState: SessionState,
+    articleState: ListArticleState,
     onLogoutClicked: () -> Unit,
+    onArticleClicked: (String) -> Unit,
     onUserIsNotLoggedIn: () -> Unit,
-    navigateToListDoctor: () -> Unit,
+    navigateToListConsultant: () -> Unit,
     navigateToAssessment: (Boolean) -> Unit,
     navigateToAddJournal: () -> Unit,
+    navigateToArticleList: () -> Unit,
     isNewUser: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -79,11 +81,14 @@ fun HomeScreen(
                 }
             } else {
                 HomeContent(
-                    homeState.session,
+                    user = homeState.session,
+                    articleState = articleState,
                     onLogoutClicked = onLogoutClicked,
+                    onArticleClicked = onArticleClicked,
                     navigateToAssessment = { navigateToAssessment(false) },
-                    navigateToListDoctor = navigateToListDoctor,
+                    navigateToListConsultant = navigateToListConsultant,
                     navigateToAddJournal = navigateToAddJournal,
+                    navigateToArticleList = navigateToArticleList,
                     modifier = modifier,
                 )
             }
@@ -94,10 +99,13 @@ fun HomeScreen(
 @Composable
 fun HomeContent(
     user: User,
+    articleState: ListArticleState,
     onLogoutClicked: () -> Unit,
+    onArticleClicked: (String) -> Unit,
     navigateToAssessment: () -> Unit,
-    navigateToListDoctor: () -> Unit,
+    navigateToListConsultant: () -> Unit,
     navigateToAddJournal: () -> Unit,
+    navigateToArticleList: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -109,39 +117,20 @@ fun HomeContent(
         val features = listOf(
             Feature(
                 icon = Icons.Outlined.Favorite,
-                title = "Consultation",
-                onClick = navigateToListDoctor,
+                title = stringResource(R.string.consultation),
+                onClick = navigateToListConsultant,
             ),
             Feature(
                 icon = Icons.Outlined.MenuBook,
-                title = "Journal",
+                title = stringResource(R.string.journal),
                 onClick = {},
             ),
             Feature(
                 icon = Icons.Outlined.Article,
-                title = "Article",
-                onClick = {},
+                title = stringResource(R.string.article),
+                onClick = navigateToArticleList,
             )
         )
-        val articles = listOf(
-            Article(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
-                description = "Article 1",
-                onClick = {},
-            ),
-            Article(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
-                description = "Article 2",
-                onClick = {},
-            ),
-            Article(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
-                description = "Article 3",
-                onClick = {},
-            )
-
-        )
-
         // Title
         Text(
             text = stringResource(R.string.hi, user.name),
@@ -189,60 +178,79 @@ fun HomeContent(
         AssessmentCard(navigateToAssessment)
 
         // Article
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            TitleText(text = "Article", Modifier)
-            Text(
-                "See More",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .clickable {
-
-                    }
-                    .padding(vertical = 8.dp)
+        if (articleState.isLoading) {
+            Text("Loading")
+        } else if (articleState.isError) {
+            Text("Error")
+        } else {
+            HomeArticles(
+                articles = articleState.listArticle.take(4),
+                navigateToArticleList = navigateToArticleList,
+                onArticleClicked = onArticleClicked,
             )
-        }
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            for (i in 0..articles.size step 2) {
-                val first = articles[i]
-                val sec = articles.getOrNull(i + 1)
-
-                Row(Modifier.fillMaxWidth()) {
-                    ArticleCard(
-                        painter = first.painter,
-                        description = first.description,
-                        onClick = first.onClick,
-                        Modifier.weight(1f)
-                    )
-                    Spacer(modifier = Modifier.width(18.dp))
-                    if (sec != null) {
-                        ArticleCard(
-                            painter = sec.painter,
-                            description = sec.description,
-                            onClick = sec.onClick,
-                            Modifier.weight(1f)
-                        )
-                    } else {
-                        Spacer(
-                            Modifier.weight(1f)
-                        )
-                    }
-                }
-                if (i != articles.lastIndex && i != (articles.lastIndex - 1)) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-            }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
+    }
+}
+
+@Composable
+fun HomeArticles(
+    articles: List<Article>,
+    navigateToArticleList: () -> Unit,
+    onArticleClicked: (String) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        TitleText(text = stringResource(R.string.article), Modifier)
+        Text(
+            stringResource(R.string.see_more),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .clickable { navigateToArticleList() }
+                .padding(vertical = 8.dp)
+        )
+    }
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        for (i in articles.indices step 2) {
+            val first = articles[i]
+            val sec = articles.getOrNull(i + 1)
+
+            Row(Modifier.fillMaxWidth()) {
+                ArticleCard(
+                    painter = painterResource(id = R.drawable.ic_launcher_background),
+                    title = first.title,
+                    description = first.description,
+                    onClick = { onArticleClicked(first.id) },
+                    modifier = Modifier.weight(1f)
+                )
+                Spacer(modifier = Modifier.width(18.dp))
+                if (sec != null) {
+                    ArticleCard(
+                        painter = painterResource(id = R.drawable.ic_launcher_background),
+                        title = sec.title,
+                        description = sec.description,
+                        onClick = { onArticleClicked(sec.id) },
+                        modifier = Modifier.weight(1f)
+                    )
+                } else {
+                    Spacer(
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+            if (i != articles.lastIndex && i != (articles.lastIndex - 1)) {
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+        }
     }
 }
 
@@ -278,40 +286,6 @@ fun AssessmentCard(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun ArticleCard(
-    painter: Painter,
-    description: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Card(
-        onClick = onClick,
-        modifier = modifier
-            .height(160.dp)
-    ) {
-        Image(
-            painter = painter,
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(90.dp),
-            contentScale = ContentScale.Crop,
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 12.dp)
-        ) {
-            Text(
-                text = description,
-                style = MaterialTheme.typography.labelMedium,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -344,11 +318,14 @@ fun HomePreview() {
         HomeScreen(
             homeState = SessionState.Loading,
             onLogoutClicked = {},
+            onArticleClicked = { _ -> },
             onUserIsNotLoggedIn = {},
-            navigateToListDoctor = {},
-            navigateToAddJournal = {},
+            navigateToListConsultant = {},
             navigateToAssessment = { _ -> },
-            isNewUser = false
+            navigateToAddJournal = {},
+            navigateToArticleList = {},
+            isNewUser = false,
+            articleState = ListArticleState(),
         )
     }
 }
@@ -359,8 +336,3 @@ data class Feature(
     val onClick: () -> Unit,
 )
 
-data class Article(
-    val painter: Painter,
-    val description: String,
-    val onClick: () -> Unit,
-)

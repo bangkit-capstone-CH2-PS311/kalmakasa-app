@@ -1,18 +1,12 @@
 package com.kalmakasa.kalmakasa.presentation
 
 import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,6 +20,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.kalmakasa.kalmakasa.presentation.component.BottomBar
+import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
+import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailScreen
+import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailViewModel
+import com.kalmakasa.kalmakasa.presentation.screens.article_list.ListArticleScreen
+import com.kalmakasa.kalmakasa.presentation.screens.article_list.ListArticleViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.auth.register.RegisterScreen
 import com.kalmakasa.kalmakasa.presentation.screens.auth.register.RegisterViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.auth.signin.SignInScreen
@@ -157,10 +156,12 @@ fun KalmakasaApp() {
             ) {
                 val viewModel: HomeViewModel = hiltViewModel()
                 val homeState by viewModel.homeState.collectAsStateWithLifecycle()
+                val articleState by viewModel.uiState.collectAsStateWithLifecycle()
 
                 val isNewUser = it.arguments?.getBoolean("isNewUser", false) ?: false
                 HomeScreen(
-                    homeState,
+                    homeState = homeState,
+                    articleState = articleState,
                     isNewUser = isNewUser,
                     onUserIsNotLoggedIn = {
                         navController.navigate(Screen.AuthGraph.route) {
@@ -173,7 +174,7 @@ fun KalmakasaApp() {
                             popUpTo(Screen.Home.route) { inclusive = true }
                         }
                     },
-                    navigateToListDoctor = {
+                    navigateToListConsultant = {
                         navController.navigate(Screen.ListConsultant.route)
                     },
                     navigateToAssessment = { isSkippable ->
@@ -181,10 +182,33 @@ fun KalmakasaApp() {
                     },
                     navigateToAddJournal = {
                         navController.navigate(Screen.AddJournal.route)
+                    },
+                    navigateToArticleList = {
+                        navController.navigate(Screen.ListArticle.route)
+                    },
+                    onArticleClicked = { id ->
+                        navController.navigate(Screen.DetailArticle.createRoute(id))
                     }
                 )
             }
 
+            composable(Screen.ListConsultant.route) {
+                val viewModel: ListDoctorViewModel = hiltViewModel()
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+                ListDoctorScreen(
+                    uiState
+                ) { doctor ->
+                    navController.navigate(Screen.ConsultantDetail.createRoute(doctor.id))
+                }
+            }
+
+            composable(Screen.Profile.route) {
+                Text("Profile Screen")
+            }
+
+
+            // FEATURES
             composable(
                 route = Screen.Question.route,
                 arguments = listOf(navArgument("isSkippable") { type = NavType.BoolType })
@@ -217,23 +241,8 @@ fun KalmakasaApp() {
                 )
             }
 
-            composable(Screen.Profile.route) {
-                Text("Profile Screen")
-            }
-
             composable(Screen.History.route) {
                 Text("History Screen")
-            }
-
-            composable(Screen.ListConsultant.route) {
-                val viewModel: ListDoctorViewModel = hiltViewModel()
-                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-                ListDoctorScreen(
-                    uiState
-                ) { doctor ->
-                    navController.navigate(Screen.ConsultantDetail.createRoute(doctor.id))
-                }
             }
 
             composable(
@@ -259,22 +268,48 @@ fun KalmakasaApp() {
                     navController.navigateUp()
                 })
             }
+
+            composable(Screen.ListArticle.route) {
+                val viewModel: ListArticleViewModel = hiltViewModel()
+
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+                ListArticleScreen(
+                    uiState = uiState,
+                    onArticleClicked = { id ->
+                        navController.navigate(Screen.DetailArticle.createRoute(id))
+                    }
+                )
+            }
+
+            composable(
+                Screen.DetailArticle.route,
+                arguments = listOf(navArgument("id") { type = NavType.StringType })
+            ) {
+                val viewModel: ArticleDetailViewModel = hiltViewModel()
+
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                val id = it.arguments?.getString("id") ?: ""
+                LaunchedEffect(true) {
+                    viewModel.getArticleDetail(id)
+                }
+
+                if (uiState.isLoading) {
+                    LoadingScreen()
+                } else if (uiState.isError) {
+                    Text("Error")
+                } else {
+                    uiState.article?.let { article ->
+                        ArticleDetailScreen(
+                            article = article,
+                            navUp = { navController.navigateUp() }
+                        )
+                    } ?: LoadingScreen()
+                }
+            }
         }
     }
 
 }
 
-@Composable
-fun LoadingScreen(modifier: Modifier = Modifier) {
-    Scaffold {
-        Box(
-            modifier = modifier
-                .padding(it)
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
-        }
-    }
-}
+

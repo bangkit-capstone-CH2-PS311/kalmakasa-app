@@ -5,8 +5,10 @@ import com.kalmakasa.kalmakasa.data.UserPreferences
 import com.kalmakasa.kalmakasa.data.dataStore
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
 import com.kalmakasa.kalmakasa.data.network.retrofit.RetrofitFactory
+import com.kalmakasa.kalmakasa.data.repository.ArticleRepositoryImpl
 import com.kalmakasa.kalmakasa.data.repository.ConsultantRepositoryImpl
 import com.kalmakasa.kalmakasa.data.repository.UserRepositoryImpl
+import com.kalmakasa.kalmakasa.domain.repository.ArticleRepository
 import com.kalmakasa.kalmakasa.domain.repository.ConsultantRepository
 import com.kalmakasa.kalmakasa.domain.repository.UserRepository
 import dagger.Module
@@ -44,5 +46,11 @@ object AppModule {
     @Singleton
     fun provideDoctorRepository(apiService: ApiService): ConsultantRepository {
         return ConsultantRepositoryImpl(apiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideArticleRepository(): ArticleRepository {
+        return ArticleRepositoryImpl()
     }
 }

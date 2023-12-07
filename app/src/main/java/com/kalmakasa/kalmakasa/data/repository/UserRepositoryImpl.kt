@@ -17,7 +17,7 @@ class UserRepositoryImpl(
     private val pref: UserPreferences,
     private val apiService: ApiService,
 ) : UserRepository {
-    override suspend fun login(email: String, password: String) = flow {
+    override fun login(email: String, password: String) = flow {
         emit(Resource.Loading)
         val response = apiService.login(email, password)
         pref.setSession(response.toUser())
@@ -30,7 +30,7 @@ class UserRepositoryImpl(
 
     }
 
-    override suspend fun register(name: String, email: String, password: String) = flow {
+    override fun register(name: String, email: String, password: String) = flow {
         emit(Resource.Loading)
         val response = apiService.register(name, email, password)
         pref.setSession(response.toUser())

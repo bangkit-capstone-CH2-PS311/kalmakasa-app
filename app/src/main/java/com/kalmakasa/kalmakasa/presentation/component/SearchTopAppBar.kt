@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 fun SearchTopAppBar(
     query: String,
     modifier: Modifier = Modifier,
+    useFilter: Boolean = true,
     placeholder: String = "Search",
 ) {
     Column(
@@ -56,25 +57,28 @@ fun SearchTopAppBar(
                 .heightIn(min = 56.dp)
                 .padding(horizontal = 16.dp)
         )
-        Row(
-            modifier = Modifier
-                .height(FilterChipDefaults.Height)
-                .horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Spacer(Modifier.width(16.dp))
-            FilterChip(
-                selected = false,
-                onClick = {},
-                label = { Text("For Me") },
-                leadingIcon = { Icon(Icons.Outlined.AutoAwesome, null) },
-            )
-            VerticalDivider()
-            FilterChip(selected = false, onClick = {}, label = { Text("Filter 1") })
-            FilterChip(selected = false, onClick = {}, label = { Text("Filter 2") })
-            FilterChip(selected = false, onClick = {}, label = { Text("Filter 3") })
-            FilterChip(selected = false, onClick = {}, label = { Text("Filter 4") })
-            Spacer(Modifier.width(16.dp))
+        if (useFilter) {
+            Row(
+                modifier = Modifier
+                    .height(FilterChipDefaults.Height)
+                    .horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Spacer(Modifier.width(16.dp))
+                FilterChip(
+                    selected = false,
+                    onClick = {},
+                    label = { Text("For Me") },
+                    leadingIcon = { Icon(Icons.Outlined.AutoAwesome, null) },
+                )
+                VerticalDivider()
+                FilterChip(selected = false, onClick = {}, label = { Text("Filter 1") })
+                FilterChip(selected = false, onClick = {}, label = { Text("Filter 2") })
+                FilterChip(selected = false, onClick = {}, label = { Text("Filter 3") })
+                FilterChip(selected = false, onClick = {}, label = { Text("Filter 4") })
+                Spacer(Modifier.width(16.dp))
+            }
         }
+
     }
 }
