@@ -1,9 +1,12 @@
 package com.kalmakasa.kalmakasa.presentation.component
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.HistoryEdu
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.QuestionAnswer
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.QuestionAnswer
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -12,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.kalmakasa.kalmakasa.presentation.Screen
@@ -31,17 +33,20 @@ fun BottomBar(
         val navigationItems = listOf(
             NavigationItem(
                 title = "Home",
-                icon = Icons.Outlined.Home,
+                icon = Icons.Default.Home,
+                iconOutline = Icons.Outlined.Home,
                 screen = Screen.Home
             ),
             NavigationItem(
-                title = "History",
-                icon = Icons.Outlined.HistoryEdu,
-                screen = Screen.History
+                title = "Consultation",
+                icon = Icons.Default.QuestionAnswer,
+                iconOutline = Icons.Outlined.QuestionAnswer,
+                screen = Screen.ListConsultant
             ),
             NavigationItem(
                 title = "Profile",
-                icon = Icons.Outlined.Person,
+                icon = Icons.Default.Person,
+                iconOutline = Icons.Outlined.Person,
                 screen = Screen.Profile
             )
         )
@@ -50,15 +55,16 @@ fun BottomBar(
             NavigationBarItem(
                 icon = {
                     Icon(
-                        imageVector = item.icon,
-                        contentDescription = item.title
+                        imageVector = if (currentRoute == item.screen.route)
+                            item.icon else item.iconOutline,
+                        contentDescription = item.title,
                     )
                 },
                 label = { Text(item.title) },
                 selected = currentRoute == item.screen.route,
                 onClick = {
                     navController.navigate(item.screen.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
+                        popUpTo(Screen.Launcher.route) {
                             saveState = true
                         }
                         restoreState = true
@@ -74,6 +80,7 @@ fun BottomBar(
 data class NavigationItem(
     val title: String,
     val icon: ImageVector,
+    val iconOutline: ImageVector,
     val screen: Screen,
 )
 

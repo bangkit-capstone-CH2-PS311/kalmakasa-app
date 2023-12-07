@@ -19,9 +19,9 @@ sealed class Screen(val route: String) {
         fun createRoute(isSkippable: Boolean) = "question/$isSkippable"
     }
 
-    object ListDoctor : Screen("list-doctor")
-    object DoctorDetail : Screen("doctor-detail/{id}") {
-        fun createRoute(id: String) = "doctor-detail/$id"
+    object ListConsultant : Screen("list-consultant")
+    object ConsultantDetail : Screen("consultant-detail/{id}") {
+        fun createRoute(id: String) = "consultant-detail/$id"
     }
 
     object AddJournal : Screen("journal-add")
@@ -29,7 +29,7 @@ sealed class Screen(val route: String) {
     companion object {
         val withBottomBar = listOf(
             Home.route,
-            History.route,
+            ListConsultant.route,
             Profile.route,
         )
     }

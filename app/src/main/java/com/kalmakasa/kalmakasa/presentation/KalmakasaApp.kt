@@ -26,7 +26,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.kalmakasa.kalmakasa.presentation.component.BottomBar
-import com.kalmakasa.kalmakasa.presentation.screens.journal_add.AddJournalScreen
 import com.kalmakasa.kalmakasa.presentation.screens.auth.register.RegisterScreen
 import com.kalmakasa.kalmakasa.presentation.screens.auth.register.RegisterViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.auth.signin.SignInScreen
@@ -34,11 +33,12 @@ import com.kalmakasa.kalmakasa.presentation.screens.auth.signin.SignInViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.auth.welcome.WelcomeScreen
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_detail.DetailDoctorScreen
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_detail.DetailDoctorViewModel
-import com.kalmakasa.kalmakasa.presentation.screens.home.HomeScreen
-import com.kalmakasa.kalmakasa.presentation.screens.home.HomeViewModel
-import com.kalmakasa.kalmakasa.presentation.screens.launcher.LauncherViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_list.ListDoctorScreen
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_list.ListDoctorViewModel
+import com.kalmakasa.kalmakasa.presentation.screens.home.HomeScreen
+import com.kalmakasa.kalmakasa.presentation.screens.home.HomeViewModel
+import com.kalmakasa.kalmakasa.presentation.screens.journal_add.AddJournalScreen
+import com.kalmakasa.kalmakasa.presentation.screens.launcher.LauncherViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.question.QuestionScreen
 import com.kalmakasa.kalmakasa.presentation.screens.question.QuestionViewModel
 import com.kalmakasa.kalmakasa.presentation.state.SessionState
@@ -76,6 +76,7 @@ fun KalmakasaApp() {
                         LaunchedEffect(state) {
                             navController.navigate(Screen.AuthGraph.route) {
                                 popUpTo(Screen.Launcher.route) { inclusive = true }
+                                launchSingleTop = true
                             }
                         }
                     }
@@ -84,6 +85,7 @@ fun KalmakasaApp() {
                         LaunchedEffect(state) {
                             navController.navigate(Screen.Home.route) {
                                 popUpTo(Screen.Launcher.route) { inclusive = true }
+                                launchSingleTop = true
                             }
                         }
                     }
@@ -172,7 +174,7 @@ fun KalmakasaApp() {
                         }
                     },
                     navigateToListDoctor = {
-                        navController.navigate(Screen.ListDoctor.route)
+                        navController.navigate(Screen.ListConsultant.route)
                     },
                     navigateToAssessment = { isSkippable ->
                         navController.navigate(Screen.Question.createRoute(isSkippable))
@@ -223,19 +225,19 @@ fun KalmakasaApp() {
                 Text("History Screen")
             }
 
-            composable(Screen.ListDoctor.route) {
+            composable(Screen.ListConsultant.route) {
                 val viewModel: ListDoctorViewModel = hiltViewModel()
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
                 ListDoctorScreen(
                     uiState
                 ) { doctor ->
-                    navController.navigate(Screen.DoctorDetail.createRoute(doctor.id))
+                    navController.navigate(Screen.ConsultantDetail.createRoute(doctor.id))
                 }
             }
 
             composable(
-                route = Screen.DoctorDetail.route,
+                route = Screen.ConsultantDetail.route,
                 arguments = listOf(navArgument("id") { type = NavType.StringType })
             ) {
                 val viewModel: DetailDoctorViewModel = hiltViewModel()
@@ -264,12 +266,15 @@ fun KalmakasaApp() {
 
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator()
+    Scaffold {
+        Box(
+            modifier = modifier
+                .padding(it)
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
     }
 }

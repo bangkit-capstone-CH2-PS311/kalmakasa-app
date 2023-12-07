@@ -1,5 +1,6 @@
 package com.kalmakasa.kalmakasa.presentation.screens.journal_add
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,9 +34,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
@@ -172,21 +173,20 @@ fun MoodSlider(
         Column(verticalArrangement = Arrangement.Center) {
 
             val emoticon = listOf(
-                "Very Sad",
-                "Sad",
-                "Flat",
-                "Happy",
-                "Very Happy",
+                painterResource(R.drawable.very_sad),
+                painterResource(R.drawable.sad),
+                painterResource(R.drawable.flat),
+                painterResource(R.drawable.happy),
+                painterResource(R.drawable.very_happy),
             )
             val emoticonIndex = sliderValue.roundToInt()
 
-            Text(
-                text = emoticon[emoticonIndex],
-                style = MaterialTheme.typography.headlineLarge,
+            Image(
+                painter = emoticon[emoticonIndex],
+                contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 32.dp),
-                textAlign = TextAlign.Center,
             )
 
             Slider(
