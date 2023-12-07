@@ -53,7 +53,6 @@ import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 fun HomeScreen(
     homeState: SessionState,
     articleState: ListArticleState,
-    onLogoutClicked: () -> Unit,
     onArticleClicked: (String) -> Unit,
     onUserIsNotLoggedIn: () -> Unit,
     navigateToListConsultant: () -> Unit,
@@ -84,7 +83,6 @@ fun HomeScreen(
                 HomeContent(
                     user = homeState.session,
                     articleState = articleState,
-                    onLogoutClicked = onLogoutClicked,
                     onArticleClicked = onArticleClicked,
                     navigateToAssessment = { navigateToAssessment(false) },
                     navigateToListConsultant = navigateToListConsultant,
@@ -101,7 +99,6 @@ fun HomeScreen(
 fun HomeContent(
     user: User,
     articleState: ListArticleState,
-    onLogoutClicked: () -> Unit,
     onArticleClicked: (String) -> Unit,
     navigateToAssessment: () -> Unit,
     navigateToListConsultant: () -> Unit,
@@ -183,7 +180,8 @@ fun HomeContent(
             LoadingContent(
                 modifier
                     .fillMaxWidth()
-                    .height(160.dp))
+                    .height(160.dp)
+            )
         } else if (articleState.isError) {
             Text("Error")
         } else {
@@ -321,7 +319,6 @@ fun HomePreview() {
     KalmakasaTheme {
         HomeScreen(
             homeState = SessionState.Loading,
-            onLogoutClicked = {},
             onArticleClicked = { _ -> },
             onUserIsNotLoggedIn = {},
             navigateToListConsultant = {},

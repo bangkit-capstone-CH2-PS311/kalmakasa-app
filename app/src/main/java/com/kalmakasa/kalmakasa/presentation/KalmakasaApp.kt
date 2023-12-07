@@ -21,7 +21,6 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.kalmakasa.kalmakasa.presentation.component.BottomBar
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
-import com.kalmakasa.kalmakasa.presentation.screens.profile.ProfileScreen
 import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailScreen
 import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.article_list.ListArticleScreen
@@ -38,7 +37,9 @@ import com.kalmakasa.kalmakasa.presentation.screens.consultant_list.ListDoctorVi
 import com.kalmakasa.kalmakasa.presentation.screens.home.HomeScreen
 import com.kalmakasa.kalmakasa.presentation.screens.home.HomeViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.journal_add.AddJournalScreen
+import com.kalmakasa.kalmakasa.presentation.screens.journal_add.AddJournalViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.launcher.LauncherViewModel
+import com.kalmakasa.kalmakasa.presentation.screens.profile.ProfileScreen
 import com.kalmakasa.kalmakasa.presentation.screens.question.QuestionScreen
 import com.kalmakasa.kalmakasa.presentation.screens.question.QuestionViewModel
 import com.kalmakasa.kalmakasa.presentation.state.SessionState
@@ -169,12 +170,12 @@ fun KalmakasaApp() {
                             popUpTo(Screen.Home.route) { inclusive = true }
                         }
                     },
-                    onLogoutClicked = {
-                        viewModel.logout()
-                        navController.navigate(Screen.AuthGraph.route) {
-                            popUpTo(Screen.Home.route) { inclusive = true }
-                        }
-                    },
+//                    onLogoutClicked = {
+//                        viewModel.logout()
+//                        navController.navigate(Screen.AuthGraph.route) {
+//                            popUpTo(Screen.Home.route) { inclusive = true }
+//                        }
+//                    },
                     navigateToListConsultant = {
                         navController.navigate(Screen.ListConsultant.route)
                     },
@@ -264,9 +265,26 @@ fun KalmakasaApp() {
             }
 
             composable(Screen.AddJournal.route) {
-                AddJournalScreen(navUp = {
-                    navController.navigateUp()
-                })
+                val viewModel: AddJournalViewModel = hiltViewModel()
+
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+                AddJournalScreen(
+                    uiState = uiState,
+                    navUp = {
+                        navController.navigateUp()
+                    },
+                    nextStep = viewModel::nextStep,
+                    prevStep = viewModel::prevStep,
+                    onSliderChange = viewModel::onSliderChange,
+                    onJournalChange = viewModel::onJournalChange,
+                    onArticleClicked = { id ->
+                        navController.navigate(Screen.DetailArticle.createRoute(id))
+                    },
+                    navigateToArticleList = {
+                        navController.navigate(Screen.ListArticle.route)
+                    },
+                )
             }
 
             composable(Screen.ListArticle.route) {
