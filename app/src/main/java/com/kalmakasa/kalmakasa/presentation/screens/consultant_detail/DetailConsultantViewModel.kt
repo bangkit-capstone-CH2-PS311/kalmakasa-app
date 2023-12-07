@@ -3,7 +3,7 @@ package com.kalmakasa.kalmakasa.presentation.screens.consultant_detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kalmakasa.kalmakasa.common.Resource
-import com.kalmakasa.kalmakasa.common.util.ConsultationDate
+import com.kalmakasa.kalmakasa.domain.model.ConsultationDate
 import com.kalmakasa.kalmakasa.domain.model.Consultant
 import com.kalmakasa.kalmakasa.domain.repository.ConsultantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

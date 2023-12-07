@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.domain.model.Article
 import com.kalmakasa.kalmakasa.domain.model.User
+import com.kalmakasa.kalmakasa.presentation.component.LoadingContent
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.screens.article_list.ArticleCard
 import com.kalmakasa.kalmakasa.presentation.screens.article_list.ListArticleState
@@ -179,7 +180,10 @@ fun HomeContent(
 
         // Article
         if (articleState.isLoading) {
-            Text("Loading")
+            LoadingContent(
+                modifier
+                    .fillMaxWidth()
+                    .height(160.dp))
         } else if (articleState.isError) {
             Text("Error")
         } else {

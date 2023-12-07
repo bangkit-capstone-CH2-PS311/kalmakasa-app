@@ -21,6 +21,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.kalmakasa.kalmakasa.presentation.component.BottomBar
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
+import com.kalmakasa.kalmakasa.presentation.screens.profile.ProfileScreen
 import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailScreen
 import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.article_list.ListArticleScreen
@@ -204,9 +205,8 @@ fun KalmakasaApp() {
             }
 
             composable(Screen.Profile.route) {
-                Text("Profile Screen")
+                ProfileScreen()
             }
-
 
             // FEATURES
             composable(
