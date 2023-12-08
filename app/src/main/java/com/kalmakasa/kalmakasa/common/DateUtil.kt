@@ -1,6 +1,7 @@
 package com.kalmakasa.kalmakasa.common
 
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
 
@@ -15,5 +16,15 @@ object DateUtil {
         } else {
             apiDate
         }
+    }
+
+    fun getCurrentDateInISO(): String {
+        // Get the current date and time
+        val currentDate = Calendar.getInstance().time
+
+        // Format it to ISO 8601 format
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
+
+        return dateFormat.format(currentDate)
     }
 }

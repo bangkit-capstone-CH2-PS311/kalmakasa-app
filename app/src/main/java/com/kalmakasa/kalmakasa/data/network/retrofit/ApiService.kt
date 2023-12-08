@@ -40,4 +40,13 @@ interface ApiService {
 
     @GET("journals/{id}")
     suspend fun getJournalDetail(id: String): ApiJournal
+
+    @FormUrlEncoded
+    @POST("journals")
+    suspend fun addJournal(
+        @Field("userId") id: String,
+        @Field("date") date: String,
+        @Field("title") title: String = "",
+        @Field("content") content: String = "",
+    ): ApiJournal
 }

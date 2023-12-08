@@ -152,7 +152,7 @@ fun HomeContent(
 
         // TODO check if the user already create journal today
 
-        if (true) {
+        if (false) {
             JournalCard(mood = Mood.HAPPY, date = "Monday, 29 January 2023")
         } else {
             CreateJournalButton(

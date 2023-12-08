@@ -35,4 +35,20 @@ class JournalRepositoryImpl(
             is IOException -> emit(Resource.Error(it.localizedMessage ?: "No Internet"))
         }
     }
+
+    override suspend fun createJournal(
+        id: String,
+        date: String,
+        title: String,
+        content: String,
+    ): Flow<Resource<Journal>> = flow {
+        emit(Resource.Loading)
+        val response = apiService.addJournal(id, date, title, content)
+        emit(Resource.Success(response.toJournal()))
+    }.catch {
+        when (it) {
+            is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
+            is IOException -> emit(Resource.Error(it.localizedMessage ?: "No Internet"))
+        }
+    }
 }

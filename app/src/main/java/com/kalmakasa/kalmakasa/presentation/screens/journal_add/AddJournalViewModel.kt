@@ -1,16 +1,21 @@
 package com.kalmakasa.kalmakasa.presentation.screens.journal_add
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kalmakasa.kalmakasa.common.DateUtil
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.Article
 import com.kalmakasa.kalmakasa.domain.repository.ArticleRepository
+import com.kalmakasa.kalmakasa.domain.repository.JournalRepository
+import com.kalmakasa.kalmakasa.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,6 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AddJournalViewModel @Inject constructor(
     private val articleRepository: ArticleRepository,
+    private val journalRepository: JournalRepository,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
 
     private val _currentStepIndex = MutableStateFlow(0)
@@ -32,7 +39,7 @@ class AddJournalViewModel @Inject constructor(
             _sliderValue,
             _journalValue,
             _recommendationContent,
-            _isLoading
+            _isLoading,
         ) { currentIndex, slider, journal, articles, isLoading ->
             AddJournalState(
                 currentIndex = currentIndex,
@@ -58,28 +65,33 @@ class AddJournalViewModel @Inject constructor(
                     delay(2000)
                     _isLoading.value = false
                     _currentStepIndex.value++
-
                 }
 
                 JournalStep.Emotion -> {
                     // Submit and get Article
-                    articleRepository.getListArticles().collect { articles ->
-                        when (articles) {
+                    Log.d("test", "test")
+                    val user = userRepository.getSession().first()
+                    journalRepository.createJournal(
+                        user.id,
+                        DateUtil.getCurrentDateInISO(),
+                        "testing title",
+                        _journalValue.value
+                    ).collect {
+                        when (it) {
                             Resource.Loading -> {
                                 _isLoading.value = true
                             }
 
                             is Resource.Success -> {
-                                _isLoading.value = false
-                                _recommendationContent.value = articles.data.take(4)
-                                _currentStepIndex.value++
+                                loadRecommendation()
                             }
 
                             else -> {
-//                                _isLoading.value = false
+                                _isLoading.value = false
                             }
                         }
                     }
+
                 }
 
                 else -> {
@@ -89,7 +101,6 @@ class AddJournalViewModel @Inject constructor(
         }
 
     }
-
 
     fun prevStep() {
         _currentStepIndex.value--
@@ -109,6 +120,28 @@ class AddJournalViewModel @Inject constructor(
             JournalStep.Emotion,
             JournalStep.Recommendation,
         )
+    }
+
+    private fun loadRecommendation() {
+        viewModelScope.launch {
+            articleRepository.getListArticles().collect { articles ->
+                when (articles) {
+                    Resource.Loading -> {
+                        _isLoading.value = true
+                    }
+
+                    is Resource.Success -> {
+                        _isLoading.value = false
+                        _recommendationContent.value = articles.data.take(4)
+                        _currentStepIndex.value++
+                    }
+
+                    else -> {
+                        _isLoading.value = false
+                    }
+                }
+            }
+        }
     }
 
 }
