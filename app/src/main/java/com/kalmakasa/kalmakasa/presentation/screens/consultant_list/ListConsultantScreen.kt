@@ -67,9 +67,7 @@ fun ListDoctorContent(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
     ) {
-        items(listConsultant, {
-            it.id
-        }) { consultant ->
+        items(listConsultant, { it.id }) { consultant ->
             OutlinedCard(
                 modifier = Modifier
                     .fillMaxWidth(),

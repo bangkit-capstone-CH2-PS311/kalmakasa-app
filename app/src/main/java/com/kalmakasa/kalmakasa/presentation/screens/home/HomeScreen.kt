@@ -32,13 +32,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
+import com.kalmakasa.kalmakasa.common.Mood
 import com.kalmakasa.kalmakasa.domain.model.Article
 import com.kalmakasa.kalmakasa.domain.model.User
 import com.kalmakasa.kalmakasa.presentation.component.LoadingContent
@@ -46,6 +46,7 @@ import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.screens.article_list.ArticleCard
 import com.kalmakasa.kalmakasa.presentation.screens.article_list.ListArticleState
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_detail.TitleText
+import com.kalmakasa.kalmakasa.presentation.screens.journal_list.JournalCard
 import com.kalmakasa.kalmakasa.presentation.state.SessionState
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 
@@ -148,18 +149,18 @@ fun HomeContent(
             color = Color.Gray,
         )
         Divider(Modifier.padding(vertical = 8.dp))
-        Button(
-            onClick = navigateToAddJournal,
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .height(60.dp)
-                .fillMaxWidth(),
-            shape = MaterialTheme.shapes.small,
-        ) {
-            Text(stringResource(R.string.create_your_daily_journal))
-            Spacer(modifier = Modifier.width(8.dp))
-            Icon(Icons.Default.ArrowForwardIos, contentDescription = null)
+
+        // TODO check if the user already create journal today
+
+        if (true) {
+            JournalCard(mood = Mood.HAPPY, date = "Monday, 29 January 2023")
+        } else {
+            CreateJournalButton(
+                navigateToAddJournal = navigateToAddJournal,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
         }
+
 
         // Features
         Row(
@@ -202,6 +203,24 @@ fun HomeContent(
 }
 
 @Composable
+fun CreateJournalButton(
+    navigateToAddJournal: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Button(
+        onClick = navigateToAddJournal,
+        modifier = modifier
+            .height(60.dp)
+            .fillMaxWidth(),
+        shape = MaterialTheme.shapes.small,
+    ) {
+        Text(stringResource(R.string.create_your_daily_journal))
+        Spacer(modifier = Modifier.width(8.dp))
+        Icon(Icons.Default.ArrowForwardIos, contentDescription = null)
+    }
+}
+
+@Composable
 fun HomeArticles(
     articles: List<Article>,
     navigateToArticleList: () -> Unit,
@@ -233,7 +252,7 @@ fun HomeArticles(
 
             Row(Modifier.fillMaxWidth()) {
                 ArticleCard(
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
+                    imageUrl = first.imageUrl,
                     title = first.title,
                     description = first.description,
                     onClick = { onArticleClicked(first.id) },
@@ -242,7 +261,7 @@ fun HomeArticles(
                 Spacer(modifier = Modifier.width(18.dp))
                 if (sec != null) {
                     ArticleCard(
-                        painter = painterResource(id = R.drawable.ic_launcher_background),
+                        imageUrl = first.imageUrl,
                         title = sec.title,
                         description = sec.description,
                         onClick = { onArticleClicked(sec.id) },

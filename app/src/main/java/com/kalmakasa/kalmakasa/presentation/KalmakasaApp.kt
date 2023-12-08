@@ -194,32 +194,27 @@ fun KalmakasaApp() {
                 )
             }
 
-            composable(Screen.ListConsultant.route) {
-                val viewModel: ListDoctorViewModel = hiltViewModel()
-                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-                ListDoctorScreen(
-                    uiState
-                ) { doctor ->
-                    navController.navigate(Screen.ConsultantDetail.createRoute(doctor.id))
-                }
-            }
-
             composable(Screen.Profile.route) {
                 val viewModel: ProfileViewModel = hiltViewModel()
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
                 ProfileScreen(
                     uiState = uiState,
-                ) {
-                    viewModel.logout()
-                    navController.navigate(Screen.AuthGraph.route) {
-                        popUpTo(Screen.Home.route) { inclusive = true }
+                    onLogoutClicked = {
+                        viewModel.logout {
+                            navController.navigate(Screen.AuthGraph.route) {
+                                popUpTo(Screen.Home.route) { inclusive = true }
+                            }
+                        }
                     }
-                }
+                )
             }
 
-            // FEATURES
+            /*
+            FEATURES SCREEN
+            */
+
+            // Question Feature
             composable(
                 route = Screen.Question.route,
                 arguments = listOf(navArgument("isSkippable") { type = NavType.BoolType })
@@ -252,6 +247,18 @@ fun KalmakasaApp() {
                 )
             }
 
+
+            // List Features
+            composable(Screen.ListConsultant.route) {
+                val viewModel: ListDoctorViewModel = hiltViewModel()
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+                ListDoctorScreen(
+                    uiState
+                ) { doctor ->
+                    navController.navigate(Screen.ConsultantDetail.createRoute(doctor.id))
+                }
+            }
             composable(
                 route = Screen.ConsultantDetail.route,
                 arguments = listOf(navArgument("id") { type = NavType.StringType })
@@ -270,6 +277,7 @@ fun KalmakasaApp() {
                 )
             }
 
+            // Journal Features
             composable(Screen.ListJournal.route) {
                 val viewModel: ListJournalViewModel = hiltViewModel()
 
@@ -280,7 +288,6 @@ fun KalmakasaApp() {
                     navUp = { navController.navigateUp() }
                 )
             }
-
             composable(Screen.AddJournal.route) {
                 val viewModel: AddJournalViewModel = hiltViewModel()
 
@@ -304,6 +311,7 @@ fun KalmakasaApp() {
                 )
             }
 
+            // Article Features
             composable(Screen.ListArticle.route) {
                 val viewModel: ListArticleViewModel = hiltViewModel()
 
@@ -319,7 +327,6 @@ fun KalmakasaApp() {
                     }
                 )
             }
-
             composable(
                 Screen.DetailArticle.route,
                 arguments = listOf(navArgument("id") { type = NavType.StringType })

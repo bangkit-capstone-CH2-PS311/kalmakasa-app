@@ -87,8 +87,8 @@ fun ListJournalContent(
 fun JournalCard(
     mood: Mood,
     date: String,
-    description: String,
     modifier: Modifier = Modifier,
+    description: String? = null,
 ) {
     OutlinedCard(
         border = BorderStroke(1.dp, Color.LightGray),
@@ -110,7 +110,7 @@ fun JournalCard(
                         .size(56.dp)
                         .border(
                             1.5.dp,
-                            color = MaterialTheme.colorScheme.primary,
+                            color = Color.Gray,
                             CircleShape
                         ),
                 )
@@ -125,12 +125,14 @@ fun JournalCard(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = description,
-                style = MaterialTheme.typography.bodyMedium,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
+            description?.let {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.kalmakasa.kalmakasa.presentation.screens.article_list
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,13 +16,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.domain.model.Article
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
@@ -75,7 +73,7 @@ fun ListArticleContent(
     ) {
         items(articles, { it.id }) { article ->
             ArticleCard(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
+                imageUrl = article.imageUrl,
                 title = article.title,
                 description = article.description,
                 onClick = { onArticleClicked(article.id) }
@@ -87,7 +85,7 @@ fun ListArticleContent(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArticleCard(
-    painter: Painter,
+    imageUrl: String,
     title: String,
     description: String,
     onClick: () -> Unit,
@@ -98,8 +96,8 @@ fun ArticleCard(
         modifier = modifier
             .height(160.dp)
     ) {
-        Image(
-            painter = painter,
+        AsyncImage(
+            model = imageUrl,
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()

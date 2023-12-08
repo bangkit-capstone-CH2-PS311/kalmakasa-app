@@ -30,9 +30,10 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun logout() {
+    fun logout(callback: () -> Unit) {
         viewModelScope.launch {
             userRepository.logout()
+            callback()
         }
     }
 }

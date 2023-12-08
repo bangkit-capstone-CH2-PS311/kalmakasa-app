@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LauncherViewModel @Inject constructor(
-    userRepository: UserRepository,
+    val userRepository: UserRepository,
 ) : ViewModel() {
 
     val sessionState = userRepository.getSession().map {

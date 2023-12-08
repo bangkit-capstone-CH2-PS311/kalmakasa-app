@@ -1,6 +1,5 @@
 package com.kalmakasa.kalmakasa.presentation.screens.article_detail
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,10 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.data.network.FakeArticleDataSource
 import com.kalmakasa.kalmakasa.domain.model.Article
@@ -35,8 +34,8 @@ fun ArticleDetailScreen(
 ) {
     Column(modifier = modifier) {
         Box {
-            Image(
-                painter = painterResource(id = R.drawable.ic_launcher_background),
+            AsyncImage(
+                model = article.imageUrl,
                 contentDescription = stringResource(R.string.article_image),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -48,9 +47,7 @@ fun ArticleDetailScreen(
                     .fillMaxWidth()
                     .background(
                         Brush.verticalGradient(
-                            listOf(
-                                Color.Gray, Color.Transparent
-                            )
+                            listOf(Color.Gray, Color.Transparent)
                         )
                     ),
             ) {
