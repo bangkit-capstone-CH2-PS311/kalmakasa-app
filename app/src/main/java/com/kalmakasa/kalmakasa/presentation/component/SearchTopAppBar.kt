@@ -13,12 +13,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -32,6 +34,7 @@ fun SearchTopAppBar(
     query: String,
     modifier: Modifier = Modifier,
     useFilter: Boolean = true,
+    navUp: (() -> Unit)? = null,
     placeholder: String = "Search",
 ) {
     Column(
@@ -41,22 +44,28 @@ fun SearchTopAppBar(
             .padding(top = 16.dp, bottom = 12.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        OutlinedTextField(
-            value = query,
-            shape = MaterialTheme.shapes.extraLarge,
-            onValueChange = {},
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = null
-                )
-            },
-            placeholder = { Text(placeholder) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 56.dp)
-                .padding(horizontal = 16.dp)
-        )
+        Row(Modifier.padding(horizontal = 16.dp)) {
+            if (navUp != null) {
+                IconButton(onClick = navUp) {
+                    Icon(Icons.Default.ArrowBack, contentDescription = null)
+                }
+            }
+            OutlinedTextField(
+                value = query,
+                shape = MaterialTheme.shapes.extraLarge,
+                onValueChange = {},
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = null
+                    )
+                },
+                placeholder = { Text(placeholder) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 56.dp)
+            )
+        }
         if (useFilter) {
             Row(
                 modifier = Modifier

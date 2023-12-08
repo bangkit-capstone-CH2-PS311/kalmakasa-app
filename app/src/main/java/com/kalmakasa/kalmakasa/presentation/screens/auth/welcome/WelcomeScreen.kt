@@ -52,7 +52,7 @@ fun WelcomeScreen(
                 )
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    "Let's start our journey towards better mental wellbeing.",
+                    stringResource(R.string.let_s_start_our_journey_towards_better_mental_wellbeing),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleLarge
                 )

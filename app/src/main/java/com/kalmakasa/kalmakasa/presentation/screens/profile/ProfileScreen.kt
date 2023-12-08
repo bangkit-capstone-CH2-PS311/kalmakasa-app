@@ -13,7 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.HealthAndSafety
-import androidx.compose.material.icons.filled.PointOfSale
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
@@ -27,15 +28,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
+import com.kalmakasa.kalmakasa.domain.model.User
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    uiState: User,
+    onLogoutClicked: () -> Unit,
+) {
     Column(
         modifier = Modifier
             .padding(horizontal = 24.dp)
@@ -53,7 +59,7 @@ fun ProfileScreen() {
             ) {
                 Image(
                     painter = painterResource(R.drawable.placeholder_consultant_img),
-                    contentDescription = "Profile Picture",
+                    contentDescription = stringResource(R.string.profile_picture),
                     modifier = Modifier
                         .padding(end = 8.dp)
                         .size(60.dp)
@@ -61,14 +67,14 @@ fun ProfileScreen() {
                 )
                 Column(Modifier.weight(1f)) {
                     Text(
-                        text = "Muhammad Dzaky Nashshar",
+                        text = uiState.name,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
                     )
                     Text(
-                        text = "dzakynashshar@gmail.com",
+                        text = uiState.email,
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -78,18 +84,26 @@ fun ProfileScreen() {
         // Profile Options
         ProfileOptionCard(
             icon = Icons.Default.Settings,
-            title = "Edit Profile",
-            onClick = {}
+            title = stringResource(R.string.edit_profile),
+            onClick = {},
+            enabled = false,
         )
         ProfileOptionCard(
-            icon = Icons.Default.PointOfSale,
-            title = "My Transactions",
-            onClick = {}
+            icon = Icons.Default.History,
+            title = stringResource(R.string.history),
+            onClick = {},
+            enabled = false,
         )
         ProfileOptionCard(
             icon = Icons.Default.HealthAndSafety,
-            title = "My Health Test Result",
-            onClick = {}
+            title = stringResource(R.string.my_health_test_result),
+            onClick = {},
+            enabled = false,
+        )
+        ProfileOptionCard(
+            icon = Icons.Default.Logout,
+            title = stringResource(R.string.logout),
+            onClick = onLogoutClicked
         )
 
     }
@@ -102,16 +116,18 @@ fun ProfileOptionCard(
     title: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.extraSmall,
+        enabled = enabled,
         onClick = onClick
     ) {
         Row(Modifier.padding(12.dp)) {
             Icon(
                 imageVector = icon,
-                contentDescription = "Settings",
+                contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(end = 12.dp)
             )
@@ -127,6 +143,8 @@ fun ProfileOptionCard(
 @Composable
 fun ProfilePreview() {
     KalmakasaTheme {
-        ProfileScreen()
+        ProfileScreen(uiState = User()) {
+
+        }
     }
 }

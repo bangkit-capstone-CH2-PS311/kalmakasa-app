@@ -33,6 +33,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
+import com.kalmakasa.kalmakasa.common.MOODS
 import com.kalmakasa.kalmakasa.domain.model.Article
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
@@ -155,14 +156,14 @@ fun JournalRecommendation(
     ) {
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = "Thanks for telling about your day!",
+            text = stringResource(R.string.thanks_for_telling_about_your_day),
             style = MaterialTheme.typography.displaySmall,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium,
             modifier = Modifier.padding(bottom = 16.dp)
         )
         Text(
-            "Here some recommendations based on your journal",
+            text = stringResource(R.string.here_some_recommendations_based_on_your_journal),
             style = MaterialTheme.typography.titleLarge,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 16.dp)
@@ -174,7 +175,7 @@ fun JournalRecommendation(
         )
         Spacer(modifier = Modifier.height(16.dp))
         OutlinedButton(onClick = navigateToHome) {
-            Text("Back to Home")
+            Text(stringResource(R.string.back_to_home))
         }
         Spacer(modifier = Modifier.height(24.dp))
     }
@@ -192,7 +193,7 @@ fun MoodJournal(
             .fillMaxSize()
     ) {
         Text(
-            text = "What could be the reason behind your mood today?",
+            text = stringResource(R.string.what_could_be_the_reason_behind_your_mood_today),
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
             modifier = Modifier
@@ -211,7 +212,7 @@ fun MoodJournal(
             ),
             placeholder = {
                 Text(
-                    text = "The main reason is...",
+                    text = stringResource(R.string.hint_journal),
                     color = Color.Gray,
                     fontWeight = FontWeight.Medium,
                 )
@@ -234,17 +235,10 @@ fun MoodSlider(
     ) {
         Column(verticalArrangement = Arrangement.Center) {
 
-            val emoticon = listOf(
-                painterResource(R.drawable.very_sad),
-                painterResource(R.drawable.sad),
-                painterResource(R.drawable.flat),
-                painterResource(R.drawable.happy),
-                painterResource(R.drawable.very_happy),
-            )
             val emoticonIndex = sliderValue.roundToInt()
 
             Image(
-                painter = emoticon[emoticonIndex],
+                painter = painterResource(MOODS[emoticonIndex].iconRes),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxWidth()

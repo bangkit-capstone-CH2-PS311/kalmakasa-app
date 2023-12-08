@@ -1,8 +1,10 @@
 package com.kalmakasa.kalmakasa.data.network.retrofit
 
 import com.kalmakasa.kalmakasa.data.network.response.ApiConsultant
+import com.kalmakasa.kalmakasa.data.network.response.ApiJournal
 import com.kalmakasa.kalmakasa.data.network.response.AuthResponse
 import com.kalmakasa.kalmakasa.data.network.response.ConsultantsResponse
+import com.kalmakasa.kalmakasa.data.network.response.JournalsResponse
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -32,4 +34,10 @@ interface ApiService {
     suspend fun getConsultantDetail(
         @Path("id") id: String,
     ): ApiConsultant
+
+    @GET("journals")
+    suspend fun getJournals(): JournalsResponse
+
+    @GET("journals/{id}")
+    suspend fun getJournalDetail(id: String): ApiJournal
 }

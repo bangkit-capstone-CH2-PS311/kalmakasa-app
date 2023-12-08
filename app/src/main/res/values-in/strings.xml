@@ -1,0 +1,75 @@
+<resources>
+    <string name="app_name">Kalmakasa</string>
+
+    <!--  Authentication  -->
+    <string name="welcome_back_sign_in_to_continue">Selamat datang kembali! Masuk untuk melanjutkan</string>
+    <string name="ready_to_get_started_create_your_account_to_continue_the_journey">Siap untuk memulai? Buat akun Anda untuk melanjutkan perjalanan</string>
+    <string name="already_have_an_account">Sudah memiliki akun?</string>
+    <string name="create_an_account">Buat akun</string>
+
+    <string name="sign_in">Masuk</string>
+    <string name="register">Daftar</string>
+    <string name="full_name">Nama Lengkap</string>
+    <string name="email">Email</string>
+    <string name="password">Kata Sandi</string>
+    <string name="show_password">Tampilkan Kata Sandi</string>
+    <string name="hide_password">Sembunyikan Kata Sandi</string>
+    <string name="forgot_password">Lupa Kata Sandi?</string>
+
+    <!--  Questionnaire  -->
+    <string name="of_questions">%1$s dari %2$s pertanyaan</string>
+    <string name="previous">Sebelumnya</string>
+    <string name="next">Selanjutnya</string>
+    <string name="done">Selesai</string>
+
+    <!--  Consultation  -->
+    <string name="schedule_consultation">Jadwalkan Konsultasi</string>
+    <string name="biography">Biografi</string>
+    <string name="time">Waktu</string>
+    <string name="book_appointment">Buat Janji</string>
+    <string name="hint_consultant_note">Masukkan catatan Anda untuk dokter di sini.</string>
+
+    <!--  Mental Health Card  -->
+    <string name="know_your_mental_health">Kenali Kesehatan Mental Anda</string>
+    <string name="get_an_overview_of_your_mental_health_by_taking_the_health_test">Dapatkan gambaran kesehatan mental Anda dengan mengikuti Tes Kesehatan.</string>
+    <string name="start_my_test">Mulai Tes Saya</string>
+
+    <string name="hi">Hai, %1$s</string>
+    <string name="see_more">Lihat Lebih Banyak</string>
+
+    <string name="home">Beranda</string>
+    <string name="consultation">Konsultasi</string>
+    <string name="profile">Profil</string>
+
+    <string name="my_health_test_result">Hasil Tes Kesehatan Saya</string>
+    <string name="profile_picture">Foto Profil</string>
+    <string name="edit_profile">Edit Profil</string>
+    <string name="history">Riwayat</string>
+    <string name="article">Artikel</string>
+    <string name="journal">Jurnal</string>
+    <string name="logout">Keluar</string>
+
+    <!--  Mood Journal  -->
+    <string name="what_could_be_the_reason_behind_your_mood_today">Apa yang bisa menjadi alasan di balik mood Anda hari ini?</string>
+    <string name="thanks_for_telling_about_your_day">Terima kasih telah menceritakan hari Anda!</string>
+    <string name="here_some_recommendations_based_on_your_journal">Berikut beberapa rekomendasi berdasarkan jurnal Anda</string>
+    <string name="hint_journal">Alasan utamanya adalah…</string>
+    <string name="back_to_home">Kembali ke Beranda</string>
+
+    <!--  Emoticon Description  -->
+    <string name="very_sad">Sangat Sedih</string>
+    <string name="sad">Sedih</string>
+    <string name="flat">Datár</string>
+    <string name="happy">Bahagia</string>
+    <string name="very_happy">Sangat Bahagia</string>
+    <string name="article_image">Gambar Artikel</string>
+    <string name="search_article">Cari Artikel…</string>
+    <string name="this_field_is_required">Kolom ini wajib diisi</string>
+    <string name="let_s_start_our_journey_towards_better_mental_wellbeing">Mari kita mulai perjalanan kita menuju kesejahteraan mental yang lebih baik.</string>
+    <string name="detail_consultant">Detail Konsultan</string>
+    <string name="data_not_found">Data tidak ditemukan</string>
+    <string name="experience">Pengalaman</string>
+    <string name="patients">Pasien</string>
+    <string name="how_was_your_feeling">Bagaimana perasaan Anda?</string>
+    <string name="create_your_daily_journal">Buat Jurnal Hari ini</string>
+</resources>

@@ -1,6 +1,5 @@
 package com.kalmakasa.kalmakasa.presentation.screens.consultant_detail
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -51,8 +50,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kalmakasa.kalmakasa.R
-import com.kalmakasa.kalmakasa.domain.model.ConsultationDate
 import com.kalmakasa.kalmakasa.domain.model.Consultant
+import com.kalmakasa.kalmakasa.domain.model.ConsultationDate
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
@@ -66,12 +65,11 @@ fun DetailDoctorScreen(
     Scaffold(
         topBar = {
             TitleTopAppBar(
-                title = "Detail Consultant",
+                title = stringResource(R.string.detail_consultant),
                 onBackButtonClicked = navUp
             )
         }
     ) { paddingValues ->
-        Log.d("state", uiState.toString())
         when {
             uiState.isError -> {
                 Text(text = "Error")
@@ -82,7 +80,7 @@ fun DetailDoctorScreen(
             }
 
             uiState.consultant == null -> {
-                Text(text = "Doctor not found")
+                Text(text = stringResource(R.string.data_not_found))
             }
 
             else -> {
@@ -143,20 +141,20 @@ fun DetailDoctorContent(
                     fontSize = 18.sp,
                 )
                 Text(
-                    text = "Psychology Specialist",
+                    text = consultant.speciality,
                     style = MaterialTheme.typography.labelLarge,
                     color = Color.Gray
                 )
 
                 DoctorPerks(
-                    title = "Experience",
-                    value = "2 Year(s)",
+                    title = stringResource(R.string.experience),
+                    value = "${consultant.yearExperience} Years",
                     icon = Icons.Rounded.BusinessCenter,
                     modifier = Modifier.padding(top = 8.dp)
                 )
                 DoctorPerks(
-                    title = "Patients",
-                    value = "215",
+                    title = stringResource(R.string.patients),
+                    value = consultant.patientCount.toString(),
                     icon = Icons.Rounded.Person,
                     modifier = Modifier.padding(top = 8.dp)
                 )

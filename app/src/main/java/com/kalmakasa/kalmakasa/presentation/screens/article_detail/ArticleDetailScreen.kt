@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
@@ -36,7 +37,7 @@ fun ArticleDetailScreen(
         Box {
             Image(
                 painter = painterResource(id = R.drawable.ic_launcher_background),
-                contentDescription = "Article Image",
+                contentDescription = stringResource(R.string.article_image),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(240.dp),

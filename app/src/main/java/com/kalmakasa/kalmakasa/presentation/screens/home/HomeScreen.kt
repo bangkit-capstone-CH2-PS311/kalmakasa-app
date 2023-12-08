@@ -55,10 +55,11 @@ fun HomeScreen(
     articleState: ListArticleState,
     onArticleClicked: (String) -> Unit,
     onUserIsNotLoggedIn: () -> Unit,
-    navigateToListConsultant: () -> Unit,
+    navigateToConsultantList: () -> Unit,
     navigateToAssessment: (Boolean) -> Unit,
     navigateToAddJournal: () -> Unit,
     navigateToArticleList: () -> Unit,
+    navigateToJournalList: () -> Unit,
     isNewUser: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -85,9 +86,10 @@ fun HomeScreen(
                     articleState = articleState,
                     onArticleClicked = onArticleClicked,
                     navigateToAssessment = { navigateToAssessment(false) },
-                    navigateToListConsultant = navigateToListConsultant,
+                    navigateToConsultantList = navigateToConsultantList,
                     navigateToAddJournal = navigateToAddJournal,
                     navigateToArticleList = navigateToArticleList,
+                    navigateToJournalList = navigateToJournalList,
                     modifier = modifier,
                 )
             }
@@ -101,9 +103,10 @@ fun HomeContent(
     articleState: ListArticleState,
     onArticleClicked: (String) -> Unit,
     navigateToAssessment: () -> Unit,
-    navigateToListConsultant: () -> Unit,
+    navigateToConsultantList: () -> Unit,
     navigateToAddJournal: () -> Unit,
     navigateToArticleList: () -> Unit,
+    navigateToJournalList: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -112,16 +115,17 @@ fun HomeContent(
             .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(16.dp))
+
         val features = listOf(
             Feature(
                 icon = Icons.Outlined.Favorite,
                 title = stringResource(R.string.consultation),
-                onClick = navigateToListConsultant,
+                onClick = navigateToConsultantList,
             ),
             Feature(
                 icon = Icons.Outlined.MenuBook,
                 title = stringResource(R.string.journal),
-                onClick = {},
+                onClick = navigateToJournalList,
             ),
             Feature(
                 icon = Icons.Outlined.Article,
@@ -129,6 +133,7 @@ fun HomeContent(
                 onClick = navigateToArticleList,
             )
         )
+
         // Title
         Text(
             text = stringResource(R.string.hi, user.name),
@@ -137,7 +142,7 @@ fun HomeContent(
             color = MaterialTheme.colorScheme.primary
         )
         Text(
-            text = "How was your feeling?",
+            text = stringResource(R.string.how_was_your_feeling),
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight.SemiBold,
             color = Color.Gray,
@@ -151,7 +156,7 @@ fun HomeContent(
                 .fillMaxWidth(),
             shape = MaterialTheme.shapes.small,
         ) {
-            Text("Create your Daily Journal")
+            Text(stringResource(R.string.create_your_daily_journal))
             Spacer(modifier = Modifier.width(8.dp))
             Icon(Icons.Default.ArrowForwardIos, contentDescription = null)
         }
@@ -321,12 +326,13 @@ fun HomePreview() {
             homeState = SessionState.Loading,
             onArticleClicked = { _ -> },
             onUserIsNotLoggedIn = {},
-            navigateToListConsultant = {},
+            navigateToConsultantList = {},
             navigateToAssessment = { _ -> },
             navigateToAddJournal = {},
             navigateToArticleList = {},
             isNewUser = false,
             articleState = ListArticleState(),
+            navigateToJournalList = {}
         )
     }
 }

@@ -1,34 +1,76 @@
 <resources>
     <string name="app_name">Kalmakasa</string>
-    <string name="email">Email</string>
-    <string name="sign_in">Sign In</string>
+
+    <!--  Authentication  -->
     <string name="welcome_back_sign_in_to_continue">Welcome back! Sign in to continue</string>
-    <string name="forgot_password">Forgot Password?</string>
+    <string name="ready_to_get_started_create_your_account_to_continue_the_journey">Ready to get started? create your account to continue the journey</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="create_an_account">Create an account</string>
+
+    <string name="sign_in">Sign In</string>
     <string name="register">Register</string>
+    <string name="full_name">Full Name</string>
+    <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="show_password">Show Password</string>
     <string name="hide_password">Hide Password</string>
-    <string name="ready_to_get_started_create_your_account_to_continue_the_journey">Ready to get started? create your account to continue the journey</string>
-    <string name="already_have_an_account">Already have an account?</string>
-    <string name="full_name">Full Name</string>
-    <string name="create_an_account">Create an account</string>
+    <string name="forgot_password">Forgot Password?</string>
+
+    <!--  Questionnaire  -->
+    <string name="of_questions">%1$s of %2$s questions</string>
+    <string name="previous">Previous</string>
     <string name="next">Next</string>
     <string name="done">Done</string>
-    <string name="previous">Previous</string>
-    <string name="of_questions">%1$s of %2$s questions</string>
-    <string name="biography">Biography</string>
+
+    <!--  Consultation  -->
     <string name="schedule_consultation">Schedule Consultation</string>
+    <string name="biography">Biography</string>
     <string name="time">Time</string>
     <string name="book_appointment">Book Appointment</string>
     <string name="hint_consultant_note">insert your notes for the doctor here.</string>
-    <string name="hi">Hi, %1$s</string>
+
+    <!--  Mental Health Card  -->
     <string name="know_your_mental_health">Know Your Mental Health</string>
     <string name="get_an_overview_of_your_mental_health_by_taking_the_health_test">Get an overview of your mental health by taking the Health Test.</string>
     <string name="start_my_test">Start My Test</string>
+
+    <string name="hi">Hi, %1$s</string>
     <string name="see_more">See More</string>
+
+    <string name="home">Home</string>
+    <string name="consultation">Consultation</string>
+    <string name="profile">Profile</string>
+
+    <string name="my_health_test_result">My Health Test Result</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="history">History</string>
     <string name="article">Article</string>
     <string name="journal">Journal</string>
-    <string name="consultation">Consultation</string>
-    <string name="home">Home</string>
-    <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
+
+    <!--  Mood Journal  -->
+    <string name="what_could_be_the_reason_behind_your_mood_today">What could be the reason behind your mood today?</string>
+    <string name="thanks_for_telling_about_your_day">Thanks for telling about your day!</string>
+    <string name="here_some_recommendations_based_on_your_journal">Here some recommendations based on your journal</string>
+    <string name="hint_journal">The main reason is…</string>
+    <string name="back_to_home">Back to Home</string>
+
+    <!--  Emoticon Description  -->
+    <string name="very_sad">Very Sad</string>
+    <string name="sad">Sad</string>
+    <string name="flat">Flat</string>
+    <string name="happy">Happy</string>
+    <string name="very_happy">Very Happy</string>
+    <string name="article_image">Article Image</string>
+    <string name="search_article">Search Article…</string>
+    <string name="this_field_is_required">This field is required</string>
+    <string name="let_s_start_our_journey_towards_better_mental_wellbeing">Let\'s start our journey towards better mental wellbeing.</string>
+    <string name="detail_consultant">Detail Consultant</string>
+    <string name="data_not_found">Data not found</string>
+    <string name="experience">Experience</string>
+    <string name="patients">Patients</string>
+    <string name="how_was_your_feeling">How was your feeling?</string>
+    <string name="create_your_daily_journal">Create your Daily Journal</string>
+
 </resources>

@@ -1,5 +1,6 @@
 package com.kalmakasa.kalmakasa.presentation.screens.auth.register
 
+import android.content.Context
 import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
@@ -29,11 +30,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.common.Resource
+import com.kalmakasa.kalmakasa.presentation.screens.auth.common.AuthButton
+import com.kalmakasa.kalmakasa.presentation.screens.auth.common.AuthTitle
 import com.kalmakasa.kalmakasa.presentation.screens.auth.common.EmailTextField
 import com.kalmakasa.kalmakasa.presentation.screens.auth.common.GeneralTextField
 import com.kalmakasa.kalmakasa.presentation.screens.auth.common.PasswordTextField
-import com.kalmakasa.kalmakasa.presentation.screens.auth.common.AuthButton
-import com.kalmakasa.kalmakasa.presentation.screens.auth.common.AuthTitle
 import com.kalmakasa.kalmakasa.presentation.state.EmailState
 import com.kalmakasa.kalmakasa.presentation.state.EmailStateSaver
 import com.kalmakasa.kalmakasa.presentation.state.PasswordState
@@ -49,12 +50,14 @@ fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+
+    val context: Context = LocalContext.current
     val focusRequester = remember { FocusRequester() }
     val nameState by remember {
         mutableStateOf(
             TextFieldState(
                 validator = { name -> name.isNotEmpty() },
-                errorFor = { _ -> "This field is required" }
+                errorFor = { _ -> context.getString(R.string.this_field_is_required) }
             )
         )
     }
@@ -73,7 +76,6 @@ fun RegisterScreen(
         }
     }
 
-    val context = LocalContext.current
     LaunchedEffect(registerState) {
         when (registerState) {
             is Resource.Error -> {

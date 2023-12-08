@@ -12,7 +12,6 @@ sealed class Screen(val route: String) {
         fun createRoute(isNewUser: Boolean = false) = "home?isNewUser=$isNewUser"
     }
 
-    object History : Screen("history")
     object Profile : Screen("profile")
 
     object Question : Screen("question/{isSkippable}") {
@@ -24,6 +23,7 @@ sealed class Screen(val route: String) {
         fun createRoute(id: String) = "consultant-detail/$id"
     }
 
+    object ListJournal : Screen("journal-list")
     object AddJournal : Screen("journal-add")
 
     object ListArticle : Screen("article-list")

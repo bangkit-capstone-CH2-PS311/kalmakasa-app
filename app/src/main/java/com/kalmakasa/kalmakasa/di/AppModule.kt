@@ -7,9 +7,11 @@ import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
 import com.kalmakasa.kalmakasa.data.network.retrofit.RetrofitFactory
 import com.kalmakasa.kalmakasa.data.repository.ArticleRepositoryImpl
 import com.kalmakasa.kalmakasa.data.repository.ConsultantRepositoryImpl
+import com.kalmakasa.kalmakasa.data.repository.JournalRepositoryImpl
 import com.kalmakasa.kalmakasa.data.repository.UserRepositoryImpl
 import com.kalmakasa.kalmakasa.domain.repository.ArticleRepository
 import com.kalmakasa.kalmakasa.domain.repository.ConsultantRepository
+import com.kalmakasa.kalmakasa.domain.repository.JournalRepository
 import com.kalmakasa.kalmakasa.domain.repository.UserRepository
 import dagger.Module
 import dagger.Provides
@@ -33,7 +35,6 @@ object AppModule {
     @Singleton
     fun provideFakeApiService(): ApiService {
         return RetrofitFactory.makeRetrofitService()
-//        return FakeApiService()
     }
 
     @Provides
@@ -52,5 +53,11 @@ object AppModule {
     @Singleton
     fun provideArticleRepository(): ArticleRepository {
         return ArticleRepositoryImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideJournalRepository(apiService: ApiService): JournalRepository {
+        return JournalRepositoryImpl(apiService)
     }
 }

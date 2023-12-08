@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val userRepository: UserRepository,
+    userRepository: UserRepository,
     private val articleRepository: ArticleRepository,
 ) : ViewModel() {
 
@@ -30,7 +30,7 @@ class HomeViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = SessionState.Loading
     )
-    
+
     private val _uiState = MutableStateFlow(ListArticleState())
     val uiState: StateFlow<ListArticleState> = _uiState.asStateFlow()
 
@@ -55,12 +55,6 @@ class HomeViewModel @Inject constructor(
                     }
                 }
             }
-        }
-    }
-
-    fun logout() {
-        viewModelScope.launch {
-            userRepository.logout()
         }
     }
 }
