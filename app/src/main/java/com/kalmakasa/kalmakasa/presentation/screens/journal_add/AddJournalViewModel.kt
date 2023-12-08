@@ -1,6 +1,5 @@
 package com.kalmakasa.kalmakasa.presentation.screens.journal_add
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kalmakasa.kalmakasa.common.DateUtil
@@ -69,7 +68,6 @@ class AddJournalViewModel @Inject constructor(
 
                 JournalStep.Emotion -> {
                     // Submit and get Article
-                    Log.d("test", "test")
                     val user = userRepository.getSession().first()
                     journalRepository.createJournal(
                         user.id,
@@ -83,6 +81,7 @@ class AddJournalViewModel @Inject constructor(
                             }
 
                             is Resource.Success -> {
+                                _currentStepIndex.value++
                                 loadRecommendation()
                             }
 
@@ -133,7 +132,6 @@ class AddJournalViewModel @Inject constructor(
                     is Resource.Success -> {
                         _isLoading.value = false
                         _recommendationContent.value = articles.data.take(4)
-                        _currentStepIndex.value++
                     }
 
                     else -> {
