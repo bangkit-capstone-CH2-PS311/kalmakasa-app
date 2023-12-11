@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalLayoutApi::class)
+
 package com.kalmakasa.kalmakasa.presentation.screens.consultant_detail
 
 import androidx.compose.foundation.BorderStroke
@@ -7,6 +9,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,20 +24,24 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.rounded.BusinessCenter
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -57,6 +65,8 @@ import com.kalmakasa.kalmakasa.domain.model.ConsultationDate
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun DetailConsultantScreen(
@@ -108,16 +118,26 @@ fun DetailConsultantContent(
     onAppointmentBooked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var selectedDate by rememberSaveable { mutableIntStateOf(0) }
+    var selectedDate by rememberSaveable { mutableLongStateOf(-1) }
     var selectedTime by rememberSaveable { mutableStateOf("") }
-    var userNotes by rememberSaveable { mutableStateOf("") }
+    var userNote by rememberSaveable { mutableStateOf("") }
 
-    val isValidated = (selectedDate != 0 && selectedTime.isNotEmpty() && userNotes.isNotEmpty())
+    var isCheckout by rememberSaveable { mutableStateOf(false) }
 
-    FullScreenDialog(
-        showDialog = false,
-        onDismissRequest = {},
-        onConfirmation = {}
+    val isValidated =
+        (selectedDate != (-1).toLong() && selectedTime.isNotEmpty() && userNote.isNotEmpty())
+
+    val checkoutData = CheckoutData(
+        consultant = consultant,
+        dateInMillis = selectedDate,
+        selectedTime = selectedTime,
+        userNote = userNote,
+    )
+    CheckoutDialog(
+        checkoutData = checkoutData,
+        showDialog = isCheckout,
+        onDismissRequest = { isCheckout = false },
+        onConfirmation = onAppointmentBooked,
     )
 
     Column(
@@ -156,7 +176,7 @@ fun DetailConsultantContent(
 
                 DoctorPerks(
                     title = stringResource(R.string.experience),
-                    value = "${consultant.yearExperience} Years",
+                    value = stringResource(R.string.experience_year, consultant.yearExperience),
                     icon = Icons.Rounded.BusinessCenter,
                     modifier = Modifier.padding(top = 8.dp)
                 )
@@ -166,6 +186,32 @@ fun DetailConsultantContent(
                     icon = Icons.Rounded.Person,
                     modifier = Modifier.padding(top = 8.dp)
                 )
+            }
+        }
+
+        // expertise
+        if (consultant.expertise.isNotEmpty()) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+            ) {
+                // TODO : Replace this listExpertise from the API
+                TitleText("Expertise")
+                Spacer(modifier = Modifier.height(8.dp))
+                FlowRow(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    consultant.expertise.forEach {
+                        OutlinedCard {
+                            Text(
+                                text = it,
+                                modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+                            )
+                        }
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
             }
         }
 
@@ -199,10 +245,10 @@ fun DetailConsultantContent(
             items(items = dates, key = { it.dateInMillis }) { consultationDate ->
                 ScheduleDate(
                     consultationDate = consultationDate,
-                    selected = consultationDate.date == selectedDate,
+                    selected = consultationDate.dateInMillis == selectedDate,
                     enabled = consultationDate.dateInMillis > currentTime,
                     onClick = {
-                        selectedDate = consultationDate.date
+                        selectedDate = consultationDate.dateInMillis
                     })
 
             }
@@ -232,14 +278,14 @@ fun DetailConsultantContent(
         }
         Spacer(modifier = Modifier.height(12.dp))
         TitleText(
-            text = "Your Notes",
+            text = stringResource(R.string.your_note),
             modifier = Modifier
                 .padding(horizontal = 24.dp)
         )
         Spacer(modifier = Modifier.height(12.dp))
         OutlinedTextField(
-            value = userNotes,
-            onValueChange = { userNotes = it },
+            value = userNote,
+            onValueChange = { userNote = it },
             maxLines = 5,
             placeholder = { Text(stringResource(R.string.hint_consultant_note)) },
             modifier = Modifier
@@ -249,9 +295,12 @@ fun DetailConsultantContent(
         )
 
         Spacer(Modifier.height(32.dp))
+
         // Book Session
         Button(
-            onClick = onAppointmentBooked,
+            onClick = {
+                isCheckout = true
+            },
             enabled = isValidated,
             modifier = Modifier
                 .fillMaxWidth()
@@ -264,12 +313,16 @@ fun DetailConsultantContent(
 }
 
 @Composable
-fun FullScreenDialog(
+fun CheckoutDialog(
     showDialog: Boolean,
+    checkoutData: CheckoutData,
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit = {},
 ) {
     if (showDialog) {
+        val sdf = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
+        val dateString = sdf.format(checkoutData.dateInMillis)
+
         Dialog(
             properties = DialogProperties(usePlatformDefaultWidth = false),
             onDismissRequest = onDismissRequest,
@@ -277,13 +330,87 @@ fun FullScreenDialog(
             Scaffold(
                 topBar = {
                     TitleTopAppBar(
-                        title = "Checkout",
+                        title = stringResource(R.string.reservation_summary),
                         onBackButtonClicked = onDismissRequest
                     )
                 }
             ) { paddingValues ->
-                Column(Modifier.padding(paddingValues)) {
-
+                Column(
+                    Modifier
+                        .padding(paddingValues)
+                        .padding(horizontal = 24.dp)
+                        .verticalScroll(rememberScrollState()),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row(
+                        modifier = Modifier.padding(horizontal = 12.dp)
+                    ) {
+                        Image(
+                            painter = painterResource(R.drawable.placeholder_consultant_img),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .width(72.dp)
+                                .height(80.dp)
+                                .border(1.dp, Color.LightGray, MaterialTheme.shapes.medium),
+                            contentScale = ContentScale.Crop
+                        )
+                        Spacer(Modifier.width(16.dp))
+                        Column {
+                            Text(
+                                text = checkoutData.consultant.name,
+                                style = MaterialTheme.typography.titleLarge,
+                                fontWeight = FontWeight.Medium,
+                                fontSize = 18.sp,
+                            )
+                            Text(
+                                text = checkoutData.consultant.speciality,
+                                style = MaterialTheme.typography.labelLarge,
+                                color = Color.Gray
+                            )
+                        }
+                    }
+                    Divider()
+                    TitleText(stringResource(R.string.reservation_detail))
+                    Column(
+                        Modifier.padding(horizontal = 12.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Row(horizontalArrangement = Arrangement.Center) {
+                            Icon(
+                                imageVector = Icons.Default.CalendarMonth,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .padding(end = 8.dp)
+                            )
+                            Text(stringResource(R.string.date, dateString))
+                        }
+                        Row(horizontalArrangement = Arrangement.Center) {
+                            Icon(
+                                imageVector = Icons.Default.AccessTime,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .padding(end = 8.dp)
+                            )
+                            Text(stringResource(R.string.time_checkout, checkoutData.selectedTime))
+                        }
+                    }
+                    Divider()
+                    TitleText(stringResource(R.string.your_note))
+                    Text(
+                        text = checkoutData.userNote,
+                        modifier = Modifier.padding(horizontal = 12.dp)
+                    )
+                    Button(
+                        onClick = onConfirmation,
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .fillMaxWidth()
+                            .height(48.dp)
+                    ) {
+                        Text(stringResource(R.string.create_reservation))
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
@@ -341,7 +468,7 @@ fun ScheduleDate(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = consultationDate.day,
+                text = stringResource(consultationDate.day),
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
@@ -400,6 +527,13 @@ fun DoctorPerks(
     }
 }
 
+data class CheckoutData(
+    val consultant: Consultant,
+    val dateInMillis: Long,
+    val selectedTime: String,
+    val userNote: String,
+)
+
 @Preview
 @Composable
 fun DetailDoctorPreview() {
@@ -407,27 +541,21 @@ fun DetailDoctorPreview() {
         DetailConsultantScreen(
             DetailConsultantState(
                 consultant = Consultant(
-                    "dsada",
-                    "Dzaky Nashshar",
-                    "Kanker",
-                    2,
-                    100,
-                    "lorem test"
+                    id = "dsada",
+                    name = "Dzaky Nashshar",
+                    speciality = "Kanker",
+                    yearExperience = 2,
+                    patientCount = 110,
+                    biography = "lorem test",
                 ),
                 timeSlots = listOf("08.00", "09.00", "10.00", "11.00", "12.00"),
-                dates = listOf(
-                    ConsultationDate(200, 12, "Sen"),
-                    ConsultationDate(201, 13, "Sel"),
-                    ConsultationDate(202, 14, "Rab"),
-                    ConsultationDate(203, 15, "Kam"),
-                    ConsultationDate(204, 16, "Jum"),
-                    ConsultationDate(205, 17, "Sab"),
-                    ConsultationDate(206, 18, "Min"),
-                )
+                dates = listOf()
             ),
             {},
             {},
         )
     }
-
 }
+
+
+

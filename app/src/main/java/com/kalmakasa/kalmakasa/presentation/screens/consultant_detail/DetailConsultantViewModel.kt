@@ -2,6 +2,7 @@ package com.kalmakasa.kalmakasa.presentation.screens.consultant_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kalmakasa.kalmakasa.common.DateUtil.DAYS
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.Consultant
 import com.kalmakasa.kalmakasa.domain.model.ConsultationDate
@@ -19,7 +20,7 @@ class DetailDoctorViewModel @Inject constructor(
     private val consultantRepository: ConsultantRepository,
 ) : ViewModel() {
 
-    private val timeSlots = listOf("09.00", "10.00", "13.00", "14.00", "16.00", "17.00", "19.00")
+    private val timeSlots = listOf("10.00", "13.00", "14.00", "16.00", "17.00", "19.00")
     private val calendar = Calendar.getInstance()
     private val currentTime = calendar.timeInMillis
 
@@ -54,8 +55,7 @@ class DetailDoctorViewModel @Inject constructor(
         val consultationDates = mutableListOf<ConsultationDate>()
 
         val calendar = Calendar.getInstance()
-//        calendar.set(Calendar.DAY_OF_WEEK, calendar.firstDayOfWeek)
-        repeat(CONSULTATION_WEEKS * 7) {
+        repeat(14) {
             val date = calendar.get(Calendar.DAY_OF_MONTH)
             val day = DAYS[calendar.get(Calendar.DAY_OF_WEEK) - 1]
             consultationDates.add(
@@ -72,19 +72,6 @@ class DetailDoctorViewModel @Inject constructor(
         return consultationDates
     }
 
-    companion object {
-        const val CONSULTATION_WEEKS = 1
-
-        val DAYS = listOf(
-            "Min",
-            "Sen",
-            "Sel",
-            "Rab",
-            "Kam",
-            "Jum",
-            "Sab",
-        )
-    }
 }
 
 data class DetailConsultantState(

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.HealthAndSafety
-import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Divider
@@ -86,12 +85,6 @@ fun ProfileScreen(
         ProfileOptionCard(
             icon = Icons.Default.Settings,
             title = stringResource(R.string.edit_profile),
-            onClick = {},
-            enabled = false,
-        )
-        ProfileOptionCard(
-            icon = Icons.Default.History,
-            title = stringResource(R.string.history),
             onClick = {},
             enabled = false,
         )

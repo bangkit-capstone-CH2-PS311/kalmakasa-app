@@ -27,7 +27,6 @@ class UserRepositoryImpl(
             is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
             is IOException -> emit(Resource.Error(it.localizedMessage ?: "No Internet"))
         }
-
     }
 
     override fun register(name: String, email: String, password: String) = flow {

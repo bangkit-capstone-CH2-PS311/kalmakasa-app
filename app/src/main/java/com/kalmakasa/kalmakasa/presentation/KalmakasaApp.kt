@@ -1,7 +1,5 @@
 package com.kalmakasa.kalmakasa.presentation
 
-import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -21,7 +19,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.kalmakasa.kalmakasa.common.BASE_URL
 import com.kalmakasa.kalmakasa.presentation.component.BottomBar
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailScreen
@@ -35,7 +32,7 @@ import com.kalmakasa.kalmakasa.presentation.screens.auth.signin.SignInViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.auth.welcome.WelcomeScreen
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_detail.DetailConsultantScreen
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_detail.DetailDoctorViewModel
-import com.kalmakasa.kalmakasa.presentation.screens.consultant_list.ListDoctorScreen
+import com.kalmakasa.kalmakasa.presentation.screens.consultant_list.ListConsultantScreen
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_list.ListDoctorViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.home.HomeScreen
 import com.kalmakasa.kalmakasa.presentation.screens.home.HomeViewModel
@@ -48,6 +45,8 @@ import com.kalmakasa.kalmakasa.presentation.screens.profile.ProfileScreen
 import com.kalmakasa.kalmakasa.presentation.screens.profile.ProfileViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.question.QuestionScreen
 import com.kalmakasa.kalmakasa.presentation.screens.question.QuestionViewModel
+import com.kalmakasa.kalmakasa.presentation.screens.reservation_list.ListReservationScreen
+import com.kalmakasa.kalmakasa.presentation.screens.reservation_list.ListReservationViewModel
 import com.kalmakasa.kalmakasa.presentation.state.SessionState
 
 
@@ -197,6 +196,7 @@ fun KalmakasaApp() {
                 )
             }
 
+            // Profile Feature
             composable(Screen.Profile.route) {
                 val viewModel: ProfileViewModel = hiltViewModel()
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -215,10 +215,6 @@ fun KalmakasaApp() {
                     }
                 )
             }
-
-            /*
-            FEATURES SCREEN
-            */
 
             // Question Feature
             composable(
@@ -254,21 +250,25 @@ fun KalmakasaApp() {
             }
 
             // Transaction Feature
-            composable(route = Screen.Transaction.route) {
+            composable(route = Screen.ListReservation.route) {
                 Text(text = "Transaction Screen")
             }
 
 
-            // List Features
+            // Consultant Features
             composable(Screen.ListConsultant.route) {
                 val viewModel: ListDoctorViewModel = hiltViewModel()
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-                ListDoctorScreen(
-                    uiState
-                ) { doctor ->
-                    navController.navigate(Screen.ConsultantDetail.createRoute(doctor.id))
-                }
+                ListConsultantScreen(
+                    uiState = uiState,
+                    onConsultantClicked = { doctor ->
+                        navController.navigate(Screen.ConsultantDetail.createRoute(doctor.id))
+                    },
+                    onQueryChange = viewModel::onQueryChange,
+                    onFilterClicked = viewModel::onFilterClicked,
+                    onForMeClicked = viewModel::onForMeClicked
+                )
             }
             composable(
                 route = Screen.ConsultantDetail.route,
@@ -280,17 +280,12 @@ fun KalmakasaApp() {
                     viewModel.getDoctorDetail(id)
                 }
 
-                val context = LocalContext.current
-
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setData(Uri.parse("${BASE_URL}reservations/google/login"))
-
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 DetailConsultantScreen(
                     uiState = uiState,
                     navUp = { navController.navigateUp() },
                     onAppointmentBooked = {
-                        context.startActivity(intent)
+                        // TODO : Create a request to make a reservation
                     }
                 )
             }
@@ -329,6 +324,15 @@ fun KalmakasaApp() {
                 )
             }
 
+            composable(Screen.ListReservation.route) {
+                val viewModel: ListReservationViewModel = hiltViewModel()
+
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                ListReservationScreen(
+                    uiState = uiState
+                )
+            }
+
             // Article Features
             composable(Screen.ListArticle.route) {
                 val viewModel: ListArticleViewModel = hiltViewModel()
@@ -356,6 +360,7 @@ fun KalmakasaApp() {
                 LaunchedEffect(true) {
                     viewModel.getArticleDetail(id)
                 }
+
 
                 if (uiState.isLoading) {
                     LoadingScreen()

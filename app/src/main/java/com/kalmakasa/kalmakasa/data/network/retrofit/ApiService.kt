@@ -5,6 +5,7 @@ import com.kalmakasa.kalmakasa.data.network.response.ApiJournal
 import com.kalmakasa.kalmakasa.data.network.response.AuthResponse
 import com.kalmakasa.kalmakasa.data.network.response.ConsultantsResponse
 import com.kalmakasa.kalmakasa.data.network.response.JournalsResponse
+import com.kalmakasa.kalmakasa.data.network.response.ReservationResponse
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -49,4 +50,17 @@ interface ApiService {
         @Field("title") title: String = "",
         @Field("content") content: String = "",
     ): ApiJournal
+
+    @FormUrlEncoded
+    @POST("reservations")
+    suspend fun addReservation(
+        @Field("userId") id: String,
+        @Field("consultantId") consultantId: String,
+        @Field("date") date: String,
+        @Field("startTime") startTime: String,
+        @Field("endTime") endTime: String,
+    )
+
+    @GET("reservations")
+    suspend fun getReservations(): ReservationResponse
 }

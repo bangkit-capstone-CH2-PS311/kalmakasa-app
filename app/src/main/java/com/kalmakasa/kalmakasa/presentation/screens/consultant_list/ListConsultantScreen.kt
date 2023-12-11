@@ -20,10 +20,15 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
@@ -32,12 +37,33 @@ import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.SearchTopAppBar
 
 @Composable
-fun ListDoctorScreen(
+fun ListConsultantScreen(
     uiState: ListConsultantState,
     onConsultantClicked: (Consultant) -> Unit,
+    onQueryChange: (String) -> Unit,
+    onFilterClicked: (String) -> Unit,
+    onForMeClicked: () -> Unit,
 ) {
+    var forMeState by rememberSaveable { mutableStateOf(false) }
+
     Scaffold(
-        topBar = { SearchTopAppBar(query = uiState.searchQuery, placeholder = "Search...") }
+        topBar = {
+            SearchTopAppBar(
+                query = uiState.searchQuery,
+                placeholder = stringResource(R.string.search),
+                onQueryChange = onQueryChange,
+                filters = uiState.filterValue,
+                onFilterClicked = {
+                    forMeState = false
+                    onFilterClicked(it)
+                },
+                forMeState = forMeState,
+                onForMeClicked = {
+                    forMeState = !forMeState
+                    onForMeClicked()
+                },
+            )
+        }
     ) { paddingValues ->
         if (uiState.isLoading) {
             LoadingScreen(Modifier.padding(paddingValues))
@@ -48,7 +74,7 @@ fun ListDoctorScreen(
         } else {
             ListDoctorContent(
                 listConsultant = uiState.listConsultant,
-                onDoctorClicked = onConsultantClicked,
+                onConsultantClicked = onConsultantClicked,
                 modifier = Modifier.padding(paddingValues)
             )
         }
@@ -59,7 +85,7 @@ fun ListDoctorScreen(
 @Composable
 fun ListDoctorContent(
     listConsultant: List<Consultant>,
-    onDoctorClicked: (Consultant) -> Unit,
+    onConsultantClicked: (Consultant) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -77,7 +103,7 @@ fun ListDoctorContent(
                 ),
                 border = BorderStroke(1.dp, Color.Gray),
                 shape = MaterialTheme.shapes.small,
-                onClick = { onDoctorClicked(consultant) }
+                onClick = { onConsultantClicked(consultant) }
             ) {
                 Row(
                     modifier = Modifier.padding(vertical = 16.dp, horizontal = 12.dp),
@@ -98,6 +124,10 @@ fun ListDoctorContent(
                         )
                         Text(
                             text = consultant.speciality,
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                        Text(
+                            text = consultant.expertise.joinToString(","),
                             style = MaterialTheme.typography.bodySmall,
                         )
                     }

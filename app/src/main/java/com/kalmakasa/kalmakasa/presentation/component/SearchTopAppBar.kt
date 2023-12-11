@@ -32,8 +32,13 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SearchTopAppBar(
     query: String,
+    onQueryChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     useFilter: Boolean = true,
+    filters: Map<String, Boolean> = emptyMap(),
+    onFilterClicked: ((String) -> Unit)? = null,
+    forMeState: Boolean = false,
+    onForMeClicked: (() -> Unit)? = null,
     navUp: (() -> Unit)? = null,
     placeholder: String = "Search",
 ) {
@@ -53,7 +58,7 @@ fun SearchTopAppBar(
             OutlinedTextField(
                 value = query,
                 shape = MaterialTheme.shapes.extraLarge,
-                onValueChange = {},
+                onValueChange = onQueryChange,
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Search,
@@ -66,7 +71,7 @@ fun SearchTopAppBar(
                     .heightIn(min = 56.dp)
             )
         }
-        if (useFilter) {
+        if (useFilter && onFilterClicked != null && onForMeClicked != null) {
             Row(
                 modifier = Modifier
                     .height(FilterChipDefaults.Height)
@@ -75,16 +80,19 @@ fun SearchTopAppBar(
             ) {
                 Spacer(Modifier.width(16.dp))
                 FilterChip(
-                    selected = false,
-                    onClick = {},
+                    selected = forMeState,
+                    onClick = onForMeClicked,
                     label = { Text("For Me") },
                     leadingIcon = { Icon(Icons.Outlined.AutoAwesome, null) },
                 )
                 VerticalDivider()
-                FilterChip(selected = false, onClick = {}, label = { Text("Filter 1") })
-                FilterChip(selected = false, onClick = {}, label = { Text("Filter 2") })
-                FilterChip(selected = false, onClick = {}, label = { Text("Filter 3") })
-                FilterChip(selected = false, onClick = {}, label = { Text("Filter 4") })
+                filters.forEach {
+                    FilterChip(
+                        selected = it.value,
+                        onClick = { onFilterClicked(it.key) },
+                        label = { Text(it.key) })
+
+                }
                 Spacer(Modifier.width(16.dp))
             }
         }

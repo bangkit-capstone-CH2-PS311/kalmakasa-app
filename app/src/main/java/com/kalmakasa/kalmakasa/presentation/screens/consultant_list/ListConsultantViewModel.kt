@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,31 +21,66 @@ class ListDoctorViewModel @Inject constructor(
     private val consultantRepository: ConsultantRepository,
 ) : ViewModel() {
 
+    private val listExpertise = listOf(
+        "Stress",
+        "Sexual Identity",
+        "Family & Relationship",
+        "Career",
+        "Depression",
+    )
+
     private val _listConsultant = MutableStateFlow<Resource<List<Consultant>>>(Resource.Loading)
 
     private val _searchQuery = MutableStateFlow("")
 
+    private val _filterChip = MutableStateFlow(listExpertise.associateWith { false })
+
     val uiState: StateFlow<ListConsultantState> =
-        combine(_listConsultant, _searchQuery) { listConsultant, query ->
+        combine(_listConsultant, _searchQuery, _filterChip) { listConsultant, query, filtersValue ->
             when (listConsultant) {
                 is Resource.Loading -> {
                     ListConsultantState(
                         searchQuery = query,
-                        isLoading = true
+                        isLoading = true,
+                        filterValue = filtersValue
                     )
                 }
 
                 is Resource.Success -> {
+                    val consultants =
+                        if (query.isNotBlank()) {
+                            listConsultant.data.filter {
+                                it.name.contains(
+                                    query,
+                                    ignoreCase = true
+                                )
+                            }
+                        } else {
+                            listConsultant.data
+                        }
+
+                    // TODO : filter it with enabled chips
+                    val enabledFilters = _filterChip.value.filterValues { it }.keys.toList()
+                    val filteredConsultants = if (enabledFilters.isNotEmpty()) {
+                        consultants.filter {
+                            enabledFilters.any { el -> it.expertise.contains(el.lowercase()) }
+                        }
+                    } else {
+                        consultants
+                    }
+
                     ListConsultantState(
                         searchQuery = query,
-                        listConsultant = listConsultant.data
+                        listConsultant = filteredConsultants,
+                        filterValue = filtersValue
                     )
                 }
 
                 else -> {
                     ListConsultantState(
                         searchQuery = query,
-                        isError = true
+                        isError = true,
+                        filterValue = filtersValue
                     )
                 }
             }
@@ -65,11 +101,34 @@ class ListDoctorViewModel @Inject constructor(
             }
         }
     }
+
+    fun onQueryChange(query: String) {
+        _searchQuery.value = query
+    }
+
+    fun onFilterClicked(filter: String) {
+        _filterChip.update {
+            val map = it.toMutableMap()
+            map[filter] = !map.getValue(filter)
+            map
+        }
+    }
+
+    fun onForMeClicked() {
+        // TODO : REMOVE THIS AFTER DASS DONE
+        val userTag = listOf("Stress")
+        _filterChip.update {
+            listExpertise.associateWith {
+                userTag.contains(it)
+            }
+        }
+    }
 }
 
 data class ListConsultantState(
     val listConsultant: List<Consultant> = emptyList(),
     val searchQuery: String = "",
     val isError: Boolean = false,
+    val filterValue: Map<String, Boolean> = emptyMap(),
     val isLoading: Boolean = false,
 )

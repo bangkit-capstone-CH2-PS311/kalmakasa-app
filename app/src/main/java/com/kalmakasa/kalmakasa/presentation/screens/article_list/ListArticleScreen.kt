@@ -38,8 +38,9 @@ fun ListArticleScreen(
         topBar = {
             SearchTopAppBar(
                 query = "",
+                onQueryChange = {},
                 placeholder = stringResource(R.string.search_article),
-                navUp = navUp
+                navUp = navUp,
             )
         },
         modifier = modifier,

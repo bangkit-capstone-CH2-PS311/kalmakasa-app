@@ -72,5 +72,29 @@
     <string name="patients">Pasien</string>
     <string name="how_was_your_feeling">Bagaimana perasaan Anda?</string>
     <string name="create_your_daily_journal">Buat Jurnal Hari ini</string>
-    <string name="transactions">Transaksi</string>
+    <string name="reservations">Reservasi</string>
+
+    <!--  SHORT DAYS  -->
+    <string name="sunday_short">Min</string>
+    <string name="monday_short">Sen</string>
+    <string name="friday_short">Jum</string>
+    <string name="thursday_short">Kam</string>
+    <string name="wednesday_short">Rab</string>
+    <string name="tuesday_short">Sel</string>
+    <string name="saturday_short">Sab</string>
+
+    <string name="reservation_detail">Detail Reservasi</string>
+    <string name="your_note">Catatan Anda</string>
+    <string name="reservation_summary">Ringkasan Reservasi</string>
+    <string name="create_reservation">Buat Reservasi</string>
+    <string name="date">Tanggal : %1$s</string>
+    <string name="experience_year">%1$s Tahun</string>
+    <string name="time_checkout">Waktu : %1$s</string>
+    <string name="search">Cari…</string>
+    <string name="skip">Lewati</string>
+
+    <string name="strongly_agree">Sangat Setuju</string>
+    <string name="agree">Setuju</string>
+    <string name="disagree">Tidak Setuju</string>
+    <string name="strongly_disagree">Sangat Tidak Setuju</string>
 </resources>

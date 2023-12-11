@@ -82,6 +82,9 @@ fun ArticleDetailScreen(
 @Composable
 fun ArticleDetailPreview() {
     MaterialTheme {
-        ArticleDetailScreen(article = FakeArticleDataSource.articles[0], {})
+        ArticleDetailScreen(
+            article = FakeArticleDataSource.articles[0],
+            navUp = {},
+        )
     }
 }

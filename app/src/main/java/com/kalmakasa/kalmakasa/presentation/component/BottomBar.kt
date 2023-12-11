@@ -4,11 +4,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.QuestionAnswer
-import androidx.compose.material.icons.filled.ReceiptLong
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.QuestionAnswer
-import androidx.compose.material.icons.outlined.ReceiptLong
+import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -48,10 +48,10 @@ fun BottomBar(
                 screen = Screen.ListConsultant
             ),
             NavigationItem(
-                title = stringResource(R.string.transactions),
-                icon = Icons.Default.ReceiptLong,
-                iconOutline = Icons.Outlined.ReceiptLong,
-                screen = Screen.Transaction
+                title = stringResource(R.string.reservations),
+                icon = Icons.Default.Schedule,
+                iconOutline = Icons.Outlined.Schedule,
+                screen = Screen.ListReservation
             ),
             NavigationItem(
                 title = stringResource(R.string.profile),

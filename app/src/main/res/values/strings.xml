@@ -72,6 +72,30 @@
     <string name="patients">Patients</string>
     <string name="how_was_your_feeling">How was your feeling?</string>
     <string name="create_your_daily_journal">Create your Daily Journal</string>
-    <string name="transactions">Transactions</string>
+    <string name="reservations">Reservations</string>
+
+    <!--  SHORT DAYS  -->
+    <string name="sunday_short">Sun</string>
+    <string name="monday_short">Mon</string>
+    <string name="friday_short">Fri</string>
+    <string name="thursday_short">Thu</string>
+    <string name="wednesday_short">Wed</string>
+    <string name="tuesday_short">Tue</string>
+    <string name="saturday_short">Sat</string>
+    <string name="reservation_detail">Reservation Detail</string>
+    <string name="your_note">Your Note</string>
+    <string name="reservation_summary">Reservation Summary</string>
+    <string name="create_reservation">Create Reservation</string>
+    <string name="date">Date : %1$s</string>
+    <string name="experience_year">%1$s Years</string>
+    <string name="time_checkout">Time : %1$s</string>
+    <string name="search">Search…</string>
+    <string name="skip">Skip</string>
+
+    <!--  Options  -->
+    <string name="strongly_agree">Strongly Agree</string>
+    <string name="agree">Agree</string>
+    <string name="disagree">Disagree</string>
+    <string name="strongly_disagree">Strongly Disagree</string>
 
 </resources>

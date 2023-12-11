@@ -33,12 +33,13 @@ sealed class Screen(val route: String) {
 
     }
 
-    object Transaction : Screen("transaction")
+    object ListReservation : Screen("Reservation")
 
     companion object {
         val withBottomBar = listOf(
             Home.route,
             ListConsultant.route,
+            ListReservation.route,
             Profile.route,
         )
     }

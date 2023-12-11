@@ -25,6 +25,9 @@ data class ApiConsultant(
     @field:SerializedName("reviews")
     val reviews: List<String> = emptyList(),
 
+    @field:SerializedName("speciality")
+    val speciality: List<String> = emptyList(),
+
     @field:SerializedName("patients")
     val patients: Int = 0,
 
@@ -54,6 +57,7 @@ fun ApiConsultant.toConsultant() = Consultant(
     id = id,
     name = name,
     speciality = "Template Speciality",
+    expertise = speciality,
     yearExperience = experience,
     patientCount = patients,
     biography = bio
