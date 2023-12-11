@@ -40,6 +40,7 @@ import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 @Composable
 fun ProfileScreen(
     uiState: User,
+    onQuestionerClicked: () -> Unit,
     onLogoutClicked: () -> Unit,
 ) {
     Column(
@@ -97,8 +98,7 @@ fun ProfileScreen(
         ProfileOptionCard(
             icon = Icons.Default.HealthAndSafety,
             title = stringResource(R.string.my_health_test_result),
-            onClick = {},
-            enabled = false,
+            onClick = onQuestionerClicked,
         )
         ProfileOptionCard(
             icon = Icons.Default.Logout,
@@ -143,7 +143,10 @@ fun ProfileOptionCard(
 @Composable
 fun ProfilePreview() {
     KalmakasaTheme {
-        ProfileScreen(uiState = User()) {
+        ProfileScreen(
+            uiState = User(),
+            {}
+        ) {
 
         }
     }

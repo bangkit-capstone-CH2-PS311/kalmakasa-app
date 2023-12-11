@@ -49,6 +49,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.domain.model.Consultant
 import com.kalmakasa.kalmakasa.domain.model.ConsultationDate
@@ -57,8 +59,8 @@ import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 
 @Composable
-fun DetailDoctorScreen(
-    uiState: DetailDoctorState,
+fun DetailConsultantScreen(
+    uiState: DetailConsultantState,
     navUp: () -> Unit,
     onAppointmentBooked: () -> Unit,
 ) {
@@ -84,7 +86,7 @@ fun DetailDoctorScreen(
             }
 
             else -> {
-                DetailDoctorContent(
+                DetailConsultantContent(
                     uiState.consultant,
                     uiState.timeSlots,
                     uiState.currentTime,
@@ -98,7 +100,7 @@ fun DetailDoctorScreen(
 }
 
 @Composable
-fun DetailDoctorContent(
+fun DetailConsultantContent(
     consultant: Consultant,
     timeSlots: List<String>,
     currentTime: Long,
@@ -111,6 +113,12 @@ fun DetailDoctorContent(
     var userNotes by rememberSaveable { mutableStateOf("") }
 
     val isValidated = (selectedDate != 0 && selectedTime.isNotEmpty() && userNotes.isNotEmpty())
+
+    FullScreenDialog(
+        showDialog = false,
+        onDismissRequest = {},
+        onConfirmation = {}
+    )
 
     Column(
         modifier = modifier
@@ -255,6 +263,33 @@ fun DetailDoctorContent(
     }
 }
 
+@Composable
+fun FullScreenDialog(
+    showDialog: Boolean,
+    onDismissRequest: () -> Unit,
+    onConfirmation: () -> Unit = {},
+) {
+    if (showDialog) {
+        Dialog(
+            properties = DialogProperties(usePlatformDefaultWidth = false),
+            onDismissRequest = onDismissRequest,
+        ) {
+            Scaffold(
+                topBar = {
+                    TitleTopAppBar(
+                        title = "Checkout",
+                        onBackButtonClicked = onDismissRequest
+                    )
+                }
+            ) { paddingValues ->
+                Column(Modifier.padding(paddingValues)) {
+
+                }
+            }
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleTime(
@@ -369,8 +404,8 @@ fun DoctorPerks(
 @Composable
 fun DetailDoctorPreview() {
     KalmakasaTheme {
-        DetailDoctorScreen(
-            DetailDoctorState(
+        DetailConsultantScreen(
+            DetailConsultantState(
                 consultant = Consultant(
                     "dsada",
                     "Dzaky Nashshar",

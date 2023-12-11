@@ -3,8 +3,8 @@ package com.kalmakasa.kalmakasa.presentation.screens.consultant_detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kalmakasa.kalmakasa.common.Resource
-import com.kalmakasa.kalmakasa.domain.model.ConsultationDate
 import com.kalmakasa.kalmakasa.domain.model.Consultant
+import com.kalmakasa.kalmakasa.domain.model.ConsultationDate
 import com.kalmakasa.kalmakasa.domain.repository.ConsultantRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,18 +23,18 @@ class DetailDoctorViewModel @Inject constructor(
     private val calendar = Calendar.getInstance()
     private val currentTime = calendar.timeInMillis
 
-    private val _uiState = MutableStateFlow(DetailDoctorState())
-    val uiState: StateFlow<DetailDoctorState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow(DetailConsultantState())
+    val uiState: StateFlow<DetailConsultantState> = _uiState.asStateFlow()
     fun getDoctorDetail(id: String) {
         viewModelScope.launch {
             consultantRepository.getDoctorDetailById(id).collect { consultant ->
                 when (consultant) {
                     is Resource.Loading -> {
-                        _uiState.value = DetailDoctorState(isLoading = true)
+                        _uiState.value = DetailConsultantState(isLoading = true)
                     }
 
                     is Resource.Success -> {
-                        _uiState.value = DetailDoctorState(
+                        _uiState.value = DetailConsultantState(
                             consultant = consultant.data,
                             timeSlots = timeSlots,
                             currentTime = currentTime,
@@ -43,7 +43,7 @@ class DetailDoctorViewModel @Inject constructor(
                     }
 
                     else -> {
-                        _uiState.value = DetailDoctorState(isError = true)
+                        _uiState.value = DetailConsultantState(isError = true)
                     }
                 }
             }
@@ -54,7 +54,7 @@ class DetailDoctorViewModel @Inject constructor(
         val consultationDates = mutableListOf<ConsultationDate>()
 
         val calendar = Calendar.getInstance()
-        calendar.set(Calendar.DAY_OF_WEEK, calendar.firstDayOfWeek)
+//        calendar.set(Calendar.DAY_OF_WEEK, calendar.firstDayOfWeek)
         repeat(CONSULTATION_WEEKS * 7) {
             val date = calendar.get(Calendar.DAY_OF_MONTH)
             val day = DAYS[calendar.get(Calendar.DAY_OF_WEEK) - 1]
@@ -73,7 +73,7 @@ class DetailDoctorViewModel @Inject constructor(
     }
 
     companion object {
-        const val CONSULTATION_WEEKS = 2
+        const val CONSULTATION_WEEKS = 1
 
         val DAYS = listOf(
             "Min",
@@ -87,7 +87,7 @@ class DetailDoctorViewModel @Inject constructor(
     }
 }
 
-data class DetailDoctorState(
+data class DetailConsultantState(
     val consultant: Consultant? = null,
     val timeSlots: List<String> = emptyList(),
     val currentTime: Long = 0,

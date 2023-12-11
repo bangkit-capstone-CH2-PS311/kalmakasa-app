@@ -59,7 +59,7 @@
     <!--  Emoticon Description  -->
     <string name="very_sad">Sangat Sedih</string>
     <string name="sad">Sedih</string>
-    <string name="flat">Datár</string>
+    <string name="flat">Datar</string>
     <string name="happy">Bahagia</string>
     <string name="very_happy">Sangat Bahagia</string>
     <string name="article_image">Gambar Artikel</string>
@@ -72,4 +72,5 @@
     <string name="patients">Pasien</string>
     <string name="how_was_your_feeling">Bagaimana perasaan Anda?</string>
     <string name="create_your_daily_journal">Buat Jurnal Hari ini</string>
+    <string name="transactions">Transaksi</string>
 </resources>

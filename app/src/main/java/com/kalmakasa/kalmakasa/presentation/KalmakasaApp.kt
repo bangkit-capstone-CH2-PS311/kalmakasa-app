@@ -1,5 +1,7 @@
 package com.kalmakasa.kalmakasa.presentation
 
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -19,6 +21,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.kalmakasa.kalmakasa.common.BASE_URL
 import com.kalmakasa.kalmakasa.presentation.component.BottomBar
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailScreen
@@ -30,7 +33,7 @@ import com.kalmakasa.kalmakasa.presentation.screens.auth.register.RegisterViewMo
 import com.kalmakasa.kalmakasa.presentation.screens.auth.signin.SignInScreen
 import com.kalmakasa.kalmakasa.presentation.screens.auth.signin.SignInViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.auth.welcome.WelcomeScreen
-import com.kalmakasa.kalmakasa.presentation.screens.consultant_detail.DetailDoctorScreen
+import com.kalmakasa.kalmakasa.presentation.screens.consultant_detail.DetailConsultantScreen
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_detail.DetailDoctorViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_list.ListDoctorScreen
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_list.ListDoctorViewModel
@@ -206,6 +209,9 @@ fun KalmakasaApp() {
                                 popUpTo(Screen.Home.route) { inclusive = true }
                             }
                         }
+                    },
+                    onQuestionerClicked = {
+                        navController.navigate(Screen.Question.createRoute(false))
                     }
                 )
             }
@@ -247,6 +253,11 @@ fun KalmakasaApp() {
                 )
             }
 
+            // Transaction Feature
+            composable(route = Screen.Transaction.route) {
+                Text(text = "Transaction Screen")
+            }
+
 
             // List Features
             composable(Screen.ListConsultant.route) {
@@ -269,11 +280,18 @@ fun KalmakasaApp() {
                     viewModel.getDoctorDetail(id)
                 }
 
+                val context = LocalContext.current
+
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setData(Uri.parse("${BASE_URL}reservations/google/login"))
+
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-                DetailDoctorScreen(
+                DetailConsultantScreen(
                     uiState = uiState,
                     navUp = { navController.navigateUp() },
-                    onAppointmentBooked = {}
+                    onAppointmentBooked = {
+                        context.startActivity(intent)
+                    }
                 )
             }
 

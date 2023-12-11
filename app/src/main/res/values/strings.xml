@@ -72,5 +72,6 @@
     <string name="patients">Patients</string>
     <string name="how_was_your_feeling">How was your feeling?</string>
     <string name="create_your_daily_journal">Create your Daily Journal</string>
+    <string name="transactions">Transactions</string>
 
 </resources>
