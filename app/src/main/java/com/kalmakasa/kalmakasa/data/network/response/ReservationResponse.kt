@@ -44,6 +44,9 @@ data class ApiReservation(
 
     @field:SerializedName("status")
     val status: String,
+
+    @field:SerializedName("notes")
+    val notes: String? = null,
 )
 
 fun ApiReservation.toReservation() = Reservation(
@@ -56,5 +59,5 @@ fun ApiReservation.toReservation() = Reservation(
     consultantSpeciality = consultant?.speciality?.joinToString(", ")
         ?: "speciality a, speciality b",
     consultantBio = consultant?.bio ?: "Consultant Bio",
-    patientNote = "Lorem ipsum dolot si amet" // TODO : Belum ada di api,
+    patientNote = notes ?: "",
 )

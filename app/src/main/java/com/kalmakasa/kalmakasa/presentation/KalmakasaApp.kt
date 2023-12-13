@@ -40,6 +40,7 @@ import com.kalmakasa.kalmakasa.presentation.screens.journal_add.AddJournalScreen
 import com.kalmakasa.kalmakasa.presentation.screens.journal_add.AddJournalViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.journal_list.ListJournalScreen
 import com.kalmakasa.kalmakasa.presentation.screens.journal_list.ListJournalViewModel
+import com.kalmakasa.kalmakasa.presentation.screens.launcher.Launcher
 import com.kalmakasa.kalmakasa.presentation.screens.launcher.LauncherViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.profile.ProfileScreen
 import com.kalmakasa.kalmakasa.presentation.screens.profile.ProfileViewModel
@@ -49,7 +50,6 @@ import com.kalmakasa.kalmakasa.presentation.screens.reservation_detail.DetailRes
 import com.kalmakasa.kalmakasa.presentation.screens.reservation_detail.DetailReservationViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.reservation_list.ListReservationScreen
 import com.kalmakasa.kalmakasa.presentation.screens.reservation_list.ListReservationViewModel
-import com.kalmakasa.kalmakasa.presentation.state.SessionState
 
 
 @Composable
@@ -75,29 +75,7 @@ fun KalmakasaApp() {
                 val viewModel: LauncherViewModel = hiltViewModel()
                 val state by viewModel.sessionState.collectAsStateWithLifecycle()
 
-                when (state) {
-                    SessionState.Loading -> {
-                        LoadingScreen()
-                    }
-
-                    SessionState.NotLoggedIn -> {
-                        LaunchedEffect(state) {
-                            navController.navigate(Screen.AuthGraph.route) {
-                                popUpTo(Screen.Launcher.route) { inclusive = true }
-                                launchSingleTop = true
-                            }
-                        }
-                    }
-
-                    is SessionState.LoggedIn -> {
-                        LaunchedEffect(state) {
-                            navController.navigate(Screen.Home.route) {
-                                popUpTo(Screen.Launcher.route) { inclusive = true }
-                                launchSingleTop = true
-                            }
-                        }
-                    }
-                }
+                Launcher(state = state, navController = navController)
             }
 
             // AUTH GRAPH
