@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.Reservation
-import com.kalmakasa.kalmakasa.domain.repository.ConsultantRepository
 import com.kalmakasa.kalmakasa.domain.repository.ReservationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +14,6 @@ import javax.inject.Inject
 @HiltViewModel
 class ListReservationViewModel @Inject constructor(
     private val reservationRepository: ReservationRepository,
-    private val consultantRepository: ConsultantRepository,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<Resource<List<Reservation>>> =
@@ -33,6 +31,5 @@ class ListReservationViewModel @Inject constructor(
             }
         }
     }
-
 
 }

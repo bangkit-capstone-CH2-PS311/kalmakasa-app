@@ -2,6 +2,7 @@ package com.kalmakasa.kalmakasa.presentation.screens.question
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kalmakasa.kalmakasa.R
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -15,31 +16,31 @@ class QuestionViewModel : ViewModel() {
         "I found it hard to wind down",
         "I was aware of dryness of my mouth",
         "I couldn’t seem to experience any positive feeling at all",
-        "I experienced breathing difficulty (e.g. excessively rapid breathing, breathlessness in the absence of physical exertion)",
-        "I found it difficult to work up the initiative to do things",
-        "I tended to over-react to situations",
-        "I experienced trembling (e.g. in the hands)",
-        "I felt that I was using a lot of nervous energy",
-        "I was worried about situations in which I might panic and make a fool of myself",
-        "I felt that I had nothing to look forward to",
-        "I found myself getting agitated",
-        "I found it difficult to relax",
-        "I felt down-hearted and blue",
-        "I was intolerant of anything that kept me from getting on with what I was doing",
-        "I felt I was close to panic",
-        "I was unable to become enthusiastic about anything",
-        "I felt I wasn’t worth much as a person",
-        "I felt that I was rather touchy",
-        "I was aware of the action of my heart in the absence of physical exertion (e.g. sense of heart rate increase, heart missing a beat)",
-        "I felt scared without any good reason",
-        "I felt that life was meaningless",
+//        "I experienced breathing difficulty (e.g. excessively rapid breathing, breathlessness in the absence of physical exertion)",
+//        "I found it difficult to work up the initiative to do things",
+//        "I tended to over-react to situations",
+//        "I experienced trembling (e.g. in the hands)",
+//        "I felt that I was using a lot of nervous energy",
+//        "I was worried about situations in which I might panic and make a fool of myself",
+//        "I felt that I had nothing to look forward to",
+//        "I found myself getting agitated",
+//        "I found it difficult to relax",
+//        "I felt down-hearted and blue",
+//        "I was intolerant of anything that kept me from getting on with what I was doing",
+//        "I felt I was close to panic",
+//        "I was unable to become enthusiastic about anything",
+//        "I felt I wasn’t worth much as a person",
+//        "I felt that I was rather touchy",
+//        "I was aware of the action of my heart in the absence of physical exertion (e.g. sense of heart rate increase, heart missing a beat)",
+//        "I felt scared without any good reason",
+//        "I felt that life was meaningless",
     )
 
     val options = listOf(
-        "Strongly Agree",
-        "Agree",
-        "Disagree",
-        "Strongly Disagree",
+        R.string.strongly_agree,
+        R.string.agree,
+        R.string.disagree,
+        R.string.strongly_disagree,
     )
     private val _currentQuestionIndex = MutableStateFlow(1)
 
@@ -52,7 +53,7 @@ class QuestionViewModel : ViewModel() {
                 currentQuestion = questions[currentIndex - 1],
                 currentAnswer = answers[currentIndex],
                 progress = currentIndex / questions.size.toFloat(),
-                isDone = currentIndex == questions.size,
+                lastQuestion = currentIndex == questions.size,
             )
         }.stateIn(
             scope = viewModelScope,
@@ -88,5 +89,5 @@ data class QuestionScreenData(
     val currentQuestion: String = "",
     val currentAnswer: String? = null,
     val progress: Float = 0F,
-    val isDone: Boolean = false,
+    val lastQuestion: Boolean = false,
 )

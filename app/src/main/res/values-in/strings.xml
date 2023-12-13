@@ -97,4 +97,9 @@
     <string name="agree">Setuju</string>
     <string name="disagree">Tidak Setuju</string>
     <string name="strongly_disagree">Sangat Tidak Setuju</string>
+
+    <string name="join_meet">Gabung Meeting</string>
+    <string name="consultation_detail">Detail Konsultasi</string>
+    <string name="your_notes">Catatan Anda</string>
+    <string name="expertise">Bidang Keahlian</string>
 </resources>

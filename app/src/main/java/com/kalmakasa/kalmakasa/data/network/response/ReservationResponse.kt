@@ -28,7 +28,7 @@ data class ApiReservation(
     val date: String,
 
     @field:SerializedName("consultantId")
-    val consultantId: String,
+    val consultant: ApiConsultant? = null,
 
     @field:SerializedName("startTime")
     val startTime: String,
@@ -40,7 +40,7 @@ data class ApiReservation(
     val id: String,
 
     @field:SerializedName("userId")
-    val userId: String,
+    val user: ApiUser,
 
     @field:SerializedName("status")
     val status: String,
@@ -48,9 +48,13 @@ data class ApiReservation(
 
 fun ApiReservation.toReservation() = Reservation(
     id = id,
-    userId = userId,
-    consultantId = consultantId,
+    userId = user.id,
     date = DateUtil.formatApiDate(date),
     time = "$startTime - $endTime",
-    status = status
+    status = status,
+    consultantName = consultant?.name ?: "Consultant Name",
+    consultantSpeciality = consultant?.speciality?.joinToString(", ")
+        ?: "speciality a, speciality b",
+    consultantBio = consultant?.bio ?: "Consultant Bio",
+    patientNote = "Lorem ipsum dolot si amet" // TODO : Belum ada di api,
 )

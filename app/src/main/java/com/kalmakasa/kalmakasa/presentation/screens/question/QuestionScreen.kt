@@ -2,7 +2,7 @@ package com.kalmakasa.kalmakasa.presentation.screens.question
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.activity.compose.BackHandler
+import androidx.annotation.StringRes
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -41,7 +41,7 @@ import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 fun QuestionScreen(
     questionData: QuestionScreenData,
     questions: List<String>,
-    options: List<String>,
+    @StringRes options: List<Int>,
     onNavUp: () -> Unit,
     onSubmit: () -> Unit,
     onNextQuestion: () -> Unit,
@@ -62,19 +62,11 @@ fun QuestionScreen(
         label = "progress"
     ).value
 
-    BackHandler {
-        if (questionData.currentQuestionIndex > 1)
-            onPreviousQuestion()
-        else
-            onNavUp()
-    }
-
     Scaffold(
         topBar = {
             QuestionTopAppbar(
                 title = "Questionnaire",
                 onBackButtonClicked = if (isSkippable) onSkipAssessment
-                else if (questionData.currentQuestionIndex > 1) onPreviousQuestion
                 else onNavUp,
                 onSkipAssessment = onSkipAssessment,
                 isSkippable = isSkippable,
@@ -96,12 +88,12 @@ fun QuestionScreen(
                 }
                 Button(
                     onClick = {
-                        if (questionData.isDone) onSubmit() else onNextQuestion()
+                        if (questionData.lastQuestion) onSubmit() else onNextQuestion()
                     },
                     modifier = Modifier.weight(1f),
                     enabled = answer != null
                 ) {
-                    if (questionData.isDone) {
+                    if (questionData.lastQuestion) {
                         Text(stringResource(R.string.done))
                     } else {
                         Text(stringResource(R.string.next))
@@ -133,7 +125,7 @@ fun QuestionScreen(
             QuestionBox(question)
             options.forEach { option ->
                 OptionBox(
-                    option = option,
+                    option = stringResource(option),
                     currentValue = answer,
                     onOptionClicked = updateAnswer
                 )
@@ -165,7 +157,7 @@ fun QuestionTopAppbar(
         actions = {
             if (isSkippable) {
                 TextButton(onClick = onSkipAssessment) {
-                    Text(text = "Skip")
+                    Text(text = stringResource(R.string.skip))
                 }
             }
         }
@@ -225,7 +217,7 @@ fun QuestionPreview() {
         QuestionScreen(
             questionData = QuestionScreenData(),
             questions = listOf("a", "b", "c", "d"),
-            options = listOf("a", "b", "c", "d"),
+            options = emptyList(),
             onNavUp = {},
             onPreviousQuestion = { },
             onSubmit = {},

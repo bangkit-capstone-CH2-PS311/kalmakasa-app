@@ -30,6 +30,16 @@ object DateUtil {
         }
     }
 
+    fun millisToDate(date: Long): String {
+        val dateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
+        return dateFormat.format(date)
+    }
+
+    fun millisToApi(date: Long): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
+        return dateFormat.format(date)
+    }
+
     fun getCurrentDateInISO(): String {
         // Get the current date and time
         val currentDate = Calendar.getInstance().time
