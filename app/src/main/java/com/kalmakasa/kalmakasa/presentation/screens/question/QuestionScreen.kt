@@ -65,7 +65,7 @@ fun QuestionScreen(
     Scaffold(
         topBar = {
             QuestionTopAppbar(
-                title = "Questionnaire",
+                title = stringResource(R.string.questionnaire),
                 onBackButtonClicked = if (isSkippable) onSkipAssessment
                 else onNavUp,
                 onSkipAssessment = onSkipAssessment,

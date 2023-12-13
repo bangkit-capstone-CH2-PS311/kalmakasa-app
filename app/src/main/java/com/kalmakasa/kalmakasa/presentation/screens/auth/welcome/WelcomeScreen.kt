@@ -82,7 +82,7 @@ fun WelcomeOptionButtons(
                     .fillMaxWidth()
                     .height(48.dp),
             ) {
-                Text(text = "Getting Started")
+                Text(stringResource(R.string.getting_started))
             }
             Spacer(Modifier.height(8.dp))
             TextButton(
@@ -91,7 +91,7 @@ fun WelcomeOptionButtons(
                     .fillMaxWidth()
                     .height(48.dp),
             ) {
-                Text(text = stringResource(R.string.already_have_an_account))
+                Text(stringResource(R.string.already_have_an_account))
             }
         }
     }

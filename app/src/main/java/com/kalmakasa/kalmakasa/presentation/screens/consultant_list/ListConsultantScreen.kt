@@ -3,7 +3,6 @@ package com.kalmakasa.kalmakasa.presentation.screens.consultant_list
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -33,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.domain.model.Consultant
+import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.SearchTopAppBar
 
@@ -68,9 +68,7 @@ fun ListConsultantScreen(
         if (uiState.isLoading) {
             LoadingScreen(Modifier.padding(paddingValues))
         } else if (uiState.isError) {
-            Box(modifier = Modifier.padding(paddingValues)) {
-                Text("Error")
-            }
+            ErrorScreen(Modifier.padding(paddingValues))
         } else {
             ListDoctorContent(
                 listConsultant = uiState.listConsultant,

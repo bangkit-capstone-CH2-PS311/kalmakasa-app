@@ -102,5 +102,8 @@
     <string name="consultation_detail">Consultation Detail</string>
     <string name="your_notes">Your Notes</string>
     <string name="expertise">Expertise</string>
+    <string name="getting_started">Getting Started</string>
+    <string name="questionnaire">Questionnaire</string>
+    <string name="new_journal">New Journal</string>
 
 </resources>

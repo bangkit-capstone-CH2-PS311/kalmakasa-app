@@ -3,7 +3,6 @@ package com.kalmakasa.kalmakasa.presentation
 import android.widget.Toast
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.kalmakasa.kalmakasa.presentation.component.BottomBar
+import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailScreen
 import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailViewModel
@@ -251,12 +251,6 @@ fun KalmakasaApp() {
                 )
             }
 
-            // Transaction Feature
-            composable(route = Screen.ListReservation.route) {
-                Text(text = "Transaction Screen")
-            }
-
-
             // Consultant Features
             composable(Screen.ListConsultant.route) {
                 val viewModel: ListDoctorViewModel = hiltViewModel()
@@ -353,7 +347,7 @@ fun KalmakasaApp() {
                 if (uiState.isLoading) {
                     LoadingScreen()
                 } else if (uiState.isError) {
-                    Text(text = "Error")
+                    ErrorScreen(Modifier.padding(paddingValues))
                 } else {
                     uiState.reservation?.let { reservation ->
                         DetailReservationScreen(
@@ -362,7 +356,8 @@ fun KalmakasaApp() {
                                 navController.navigateUp()
                             }
                         )
-                    } ?: Text(text = "Error")
+                    } ?: ErrorScreen(Modifier.padding(paddingValues))
+
                 }
 
             }
@@ -399,7 +394,7 @@ fun KalmakasaApp() {
                 if (uiState.isLoading) {
                     LoadingScreen()
                 } else if (uiState.isError) {
-                    Text("Error")
+                    ErrorScreen(Modifier.padding(paddingValues))
                 } else {
                     uiState.article?.let { article ->
                         ArticleDetailScreen(

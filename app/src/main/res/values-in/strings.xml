@@ -102,4 +102,7 @@
     <string name="consultation_detail">Detail Konsultasi</string>
     <string name="your_notes">Catatan Anda</string>
     <string name="expertise">Bidang Keahlian</string>
+    <string name="getting_started">Mulai Sekarang</string>
+    <string name="questionnaire">Kuesioner</string>
+    <string name="new_journal">Jurnal Baru</string>
 </resources>

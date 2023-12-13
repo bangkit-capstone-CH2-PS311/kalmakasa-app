@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.common.Mood
 import com.kalmakasa.kalmakasa.domain.model.Journal
+import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
@@ -53,7 +54,7 @@ fun ListJournalScreen(
         if (uiState.isLoading) {
             LoadingScreen(Modifier.padding(paddingValues))
         } else if (uiState.isError) {
-            Text(text = "Error")
+            ErrorScreen(Modifier.padding(paddingValues))
         } else {
             ListJournalContent(
                 journal = uiState.listJournal,

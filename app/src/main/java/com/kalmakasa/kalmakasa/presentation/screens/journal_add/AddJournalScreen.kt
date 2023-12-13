@@ -68,7 +68,7 @@ fun AddJournalScreen(
         topBar = {
             Column {
                 TitleTopAppBar(
-                    title = "New Journal",
+                    title = stringResource(R.string.new_journal),
                     onBackButtonClicked = navUp
                 )
                 LinearProgressIndicator(

@@ -57,6 +57,7 @@ import androidx.compose.ui.unit.sp
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.domain.model.Consultant
 import com.kalmakasa.kalmakasa.domain.model.ConsultationDate
+import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
@@ -77,7 +78,7 @@ fun DetailConsultantScreen(
     ) { paddingValues ->
         when {
             uiState.isError -> {
-                Text(text = "Error", modifier = Modifier.padding(paddingValues))
+                ErrorScreen(Modifier.padding(paddingValues))
             }
 
             uiState.isLoading -> {
@@ -102,6 +103,7 @@ fun DetailConsultantScreen(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun DetailConsultantContent(
     consultant: Consultant,
