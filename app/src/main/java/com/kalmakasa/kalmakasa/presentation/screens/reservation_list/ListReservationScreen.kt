@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.kalmakasa.kalmakasa.R
@@ -36,6 +38,8 @@ import com.kalmakasa.kalmakasa.domain.model.Reservation
 import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
+import com.kalmakasa.kalmakasa.presentation.theme.OnPositive
+import com.kalmakasa.kalmakasa.presentation.theme.Positive
 
 @Composable
 fun ListReservationScreen(
@@ -81,7 +85,8 @@ fun ListReservationContent(
 
     LazyColumn(
         modifier = modifier.padding(horizontal = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(vertical = 16.dp)
     ) {
         items(reservations, key = { it.id }) { reservation ->
             OutlinedCard(
@@ -96,10 +101,10 @@ fun ListReservationContent(
                 ) {
                     Row(
                         modifier = Modifier.padding(bottom = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
                     ) {
                         AsyncImage(
-                            model = "https://www.pacificsantacruzvet.com/files/santa_cruz_vet/female-placeholder.jpg",
+                            model = reservation.consultantImageUrl,
                             contentDescription = null,
                             modifier = Modifier
                                 .border(
@@ -108,14 +113,32 @@ fun ListReservationContent(
                                 )
                                 .size(64.dp),
                         )
-                        Column {
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+
+                        ) {
                             Text(
                                 text = reservation.consultantName,
                                 style = MaterialTheme.typography.titleMedium,
+                                overflow = TextOverflow.Ellipsis,
                             )
                             Text(
                                 text = reservation.consultantSpeciality,
                                 style = MaterialTheme.typography.bodyMedium,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
+                        OutlinedCard(
+                            colors = CardDefaults.outlinedCardColors(
+                                containerColor = Positive,
+                                contentColor = OnPositive,
+                            ),
+                        ) {
+                            Text(
+                                text = reservation.status,
+                                style = MaterialTheme.typography.labelMedium,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                             )
                         }
                     }

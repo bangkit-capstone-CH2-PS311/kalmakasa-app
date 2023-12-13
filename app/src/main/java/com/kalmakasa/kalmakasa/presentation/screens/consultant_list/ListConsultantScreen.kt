@@ -1,7 +1,6 @@
 package com.kalmakasa.kalmakasa.presentation.screens.consultant_list
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,10 +25,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.domain.model.Consultant
 import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
@@ -104,11 +103,11 @@ fun ListDoctorContent(
                 onClick = { onConsultantClicked(consultant) }
             ) {
                 Row {
-                    Image(
+                    AsyncImage(
+                        model = consultant.imageUrl,
                         modifier = Modifier
                             .clip(MaterialTheme.shapes.large)
                             .width(80.dp),
-                        painter = painterResource(R.drawable.placeholder_consultant_img),
                         contentDescription = null,
                     )
                     Spacer(modifier = Modifier.width(16.dp))

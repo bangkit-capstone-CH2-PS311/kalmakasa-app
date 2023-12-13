@@ -19,6 +19,7 @@ class UserPreferences(private val dataStore: DataStore<Preferences>) {
         dataStore.edit { preferences ->
             preferences[ID_KEY] = user.id
             preferences[NAME_KEY] = user.name
+            preferences[ROLE_KEY] = user.role
             preferences[EMAIL_KEY] = user.email
             preferences[ACCESS_TOKEN_KEY] = user.accessToken
             preferences[REFRESH_TOKEN_KEY] = user.accessToken
@@ -31,9 +32,10 @@ class UserPreferences(private val dataStore: DataStore<Preferences>) {
         return dataStore.data.map { preferences ->
             User(
                 preferences[ID_KEY] ?: "",
-                preferences[NAME_KEY] ?: "",
+                preferences[ROLE_KEY] ?: "user",
                 preferences[EMAIL_KEY] ?: "",
                 preferences[ACCESS_TOKEN_KEY] ?: "",
+                preferences[REFRESH_TOKEN_KEY] ?: "",
                 preferences[REFRESH_TOKEN_KEY] ?: "",
                 preferences[IS_LOGIN_KEY] ?: false,
             )
@@ -49,6 +51,7 @@ class UserPreferences(private val dataStore: DataStore<Preferences>) {
     companion object {
         private val ID_KEY = stringPreferencesKey("id")
         private val NAME_KEY = stringPreferencesKey("name")
+        private val ROLE_KEY = stringPreferencesKey("role")
         private val EMAIL_KEY = stringPreferencesKey("email")
         private val ACCESS_TOKEN_KEY = stringPreferencesKey("access-token")
         private val REFRESH_TOKEN_KEY = stringPreferencesKey("refresh-token")

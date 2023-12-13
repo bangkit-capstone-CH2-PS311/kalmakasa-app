@@ -44,7 +44,7 @@ data class ApiJournal(
 
 fun ApiJournal.toJournal() = Journal(
     id = id,
-    mood = Mood.intToMood(Random.nextInt(6)), // TODO : Belom ada di API
+    mood = Mood.intToMood(Random.nextInt(6)), // TODO : Belom ada di API 1 - 5
     date = DateUtil.formatApiDate(date),
     description = content,
 )

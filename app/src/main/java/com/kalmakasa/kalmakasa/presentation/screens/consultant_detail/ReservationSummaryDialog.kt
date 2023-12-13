@@ -1,7 +1,6 @@
 package com.kalmakasa.kalmakasa.presentation.screens.consultant_detail
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,13 +26,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import coil.compose.AsyncImage
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.common.DateUtil
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
@@ -71,8 +70,8 @@ fun CheckoutDialog(
                     Row(
                         modifier = Modifier.padding(horizontal = 12.dp)
                     ) {
-                        Image(
-                            painter = painterResource(R.drawable.placeholder_consultant_img),
+                        AsyncImage(
+                            model = checkoutData.consultant.imageUrl,
                             contentDescription = null,
                             modifier = Modifier
                                 .width(72.dp)
@@ -137,7 +136,7 @@ fun CheckoutDialog(
                             onDismissRequest()
                             Toast.makeText(
                                 context,
-                                "Reservation Created Successfully",
+                                context.getString(R.string.reservation_created_successfully),
                                 Toast.LENGTH_SHORT
                             ).show()
                         },

@@ -196,7 +196,7 @@ fun DetailReservationScreen(
                     Spacer(modifier = Modifier.height(4.dp))
                     Button(
                         onClick = {
-                            // TODO:
+                            // TODO: Join Google Meet
                         },
                         modifier = Modifier
                             .height(48.dp)
@@ -222,6 +222,7 @@ fun DetailReservationPreview() {
                 "",
                 "",
                 "Dr. Dzaky Nashshar",
+                "",
                 "Lorem ipsum dolot sit amet",
                 "Speciality A, Speciality B",
                 "aku pengen berak",

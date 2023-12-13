@@ -23,6 +23,8 @@ class ConsultantRepositoryImpl(
         when (it) {
             is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
             is IOException -> emit(Resource.Error(it.localizedMessage ?: "No Internet"))
+            else -> emit(Resource.Error(it.localizedMessage ?: "Unknown error occurred"))
+
         }
     }
 
@@ -34,6 +36,7 @@ class ConsultantRepositoryImpl(
         when (it) {
             is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
             is IOException -> emit(Resource.Error(it.localizedMessage ?: "No Internet"))
+            else -> emit(Resource.Error(it.localizedMessage ?: "Unknown error occurred"))
         }
     }
 

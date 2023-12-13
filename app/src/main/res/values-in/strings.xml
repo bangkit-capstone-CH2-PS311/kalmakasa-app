@@ -105,4 +105,5 @@
     <string name="getting_started">Mulai Sekarang</string>
     <string name="questionnaire">Kuesioner</string>
     <string name="new_journal">Jurnal Baru</string>
+    <string name="reservation_created_successfully">Reservasi Berhasil Dibuat</string>
 </resources>

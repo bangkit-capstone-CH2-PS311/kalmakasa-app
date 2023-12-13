@@ -105,5 +105,6 @@
     <string name="getting_started">Getting Started</string>
     <string name="questionnaire">Questionnaire</string>
     <string name="new_journal">New Journal</string>
+    <string name="reservation_created_successfully">Reservation Created Successfully</string>
 
 </resources>

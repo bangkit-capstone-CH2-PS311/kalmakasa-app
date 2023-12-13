@@ -59,6 +59,7 @@ data class Tokens(
 fun AuthResponse.toUser() = User(
     id = user.id,
     name = user.name,
+    role = user.role,
     email = user.email,
     accessToken = tokens.access.token,
     refreshToken = tokens.refresh.token,

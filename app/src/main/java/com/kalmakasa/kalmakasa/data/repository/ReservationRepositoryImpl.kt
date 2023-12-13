@@ -1,6 +1,5 @@
 package com.kalmakasa.kalmakasa.data.repository
 
-import android.util.Log
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.data.network.response.toReservation
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
@@ -54,10 +53,7 @@ class ReservationRepositoryImpl(
         when (it) {
             is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
             is IOException -> emit(Resource.Error(it.localizedMessage ?: "No Internet"))
-            else -> {
-                Log.d("Repo", "createReservation: ${it.localizedMessage}")
-                emit(Resource.Error(it.localizedMessage ?: "Unknown error occurred"))
-            }
+            else -> emit(Resource.Error(it.localizedMessage ?: "Unknown error occurred"))
         }
     }
 
