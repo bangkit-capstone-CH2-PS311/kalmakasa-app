@@ -71,7 +71,7 @@ fun ListJournalContent(
     LazyColumn(
         modifier.padding(horizontal = 24.dp),
         contentPadding = PaddingValues(vertical = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(journal, { it.id }) { journal ->
             JournalCard(
@@ -91,7 +91,7 @@ fun JournalCard(
     description: String? = null,
 ) {
     OutlinedCard(
-        border = BorderStroke(1.dp, Color.LightGray),
+        border = BorderStroke(1.dp, Color.Gray),
         colors = CardDefaults.elevatedCardColors(Color.Transparent)
     ) {
         Column(

@@ -59,7 +59,6 @@ class ListDoctorViewModel @Inject constructor(
                             listConsultant.data
                         }
 
-                    // TODO : filter it with enabled chips
                     val enabledFilters = _filterChip.value.filterValues { it }.keys.toList()
                     val filteredConsultants = if (enabledFilters.isNotEmpty()) {
                         consultants.filter {

@@ -45,6 +45,8 @@ import com.kalmakasa.kalmakasa.presentation.screens.profile.ProfileScreen
 import com.kalmakasa.kalmakasa.presentation.screens.profile.ProfileViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.question.QuestionScreen
 import com.kalmakasa.kalmakasa.presentation.screens.question.QuestionViewModel
+import com.kalmakasa.kalmakasa.presentation.screens.reservation_detail.DetailReservationScreen
+import com.kalmakasa.kalmakasa.presentation.screens.reservation_detail.DetailReservationViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.reservation_list.ListReservationScreen
 import com.kalmakasa.kalmakasa.presentation.screens.reservation_list.ListReservationViewModel
 import com.kalmakasa.kalmakasa.presentation.state.SessionState
@@ -284,8 +286,8 @@ fun KalmakasaApp() {
                 DetailConsultantScreen(
                     uiState = uiState,
                     navUp = { navController.navigateUp() },
-                    onAppointmentBooked = {
-                        // TODO : Create a request to make a reservation
+                    onAppointmentBooked = { checkout ->
+                        viewModel.createReservation(checkout)
                     }
                 )
             }
@@ -301,7 +303,7 @@ fun KalmakasaApp() {
                     navUp = { navController.navigateUp() }
                 )
             }
-            composable(Screen.AddJournal.route) {
+            composable(route = Screen.AddJournal.route) {
                 val viewModel: AddJournalViewModel = hiltViewModel()
 
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -324,13 +326,45 @@ fun KalmakasaApp() {
                 )
             }
 
+            // Reservation Feature
             composable(Screen.ListReservation.route) {
                 val viewModel: ListReservationViewModel = hiltViewModel()
 
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 ListReservationScreen(
-                    uiState = uiState
+                    uiState = uiState,
+                    onReservationClicked = {
+                        navController.navigate(Screen.DetailReservation.createRoute(it))
+                    }
                 )
+            }
+            composable(
+                Screen.DetailReservation.route,
+                arguments = listOf(navArgument("id") { type = NavType.StringType })
+            ) {
+                val viewModel: DetailReservationViewModel = hiltViewModel()
+
+                val id = it.arguments?.getString("id") ?: ""
+                LaunchedEffect(true) {
+                    viewModel.getReservationDetail(id)
+                }
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+                if (uiState.isLoading) {
+                    LoadingScreen()
+                } else if (uiState.isError) {
+                    Text(text = "Error")
+                } else {
+                    uiState.reservation?.let { reservation ->
+                        DetailReservationScreen(
+                            reservation = reservation,
+                            navUp = {
+                                navController.navigateUp()
+                            }
+                        )
+                    } ?: Text(text = "Error")
+                }
+
             }
 
             // Article Features
@@ -355,11 +389,11 @@ fun KalmakasaApp() {
             ) {
                 val viewModel: ArticleDetailViewModel = hiltViewModel()
 
-                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
                 val id = it.arguments?.getString("id") ?: ""
                 LaunchedEffect(true) {
                     viewModel.getArticleDetail(id)
                 }
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
 
                 if (uiState.isLoading) {

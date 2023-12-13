@@ -2,8 +2,10 @@ package com.kalmakasa.kalmakasa.data.network.retrofit
 
 import com.kalmakasa.kalmakasa.data.network.response.ApiConsultant
 import com.kalmakasa.kalmakasa.data.network.response.ApiJournal
+import com.kalmakasa.kalmakasa.data.network.response.ApiReservation
 import com.kalmakasa.kalmakasa.data.network.response.AuthResponse
 import com.kalmakasa.kalmakasa.data.network.response.ConsultantsResponse
+import com.kalmakasa.kalmakasa.data.network.response.CreateReservationResponse
 import com.kalmakasa.kalmakasa.data.network.response.JournalsResponse
 import com.kalmakasa.kalmakasa.data.network.response.ReservationResponse
 import retrofit2.http.Field
@@ -40,11 +42,13 @@ interface ApiService {
     suspend fun getJournals(): JournalsResponse
 
     @GET("journals/{id}")
-    suspend fun getJournalDetail(id: String): ApiJournal
+    suspend fun getJournalDetail(
+        @Path("id") id: String,
+    ): ApiJournal
 
     @FormUrlEncoded
     @POST("journals")
-    suspend fun addJournal(
+    suspend fun createJournal(
         @Field("userId") id: String,
         @Field("date") date: String,
         @Field("title") title: String = "",
@@ -53,14 +57,19 @@ interface ApiService {
 
     @FormUrlEncoded
     @POST("reservations")
-    suspend fun addReservation(
+    suspend fun createReservation(
         @Field("userId") id: String,
         @Field("consultantId") consultantId: String,
         @Field("date") date: String,
         @Field("startTime") startTime: String,
         @Field("endTime") endTime: String,
-    )
+    ): CreateReservationResponse
 
     @GET("reservations")
     suspend fun getReservations(): ReservationResponse
+
+    @GET("reservations/{id}")
+    suspend fun getReservationDetail(
+        @Path("id") id: String,
+    ): ApiReservation
 }

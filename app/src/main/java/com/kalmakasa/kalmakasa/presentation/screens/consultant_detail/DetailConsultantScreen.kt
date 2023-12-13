@@ -24,14 +24,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccessTime
-import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.rounded.BusinessCenter
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -57,22 +54,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.domain.model.Consultant
 import com.kalmakasa.kalmakasa.domain.model.ConsultationDate
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
-import java.text.SimpleDateFormat
-import java.util.Locale
 
 @Composable
 fun DetailConsultantScreen(
     uiState: DetailConsultantState,
     navUp: () -> Unit,
-    onAppointmentBooked: () -> Unit,
+    onAppointmentBooked: (CheckoutData) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -84,7 +77,7 @@ fun DetailConsultantScreen(
     ) { paddingValues ->
         when {
             uiState.isError -> {
-                Text(text = "Error")
+                Text(text = "Error", modifier = Modifier.padding(paddingValues))
             }
 
             uiState.isLoading -> {
@@ -115,7 +108,7 @@ fun DetailConsultantContent(
     timeSlots: List<String>,
     currentTime: Long,
     dates: List<ConsultationDate>,
-    onAppointmentBooked: () -> Unit,
+    onAppointmentBooked: (CheckoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var selectedDate by rememberSaveable { mutableLongStateOf(-1) }
@@ -133,11 +126,12 @@ fun DetailConsultantContent(
         selectedTime = selectedTime,
         userNote = userNote,
     )
+
     CheckoutDialog(
         checkoutData = checkoutData,
         showDialog = isCheckout,
         onDismissRequest = { isCheckout = false },
-        onConfirmation = onAppointmentBooked,
+        onCheckout = onAppointmentBooked,
     )
 
     Column(
@@ -195,8 +189,8 @@ fun DetailConsultantContent(
                 modifier = Modifier
                     .padding(horizontal = 24.dp)
             ) {
-                // TODO : Replace this listExpertise from the API
-                TitleText("Expertise")
+
+                TitleText(stringResource(R.string.expertise))
                 Spacer(modifier = Modifier.height(8.dp))
                 FlowRow(
                     verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -312,110 +306,6 @@ fun DetailConsultantContent(
     }
 }
 
-@Composable
-fun CheckoutDialog(
-    showDialog: Boolean,
-    checkoutData: CheckoutData,
-    onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit = {},
-) {
-    if (showDialog) {
-        val sdf = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
-        val dateString = sdf.format(checkoutData.dateInMillis)
-
-        Dialog(
-            properties = DialogProperties(usePlatformDefaultWidth = false),
-            onDismissRequest = onDismissRequest,
-        ) {
-            Scaffold(
-                topBar = {
-                    TitleTopAppBar(
-                        title = stringResource(R.string.reservation_summary),
-                        onBackButtonClicked = onDismissRequest
-                    )
-                }
-            ) { paddingValues ->
-                Column(
-                    Modifier
-                        .padding(paddingValues)
-                        .padding(horizontal = 24.dp)
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Row(
-                        modifier = Modifier.padding(horizontal = 12.dp)
-                    ) {
-                        Image(
-                            painter = painterResource(R.drawable.placeholder_consultant_img),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .width(72.dp)
-                                .height(80.dp)
-                                .border(1.dp, Color.LightGray, MaterialTheme.shapes.medium),
-                            contentScale = ContentScale.Crop
-                        )
-                        Spacer(Modifier.width(16.dp))
-                        Column {
-                            Text(
-                                text = checkoutData.consultant.name,
-                                style = MaterialTheme.typography.titleLarge,
-                                fontWeight = FontWeight.Medium,
-                                fontSize = 18.sp,
-                            )
-                            Text(
-                                text = checkoutData.consultant.speciality,
-                                style = MaterialTheme.typography.labelLarge,
-                                color = Color.Gray
-                            )
-                        }
-                    }
-                    Divider()
-                    TitleText(stringResource(R.string.reservation_detail))
-                    Column(
-                        Modifier.padding(horizontal = 12.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        Row(horizontalArrangement = Arrangement.Center) {
-                            Icon(
-                                imageVector = Icons.Default.CalendarMonth,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .padding(end = 8.dp)
-                            )
-                            Text(stringResource(R.string.date, dateString))
-                        }
-                        Row(horizontalArrangement = Arrangement.Center) {
-                            Icon(
-                                imageVector = Icons.Default.AccessTime,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .padding(end = 8.dp)
-                            )
-                            Text(stringResource(R.string.time_checkout, checkoutData.selectedTime))
-                        }
-                    }
-                    Divider()
-                    TitleText(stringResource(R.string.your_note))
-                    Text(
-                        text = checkoutData.userNote,
-                        modifier = Modifier.padding(horizontal = 12.dp)
-                    )
-                    Button(
-                        onClick = onConfirmation,
-                        modifier = Modifier
-                            .padding(top = 16.dp)
-                            .fillMaxWidth()
-                            .height(48.dp)
-                    ) {
-                        Text(stringResource(R.string.create_reservation))
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-            }
-        }
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -485,7 +375,7 @@ fun TitleText(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
         style = MaterialTheme.typography.titleMedium,
-        fontWeight = FontWeight.SemiBold,
+        fontWeight = FontWeight.Medium,
         fontSize = 18.sp,
         modifier = modifier
     )
@@ -526,13 +416,6 @@ fun DoctorPerks(
         }
     }
 }
-
-data class CheckoutData(
-    val consultant: Consultant,
-    val dateInMillis: Long,
-    val selectedTime: String,
-    val userNote: String,
-)
 
 @Preview
 @Composable

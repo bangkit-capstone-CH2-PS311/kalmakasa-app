@@ -98,4 +98,9 @@
     <string name="disagree">Disagree</string>
     <string name="strongly_disagree">Strongly Disagree</string>
 
+    <string name="join_meet">Join Meet</string>
+    <string name="consultation_detail">Consultation Detail</string>
+    <string name="your_notes">Your Notes</string>
+    <string name="expertise">Expertise</string>
+
 </resources>

@@ -17,11 +17,12 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun TitleTopAppBar(
     title: String,
-    onBackButtonClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    onBackButtonClicked: (() -> Unit)? = null,
 ) {
     TopAppBar(
-        modifier = modifier.padding(horizontal = 8.dp),
+        modifier = modifier
+            .padding(horizontal = 8.dp),
         title = {
             Text(
                 text = title,
@@ -29,8 +30,10 @@ fun TitleTopAppBar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = onBackButtonClicked) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+            if (onBackButtonClicked != null) {
+                IconButton(onClick = onBackButtonClicked) {
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                }
             }
         }
     )

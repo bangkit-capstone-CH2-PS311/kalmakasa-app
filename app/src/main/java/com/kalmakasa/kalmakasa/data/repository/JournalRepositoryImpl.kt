@@ -43,7 +43,7 @@ class JournalRepositoryImpl(
         content: String,
     ): Flow<Resource<Journal>> = flow {
         emit(Resource.Loading)
-        val response = apiService.addJournal(id, date, title, content)
+        val response = apiService.createJournal(id, date, title, content)
         emit(Resource.Success(response.toJournal()))
     }.catch {
         when (it) {

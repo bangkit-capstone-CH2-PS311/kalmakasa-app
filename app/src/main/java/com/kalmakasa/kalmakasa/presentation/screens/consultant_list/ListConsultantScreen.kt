@@ -90,7 +90,7 @@ fun ListDoctorContent(
 ) {
     LazyColumn(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
     ) {
         items(listConsultant, { it.id }) { consultant ->
@@ -105,9 +105,7 @@ fun ListDoctorContent(
                 shape = MaterialTheme.shapes.small,
                 onClick = { onConsultantClicked(consultant) }
             ) {
-                Row(
-                    modifier = Modifier.padding(vertical = 16.dp, horizontal = 12.dp),
-                ) {
+                Row {
                     Image(
                         modifier = Modifier
                             .clip(MaterialTheme.shapes.large)
@@ -116,7 +114,9 @@ fun ListDoctorContent(
                         contentDescription = null,
                     )
                     Spacer(modifier = Modifier.width(16.dp))
-                    Column {
+                    Column(
+                        Modifier.padding(vertical = 8.dp)
+                    ) {
                         Text(
                             text = consultant.name,
                             style = MaterialTheme.typography.titleMedium,

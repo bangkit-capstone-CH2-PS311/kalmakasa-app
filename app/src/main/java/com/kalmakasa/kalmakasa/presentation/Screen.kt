@@ -33,7 +33,10 @@ sealed class Screen(val route: String) {
 
     }
 
-    object ListReservation : Screen("Reservation")
+    object ListReservation : Screen("Reservation-list")
+    object DetailReservation : Screen("Reservation-detail/{id}") {
+        fun createRoute(id: String) = "reservation-detail/$id"
+    }
 
     companion object {
         val withBottomBar = listOf(
