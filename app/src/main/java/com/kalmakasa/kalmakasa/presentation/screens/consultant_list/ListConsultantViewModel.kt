@@ -2,6 +2,7 @@ package com.kalmakasa.kalmakasa.presentation.screens.consultant_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kalmakasa.kalmakasa.common.EXPERTISES
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.Consultant
 import com.kalmakasa.kalmakasa.domain.repository.ConsultantRepository
@@ -21,19 +22,9 @@ class ListDoctorViewModel @Inject constructor(
     private val consultantRepository: ConsultantRepository,
 ) : ViewModel() {
 
-    private val listExpertise = listOf(
-        "Stress",
-        "Sexual Identity",
-        "Family & Relationship",
-        "Career",
-        "Depression",
-    )
-
     private val _listConsultant = MutableStateFlow<Resource<List<Consultant>>>(Resource.Loading)
-
+    private val _filterChip = MutableStateFlow(EXPERTISES.associateWith { false })
     private val _searchQuery = MutableStateFlow("")
-
-    private val _filterChip = MutableStateFlow(listExpertise.associateWith { false })
 
     val uiState: StateFlow<ListConsultantState> =
         combine(_listConsultant, _searchQuery, _filterChip) { listConsultant, query, filtersValue ->
@@ -117,7 +108,7 @@ class ListDoctorViewModel @Inject constructor(
         // TODO : REMOVE THIS AFTER DASS DONE
         val userTag = listOf("Stress")
         _filterChip.update {
-            listExpertise.associateWith {
+            EXPERTISES.associateWith {
                 userTag.contains(it)
             }
         }

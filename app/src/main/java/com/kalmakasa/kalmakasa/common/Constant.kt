@@ -9,3 +9,11 @@ val MOODS = listOf(
     Mood.HAPPY,
     Mood.VERY_HAPPY,
 )
+
+val EXPERTISES = listOf(
+    "Stress",
+    "Sexual Identity",
+    "Family & Relationship",
+    "Career",
+    "Depression",
+)

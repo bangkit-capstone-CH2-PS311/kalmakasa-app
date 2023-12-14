@@ -1,6 +1,7 @@
 package com.kalmakasa.kalmakasa.data.network.response
 
 import com.google.gson.annotations.SerializedName
+import com.kalmakasa.kalmakasa.domain.model.Patient
 import com.kalmakasa.kalmakasa.domain.model.User
 
 data class AuthResponse(
@@ -64,6 +65,13 @@ fun AuthResponse.toUser() = User(
     accessToken = tokens.access.token,
     refreshToken = tokens.refresh.token,
     isLogin = true,
+)
+
+fun ApiUser.toPatient() = Patient(
+    id = id,
+    name = name,
+    email = email,
+    isEmailVerified = isEmailVerified
 )
 
 

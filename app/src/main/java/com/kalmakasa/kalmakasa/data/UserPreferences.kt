@@ -33,9 +33,9 @@ class UserPreferences(private val dataStore: DataStore<Preferences>) {
             User(
                 preferences[ID_KEY] ?: "",
                 preferences[ROLE_KEY] ?: "user",
+                preferences[NAME_KEY] ?: "",
                 preferences[EMAIL_KEY] ?: "",
                 preferences[ACCESS_TOKEN_KEY] ?: "",
-                preferences[REFRESH_TOKEN_KEY] ?: "",
                 preferences[REFRESH_TOKEN_KEY] ?: "",
                 preferences[IS_LOGIN_KEY] ?: false,
             )

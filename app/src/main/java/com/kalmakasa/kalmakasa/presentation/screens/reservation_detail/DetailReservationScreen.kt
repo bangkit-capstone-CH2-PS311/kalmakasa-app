@@ -31,14 +31,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.domain.model.Reservation
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
-import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 import com.kalmakasa.kalmakasa.presentation.theme.OnPositive
 import com.kalmakasa.kalmakasa.presentation.theme.Positive
 
@@ -83,13 +81,13 @@ fun DetailReservationScreen(
                         Spacer(Modifier.width(16.dp))
                         Column(Modifier.padding(vertical = 8.dp)) {
                             Text(
-                                text = reservation.consultantName,
+                                text = reservation.consultant.name,
                                 style = MaterialTheme.typography.titleLarge,
                                 fontWeight = FontWeight.Medium,
                                 fontSize = 18.sp,
                             )
                             Text(
-                                text = reservation.consultantSpeciality,
+                                text = reservation.consultant.speciality,
                                 style = MaterialTheme.typography.labelLarge,
                                 color = Color.Gray
                             )
@@ -101,7 +99,7 @@ fun DetailReservationScreen(
 
                         )
                     Text(
-                        text = reservation.consultantBio,
+                        text = reservation.consultant.biography,
                         style = MaterialTheme.typography.bodyMedium,
                         overflow = TextOverflow.Ellipsis,
                         maxLines = 5,
@@ -123,7 +121,7 @@ fun DetailReservationScreen(
                         style = MaterialTheme.typography.titleMedium
                     )
                     Text(
-                        text = reservation.patientNote,
+                        text = reservation.notes,
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -209,28 +207,5 @@ fun DetailReservationScreen(
                 }
             }
         }
-    }
-
-}
-
-@Preview
-@Composable
-fun DetailReservationPreview() {
-    KalmakasaTheme {
-        DetailReservationScreen(
-            reservation = Reservation(
-                "",
-                "",
-                "Dr. Dzaky Nashshar",
-                "",
-                "Lorem ipsum dolot sit amet",
-                "Speciality A, Speciality B",
-                "aku pengen berak",
-                "Senin, 29 Desember 2023",
-                "19.00 - 20.00",
-                "Completed",
-            ),
-            navUp = {},
-        )
     }
 }
