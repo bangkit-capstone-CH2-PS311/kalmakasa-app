@@ -57,11 +57,11 @@
     <string name="back_to_home">Back to Home</string>
 
     <!--  Emoticon Description  -->
-    <string name="very_sad">Very Sad</string>
-    <string name="sad">Sad</string>
+    <string name="very_sad">Very Negative</string>
+    <string name="sad">Negative</string>
     <string name="flat">Flat</string>
-    <string name="happy">Happy</string>
-    <string name="very_happy">Very Happy</string>
+    <string name="happy">Positive</string>
+    <string name="very_happy">Very Positive</string>
     <string name="article_image">Article Image</string>
     <string name="search_article">Search Article…</string>
     <string name="this_field_is_required">This field is required</string>

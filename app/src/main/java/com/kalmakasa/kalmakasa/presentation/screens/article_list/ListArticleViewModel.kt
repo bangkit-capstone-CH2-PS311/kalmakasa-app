@@ -7,8 +7,10 @@ import com.kalmakasa.kalmakasa.domain.model.Article
 import com.kalmakasa.kalmakasa.domain.repository.ArticleRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,8 +19,22 @@ class ListArticleViewModel @Inject constructor(
     private val articleRepository: ArticleRepository,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(ListArticleState())
-    val uiState: StateFlow<ListArticleState> = _uiState.asStateFlow()
+    private val _articles = MutableStateFlow(emptyList<Article>())
+    private val _isLoading = MutableStateFlow(false)
+    private val _isError = MutableStateFlow(false)
+    private val _query = MutableStateFlow("")
+
+    val uiState: StateFlow<ListArticleState> = combine(
+        _articles, _query, _isLoading, _isError
+    ) { article, query, isLoading, isError ->
+        ListArticleState(
+            isLoading, isError, article, query
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = ListArticleState()
+    )
 
     init {
         getArticles()
@@ -29,19 +45,25 @@ class ListArticleViewModel @Inject constructor(
             articleRepository.getListArticles().collect { articles ->
                 when (articles) {
                     is Resource.Loading -> {
-                        _uiState.value = ListArticleState(isLoading = true)
+                        _isLoading.value = true
                     }
 
                     is Resource.Success -> {
-                        _uiState.value = ListArticleState(listArticle = articles.data)
+                        _isLoading.value = false
+                        _articles.value = articles.data
                     }
 
                     else -> {
-                        _uiState.value = ListArticleState(isError = true)
+                        _isLoading.value = false
+                        _isError.value = true
                     }
                 }
             }
         }
+    }
+
+    fun onQueryChange(query: String) {
+        _query.value = query
     }
 
 }
@@ -50,4 +72,5 @@ data class ListArticleState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val listArticle: List<Article> = emptyList(),
+    val query: String = "",
 )

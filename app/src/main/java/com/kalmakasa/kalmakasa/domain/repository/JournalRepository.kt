@@ -14,4 +14,6 @@ interface JournalRepository {
         title: String,
         content: String,
     ): Flow<Resource<Journal>>
+
+    suspend fun getTodayJournal(): Flow<Resource<Journal>>
 }

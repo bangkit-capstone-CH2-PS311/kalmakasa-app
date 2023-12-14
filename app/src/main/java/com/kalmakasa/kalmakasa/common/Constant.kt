@@ -12,8 +12,9 @@ val MOODS = listOf(
 
 val EXPERTISES = listOf(
     "Stress",
+    "Anxiety",
+    "Depression",
+    "Career",
     "Sexual Identity",
     "Family & Relationship",
-    "Career",
-    "Depression",
 )

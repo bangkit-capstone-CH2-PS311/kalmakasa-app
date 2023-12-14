@@ -57,11 +57,11 @@
     <string name="back_to_home">Kembali ke Beranda</string>
 
     <!--  Emoticon Description  -->
-    <string name="very_sad">Sangat Sedih</string>
-    <string name="sad">Sedih</string>
-    <string name="flat">Datar</string>
-    <string name="happy">Bahagia</string>
-    <string name="very_happy">Sangat Bahagia</string>
+    <string name="very_sad">Sangat Negatif</string>
+    <string name="sad">Negatif</string>
+    <string name="flat">Biasa Saja</string>
+    <string name="happy">Positif</string>
+    <string name="very_happy">Sangat Positif</string>
     <string name="article_image">Gambar Artikel</string>
     <string name="search_article">Cari Artikel…</string>
     <string name="this_field_is_required">Kolom ini wajib diisi</string>

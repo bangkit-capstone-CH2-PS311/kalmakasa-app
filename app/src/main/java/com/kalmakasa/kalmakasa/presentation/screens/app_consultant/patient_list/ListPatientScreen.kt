@@ -1,4 +1,4 @@
-package com.kalmakasa.kalmakasa.presentation.screens.app_consultant.appointment_list
+package com.kalmakasa.kalmakasa.presentation.screens.app_consultant.patient_list
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -8,8 +8,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,7 +27,20 @@ import com.kalmakasa.kalmakasa.R
 
 @Composable
 fun ListPatientScreen() {
-
+    Scaffold { paddingValues ->
+        LazyColumn(
+            modifier = Modifier
+                .padding(paddingValues)
+        ) {
+            items(50) {
+                PatientCard(
+                    name = "Dzaky Nashshar",
+                    imageUrl = "",
+                )
+                Divider()
+            }
+        }
+    }
 }
 
 @Composable
@@ -37,6 +53,7 @@ fun PatientCard(
         modifier = modifier
             .clickable { }
             .fillMaxWidth()
+            .padding(horizontal = 24.dp)
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

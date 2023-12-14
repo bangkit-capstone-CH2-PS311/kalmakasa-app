@@ -2,6 +2,7 @@ package com.kalmakasa.kalmakasa.data.network.response
 
 import com.google.gson.annotations.SerializedName
 import com.kalmakasa.kalmakasa.common.DateUtil
+import com.kalmakasa.kalmakasa.common.ReservationStatus
 import com.kalmakasa.kalmakasa.domain.model.Reservation
 
 data class ReservationResponse(
@@ -55,6 +56,6 @@ fun ApiReservation.toReservation() = Reservation(
     time = "$startTime - $endTime",
     patient = patient.toPatient(),
     consultant = consultant.toConsultant(),
-    status = status,
+    status = ReservationStatus.getStatus(status),
     notes = notes ?: "there is no note"
 )

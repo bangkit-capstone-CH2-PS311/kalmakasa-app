@@ -33,9 +33,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.kalmakasa.kalmakasa.common.ReservationStatus
+import com.kalmakasa.kalmakasa.presentation.component.StatusChip
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
-import com.kalmakasa.kalmakasa.presentation.theme.OnPositive
-import com.kalmakasa.kalmakasa.presentation.theme.Positive
 
 @Composable
 fun ListAppointmentScreen() {
@@ -47,12 +47,12 @@ fun ListAppointmentScreen() {
             contentPadding = PaddingValues(vertical = 16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(3) {
+            items(50) {
                 AppointmentCard(
                     reservationId = "",
                     patientName = "Dzaky Nashshar",
                     imageUrl = "",
-                    status = "Pending",
+                    status = ReservationStatus.Pending,
                     date = "Senin, 22 Desember 2022",
                     time = "19.00 - 20.00",
                     onAppointmentClicked = {}
@@ -68,7 +68,7 @@ fun AppointmentCard(
     reservationId: String,
     patientName: String,
     imageUrl: String,
-    status: String,
+    status: ReservationStatus,
     date: String,
     time: String,
     onAppointmentClicked: (String) -> Unit,
@@ -109,18 +109,7 @@ fun AppointmentCard(
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
-                OutlinedCard(
-                    colors = CardDefaults.outlinedCardColors(
-                        containerColor = Positive,
-                        contentColor = OnPositive,
-                    ),
-                ) {
-                    Text(
-                        text = status,
-                        style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-                    )
-                }
+                StatusChip(status = status)
             }
             Spacer(modifier = Modifier.height(12.dp))
             Column(

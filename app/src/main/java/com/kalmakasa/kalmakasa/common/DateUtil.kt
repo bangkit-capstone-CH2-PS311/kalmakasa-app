@@ -3,7 +3,9 @@ package com.kalmakasa.kalmakasa.common
 import com.kalmakasa.kalmakasa.R
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 
 object DateUtil {
@@ -30,6 +32,11 @@ object DateUtil {
         }
     }
 
+    fun apiToDate(apiDate: String): Date? {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        return inputFormat.parse(apiDate)
+    }
+
     fun millisToDate(date: Long): String {
         val dateFormat = SimpleDateFormat("EEEE, d MMMM yyyy", Locale.getDefault())
         return dateFormat.format(date)
@@ -48,5 +55,16 @@ object DateUtil {
         val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault())
 
         return dateFormat.format(currentDate)
+    }
+
+    fun isDateToday(date: Date): Boolean {
+        val calendar = Calendar.getInstance(TimeZone.getDefault())
+
+        val dateCalendar = Calendar.getInstance(TimeZone.getDefault())
+        dateCalendar.time = date
+
+        return (dateCalendar.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)
+                && dateCalendar.get(Calendar.MONTH) == calendar.get(Calendar.MONTH)
+                && dateCalendar.get(Calendar.DAY_OF_MONTH) == calendar.get(Calendar.DAY_OF_MONTH))
     }
 }

@@ -1,11 +1,15 @@
 package com.kalmakasa.kalmakasa.presentation.component
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.PendingActions
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.QuestionAnswer
 import androidx.compose.material.icons.filled.Schedule
+import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.PendingActions
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.QuestionAnswer
 import androidx.compose.material.icons.outlined.Schedule
@@ -25,6 +29,7 @@ import com.kalmakasa.kalmakasa.presentation.Screen
 
 @Composable
 fun BottomBar(
+    navigationItems: List<NavigationItem>,
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
@@ -34,33 +39,6 @@ fun BottomBar(
     NavigationBar(
         modifier = modifier,
     ) {
-        val navigationItems = listOf(
-            NavigationItem(
-                title = stringResource(R.string.home),
-                icon = Icons.Default.Home,
-                iconOutline = Icons.Outlined.Home,
-                screen = Screen.Home
-            ),
-            NavigationItem(
-                title = stringResource(R.string.consultation),
-                icon = Icons.Default.QuestionAnswer,
-                iconOutline = Icons.Outlined.QuestionAnswer,
-                screen = Screen.ListConsultant
-            ),
-            NavigationItem(
-                title = stringResource(R.string.reservations),
-                icon = Icons.Default.Schedule,
-                iconOutline = Icons.Outlined.Schedule,
-                screen = Screen.ListReservation
-            ),
-            NavigationItem(
-                title = stringResource(R.string.profile),
-                icon = Icons.Default.Person,
-                iconOutline = Icons.Outlined.Person,
-                screen = Screen.Profile
-            )
-        )
-
         navigationItems.map { item ->
             NavigationBarItem(
                 icon = {
@@ -86,6 +64,63 @@ fun BottomBar(
     }
 
 }
+
+@Composable
+fun AppBottomBar(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+) {
+    val navigationItems = listOf(
+        NavigationItem(
+            title = stringResource(R.string.home),
+            icon = Icons.Default.Home,
+            iconOutline = Icons.Outlined.Home,
+            screen = Screen.Home
+        ),
+        NavigationItem(
+            title = stringResource(R.string.consultation),
+            icon = Icons.Default.QuestionAnswer,
+            iconOutline = Icons.Outlined.QuestionAnswer,
+            screen = Screen.ListConsultant
+        ),
+        NavigationItem(
+            title = stringResource(R.string.reservations),
+            icon = Icons.Default.Schedule,
+            iconOutline = Icons.Outlined.Schedule,
+            screen = Screen.ListReservation
+        ),
+        NavigationItem(
+            title = stringResource(R.string.profile),
+            icon = Icons.Default.Person,
+            iconOutline = Icons.Outlined.Person,
+            screen = Screen.Profile
+        )
+    )
+    BottomBar(navigationItems, navController, modifier)
+}
+
+@Composable
+fun ConsultantBottomBar(
+    navController: NavHostController,
+    modifier: Modifier = Modifier,
+) {
+    val navigationItems = listOf(
+        NavigationItem(
+            title = "Appointment",
+            icon = Icons.Default.PendingActions,
+            iconOutline = Icons.Outlined.PendingActions,
+            screen = Screen.ListAppointment
+        ),
+        NavigationItem(
+            title = "Patients",
+            icon = Icons.Default.Groups,
+            iconOutline = Icons.Outlined.Groups,
+            screen = Screen.ListPatient
+        ),
+    )
+    BottomBar(navigationItems, navController, modifier)
+}
+
 
 data class NavigationItem(
     val title: String,

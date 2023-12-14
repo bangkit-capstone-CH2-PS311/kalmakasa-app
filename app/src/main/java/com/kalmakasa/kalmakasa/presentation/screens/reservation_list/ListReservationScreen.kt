@@ -37,9 +37,8 @@ import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.Reservation
 import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
+import com.kalmakasa.kalmakasa.presentation.component.StatusChip
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
-import com.kalmakasa.kalmakasa.presentation.theme.OnPositive
-import com.kalmakasa.kalmakasa.presentation.theme.Positive
 
 @Composable
 fun ListReservationScreen(
@@ -145,18 +144,7 @@ fun ReservationCard(
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
-                OutlinedCard(
-                    colors = CardDefaults.outlinedCardColors(
-                        containerColor = Positive,
-                        contentColor = OnPositive,
-                    ),
-                ) {
-                    Text(
-                        text = reservation.status,
-                        style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-                    )
-                }
+                StatusChip(status = reservation.status)
             }
             Spacer(modifier = Modifier.height(12.dp))
             Column(

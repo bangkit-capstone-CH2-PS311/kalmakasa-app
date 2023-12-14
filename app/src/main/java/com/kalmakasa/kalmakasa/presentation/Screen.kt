@@ -38,12 +38,21 @@ sealed class Screen(val route: String) {
         fun createRoute(id: String) = "reservation-detail/$id"
     }
 
+    object ConsultantGraph : Screen("consultant-graph")
+    object ListAppointment : Screen("appointment-list")
+    object ListPatient : Screen("patients-list")
+
     companion object {
         val withBottomBar = listOf(
             Home.route,
             ListConsultant.route,
             ListReservation.route,
             Profile.route,
+        )
+
+        val consultantBottomBar = listOf(
+            ListAppointment.route,
+            ListPatient.route
         )
     }
 

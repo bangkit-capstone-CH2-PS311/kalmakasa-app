@@ -3,6 +3,7 @@ package com.kalmakasa.kalmakasa.presentation.screens.question
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kalmakasa.kalmakasa.R
+import com.kalmakasa.kalmakasa.data.network.DassDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -12,29 +13,7 @@ import kotlinx.coroutines.flow.update
 
 class QuestionViewModel : ViewModel() {
 
-    val questions = listOf(
-        "I found it hard to wind down",
-        "I was aware of dryness of my mouth",
-        "I couldn’t seem to experience any positive feeling at all",
-//        "I experienced breathing difficulty (e.g. excessively rapid breathing, breathlessness in the absence of physical exertion)",
-//        "I found it difficult to work up the initiative to do things",
-//        "I tended to over-react to situations",
-//        "I experienced trembling (e.g. in the hands)",
-//        "I felt that I was using a lot of nervous energy",
-//        "I was worried about situations in which I might panic and make a fool of myself",
-//        "I felt that I had nothing to look forward to",
-//        "I found myself getting agitated",
-//        "I found it difficult to relax",
-//        "I felt down-hearted and blue",
-//        "I was intolerant of anything that kept me from getting on with what I was doing",
-//        "I felt I was close to panic",
-//        "I was unable to become enthusiastic about anything",
-//        "I felt I wasn’t worth much as a person",
-//        "I felt that I was rather touchy",
-//        "I was aware of the action of my heart in the absence of physical exertion (e.g. sense of heart rate increase, heart missing a beat)",
-//        "I felt scared without any good reason",
-//        "I felt that life was meaningless",
-    )
+    val questions = DassDataSource.questions
 
     val options = listOf(
         R.string.strongly_agree,

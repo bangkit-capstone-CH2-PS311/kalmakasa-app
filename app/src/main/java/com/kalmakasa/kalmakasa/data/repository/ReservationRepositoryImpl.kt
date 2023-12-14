@@ -1,5 +1,6 @@
 package com.kalmakasa.kalmakasa.data.repository
 
+import com.kalmakasa.kalmakasa.common.DateUtil
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.data.network.response.toReservation
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
@@ -17,7 +18,10 @@ class ReservationRepositoryImpl(
     override suspend fun getReservations(): Flow<Resource<List<Reservation>>> = flow {
         emit(Resource.Loading)
         val response = apiService.getReservations()
-        emit(Resource.Success(response.results.map { it.toReservation() }))
+        val reservations = response.results.sortedBy {
+            DateUtil.apiToDate(it.date)
+        }.map { it.toReservation() }
+        emit(Resource.Success(reservations))
     }.catch {
         when (it) {
             is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))

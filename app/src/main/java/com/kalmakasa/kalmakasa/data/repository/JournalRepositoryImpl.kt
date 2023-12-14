@@ -1,5 +1,6 @@
 package com.kalmakasa.kalmakasa.data.repository
 
+import com.kalmakasa.kalmakasa.common.DateUtil
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.data.network.response.toJournal
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
@@ -17,7 +18,28 @@ class JournalRepositoryImpl(
     override suspend fun getJournals(): Flow<Resource<List<Journal>>> = flow {
         emit(Resource.Loading)
         val response = apiService.getJournals()
-        emit(Resource.Success(response.results.map { it.toJournal() }))
+        val journals = response.results.sortedByDescending {
+            DateUtil.apiToDate(it.date)
+        }.map { it.toJournal() }
+        emit(Resource.Success(journals))
+    }.catch {
+        when (it) {
+            is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
+            is IOException -> emit(Resource.Error(it.localizedMessage ?: "No Internet"))
+        }
+    }
+
+    override suspend fun getTodayJournal(): Flow<Resource<Journal>> = flow {
+        emit(Resource.Loading)
+        val response = apiService.getJournals()
+        val journal = response.results.filter {
+            val date = DateUtil.apiToDate(it.date)
+            date?.let {
+                DateUtil.isDateToday(date)
+            } ?: false
+        }
+
+        emit(Resource.Success(journal.first().toJournal()))
     }.catch {
         when (it) {
             is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))

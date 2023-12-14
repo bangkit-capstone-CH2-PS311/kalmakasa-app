@@ -18,9 +18,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.kalmakasa.kalmakasa.presentation.component.BottomBar
+import com.kalmakasa.kalmakasa.presentation.component.AppBottomBar
+import com.kalmakasa.kalmakasa.presentation.component.ConsultantBottomBar
 import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
+import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.appointment_list.ListAppointmentScreen
+import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.patient_list.ListPatientScreen
 import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailScreen
 import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.article_list.ListArticleScreen
@@ -62,7 +65,9 @@ fun KalmakasaApp() {
     Scaffold(
         bottomBar = {
             if (Screen.withBottomBar.contains(currentRoute)) {
-                BottomBar(navController = navController)
+                AppBottomBar(navController = navController)
+            } else if (Screen.consultantBottomBar.contains(currentRoute)) {
+                ConsultantBottomBar(navController = navController)
             }
         },
     ) { paddingValues ->
@@ -133,6 +138,17 @@ fun KalmakasaApp() {
                 }
             }
 
+            // CONSULTANT GRAPH
+            navigation(Screen.ListAppointment.route, Screen.ConsultantGraph.route) {
+                composable(Screen.ListAppointment.route) {
+                    ListAppointmentScreen()
+                }
+
+                composable(Screen.ListPatient.route) {
+                    ListPatientScreen()
+                }
+            }
+
             // APP GRAPH
             composable(
                 Screen.Home.route,
@@ -142,13 +158,13 @@ fun KalmakasaApp() {
                 })
             ) {
                 val viewModel: HomeViewModel = hiltViewModel()
-                val homeState by viewModel.homeState.collectAsStateWithLifecycle()
-                val articleState by viewModel.uiState.collectAsStateWithLifecycle()
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
                 val isNewUser = it.arguments?.getBoolean("isNewUser", false) ?: false
                 HomeScreen(
-                    homeState = homeState,
-                    articleState = articleState,
+                    sessionState = uiState.sessionState,
+                    articleState = uiState.articleState,
+                    journal = uiState.journal,
                     isNewUser = isNewUser,
                     onUserIsNotLoggedIn = {
                         navController.navigate(Screen.AuthGraph.route) {
@@ -353,7 +369,8 @@ fun KalmakasaApp() {
                     },
                     navUp = {
                         navController.navigateUp()
-                    }
+                    },
+                    onQueryChange = viewModel::onQueryChange
                 )
             }
             composable(

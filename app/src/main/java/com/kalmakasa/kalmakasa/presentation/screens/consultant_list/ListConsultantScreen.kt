@@ -78,7 +78,6 @@ fun ListConsultantScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListDoctorContent(
     listConsultant: List<Consultant>,
@@ -91,44 +90,57 @@ fun ListDoctorContent(
         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
     ) {
         items(listConsultant, { it.id }) { consultant ->
-            OutlinedCard(
+            ConsultantCard(
+                consultant = consultant,
+                onConsultantClicked = onConsultantClicked
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ConsultantCard(
+    consultant: Consultant,
+    onConsultantClicked: (Consultant) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    OutlinedCard(
+        modifier = modifier
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.background,
+            contentColor = MaterialTheme.colorScheme.onBackground
+        ),
+        border = BorderStroke(1.dp, Color.Gray),
+        shape = MaterialTheme.shapes.small,
+        onClick = { onConsultantClicked(consultant) }
+    ) {
+        Row {
+            AsyncImage(
+                model = consultant.imageUrl,
                 modifier = Modifier
-                    .fillMaxWidth(),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.background,
-                    contentColor = MaterialTheme.colorScheme.onBackground
-                ),
-                border = BorderStroke(1.dp, Color.Gray),
-                shape = MaterialTheme.shapes.small,
-                onClick = { onConsultantClicked(consultant) }
+                    .clip(MaterialTheme.shapes.large)
+                    .width(80.dp),
+                contentDescription = null,
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Column(
+                Modifier.padding(vertical = 8.dp)
             ) {
-                Row {
-                    AsyncImage(
-                        model = consultant.imageUrl,
-                        modifier = Modifier
-                            .clip(MaterialTheme.shapes.large)
-                            .width(80.dp),
-                        contentDescription = null,
-                    )
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Column(
-                        Modifier.padding(vertical = 8.dp)
-                    ) {
-                        Text(
-                            text = consultant.name,
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold,
-                        )
-                        Text(
-                            text = consultant.speciality,
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                        Text(
-                            text = consultant.expertise.joinToString(","),
-                            style = MaterialTheme.typography.bodySmall,
-                        )
-                    }
-                }
+                Text(
+                    text = consultant.name,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                Text(
+                    text = consultant.speciality,
+                    style = MaterialTheme.typography.bodySmall,
+                )
+                Text(
+                    text = consultant.expertise.joinToString(","),
+                    style = MaterialTheme.typography.bodySmall,
+                )
             }
         }
     }

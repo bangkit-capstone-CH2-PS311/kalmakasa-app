@@ -38,8 +38,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
-import com.kalmakasa.kalmakasa.common.Mood
 import com.kalmakasa.kalmakasa.domain.model.Article
+import com.kalmakasa.kalmakasa.domain.model.Journal
 import com.kalmakasa.kalmakasa.domain.model.User
 import com.kalmakasa.kalmakasa.presentation.component.LoadingContent
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
@@ -52,7 +52,7 @@ import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 
 @Composable
 fun HomeScreen(
-    homeState: SessionState,
+    sessionState: SessionState,
     articleState: ListArticleState,
     onArticleClicked: (String) -> Unit,
     onUserIsNotLoggedIn: () -> Unit,
@@ -63,15 +63,16 @@ fun HomeScreen(
     navigateToJournalList: () -> Unit,
     isNewUser: Boolean,
     modifier: Modifier = Modifier,
+    journal: Journal? = null,
 ) {
 
-    when (homeState) {
+    when (sessionState) {
         SessionState.Loading -> {
             LoadingScreen()
         }
 
         SessionState.NotLoggedIn -> {
-            LaunchedEffect(homeState) {
+            LaunchedEffect(sessionState) {
                 onUserIsNotLoggedIn()
             }
         }
@@ -83,7 +84,7 @@ fun HomeScreen(
                 }
             } else {
                 HomeContent(
-                    user = homeState.session,
+                    user = sessionState.session,
                     articleState = articleState,
                     onArticleClicked = onArticleClicked,
                     navigateToAssessment = { navigateToAssessment(false) },
@@ -92,6 +93,7 @@ fun HomeScreen(
                     navigateToArticleList = navigateToArticleList,
                     navigateToJournalList = navigateToJournalList,
                     modifier = modifier,
+                    journal = journal
                 )
             }
         }
@@ -109,6 +111,7 @@ fun HomeContent(
     navigateToArticleList: () -> Unit,
     navigateToJournalList: () -> Unit,
     modifier: Modifier = Modifier,
+    journal: Journal? = null,
 ) {
     Column(
         modifier = modifier
@@ -150,10 +153,8 @@ fun HomeContent(
         )
         Divider(Modifier.padding(vertical = 8.dp))
 
-        // TODO check if the user already create journal today
-
-        if (false) {
-            JournalCard(mood = Mood.HAPPY, date = "Monday, 29 January 2023")
+        if (journal != null) {
+            JournalCard(mood = journal.mood, date = journal.date)
         } else {
             CreateJournalButton(
                 navigateToAddJournal = navigateToAddJournal,
@@ -342,16 +343,16 @@ fun FeatureButton(
 fun HomePreview() {
     KalmakasaTheme {
         HomeScreen(
-            homeState = SessionState.Loading,
+            sessionState = SessionState.Loading,
+            articleState = ListArticleState(),
             onArticleClicked = { _ -> },
             onUserIsNotLoggedIn = {},
             navigateToConsultantList = {},
             navigateToAssessment = { _ -> },
             navigateToAddJournal = {},
             navigateToArticleList = {},
+            navigateToJournalList = {},
             isNewUser = false,
-            articleState = ListArticleState(),
-            navigateToJournalList = {}
         )
     }
 }

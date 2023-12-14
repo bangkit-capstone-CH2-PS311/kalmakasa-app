@@ -36,9 +36,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.domain.model.Reservation
+import com.kalmakasa.kalmakasa.presentation.component.StatusChip
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
-import com.kalmakasa.kalmakasa.presentation.theme.OnPositive
-import com.kalmakasa.kalmakasa.presentation.theme.Positive
 
 @Composable
 fun DetailReservationScreen(
@@ -144,18 +143,7 @@ fun DetailReservationScreen(
                             text = stringResource(R.string.consultation_detail),
                             style = MaterialTheme.typography.titleMedium
                         )
-                        OutlinedCard(
-                            colors = CardDefaults.outlinedCardColors(
-                                containerColor = Positive,
-                                contentColor = OnPositive,
-                            )
-                        ) {
-                            Text(
-                                text = reservation.status,
-                                style = MaterialTheme.typography.labelMedium,
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
-                            )
-                        }
+                        StatusChip(status = reservation.status)
                     }
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),

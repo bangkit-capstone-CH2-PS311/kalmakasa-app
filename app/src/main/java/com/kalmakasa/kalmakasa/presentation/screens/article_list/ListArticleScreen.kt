@@ -24,12 +24,14 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.domain.model.Article
+import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.SearchTopAppBar
 
 @Composable
 fun ListArticleScreen(
     uiState: ListArticleState,
+    onQueryChange: (String) -> Unit,
     onArticleClicked: (String) -> Unit,
     navUp: () -> Unit,
     modifier: Modifier = Modifier,
@@ -37,8 +39,8 @@ fun ListArticleScreen(
     Scaffold(
         topBar = {
             SearchTopAppBar(
-                query = "",
-                onQueryChange = {},
+                query = uiState.query,
+                onQueryChange = onQueryChange,
                 placeholder = stringResource(R.string.search_article),
                 navUp = navUp,
             )
@@ -48,7 +50,7 @@ fun ListArticleScreen(
         if (uiState.isLoading) {
             LoadingScreen(Modifier.padding(paddingValues))
         } else if (uiState.isError) {
-            Text("Error")
+            ErrorScreen(Modifier.padding(paddingValues))
         } else {
             ListArticleContent(
                 articles = uiState.listArticle,
@@ -130,6 +132,7 @@ fun ListArticlePreview() {
     ListArticleScreen(
         uiState = ListArticleState(),
         onArticleClicked = {},
-        navUp = {}
+        navUp = {},
+        onQueryChange = {}
     )
 }
