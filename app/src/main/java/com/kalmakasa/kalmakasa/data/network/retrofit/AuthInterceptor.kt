@@ -1,6 +1,5 @@
 package com.kalmakasa.kalmakasa.data.network.retrofit
 
-import android.util.Log
 import com.kalmakasa.kalmakasa.data.UserPreferences
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -12,7 +11,6 @@ class AuthInterceptor(
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val session = runBlocking { userPreferences.getSession().first() }
-        Log.d("session", session.accessToken)
         val modifierRequest = chain
             .request()
             .newBuilder()

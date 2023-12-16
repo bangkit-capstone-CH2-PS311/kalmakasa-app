@@ -15,4 +15,12 @@ interface ReservationRepository {
         endTime: String,
         note: String,
     ): Flow<Resource<String>>
+
+    suspend fun createReservationReport(
+        id: String,
+        commonIssues: String,
+        psychologicalDynamics: String,
+        triggers: String,
+        recommendation: String,
+    ): Flow<Resource<Reservation>>
 }

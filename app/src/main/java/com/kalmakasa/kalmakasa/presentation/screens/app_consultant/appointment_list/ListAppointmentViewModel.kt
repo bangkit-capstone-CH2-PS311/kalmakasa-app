@@ -1,4 +1,4 @@
-package com.kalmakasa.kalmakasa.presentation.screens.reservation_list
+package com.kalmakasa.kalmakasa.presentation.screens.app_consultant.appointment_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -12,24 +12,22 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ListReservationViewModel @Inject constructor(
+class ListAppointmentViewModel @Inject constructor(
     private val reservationRepository: ReservationRepository,
 ) : ViewModel() {
-
     private val _uiState: MutableStateFlow<Resource<List<Reservation>>> =
         MutableStateFlow(Resource.Loading)
     val uiState = _uiState.asStateFlow()
 
     init {
-        getReservations()
+        getAppointment()
     }
 
-    private fun getReservations() {
+    private fun getAppointment() {
         viewModelScope.launch {
             reservationRepository.getReservations().collect {
                 _uiState.value = it
             }
         }
     }
-
 }

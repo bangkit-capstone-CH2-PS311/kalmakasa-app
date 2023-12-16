@@ -117,6 +117,12 @@ fun ConsultantBottomBar(
             iconOutline = Icons.Outlined.Groups,
             screen = Screen.ListPatient
         ),
+        NavigationItem(
+            title = stringResource(R.string.profile),
+            icon = Icons.Default.Person,
+            iconOutline = Icons.Outlined.Person,
+            screen = Screen.ProfileConsultant
+        ),
     )
     BottomBar(navigationItems, navController, modifier)
 }

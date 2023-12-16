@@ -47,18 +47,6 @@ class JournalRepositoryImpl(
         }
     }
 
-    override suspend fun getJournalDetail(id: String): Flow<Resource<Journal>> = flow {
-        emit(Resource.Loading)
-        val response = apiService.getJournalDetail(id)
-        emit(Resource.Success(response.toJournal()))
-    }.catch {
-        when (it) {
-            is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
-            is IOException -> emit(Resource.Error(it.localizedMessage ?: "No Internet"))
-            else -> emit(Resource.Error(it.localizedMessage ?: "Unknown error occurred"))
-        }
-    }
-
     override suspend fun createJournal(
         id: String,
         date: String,

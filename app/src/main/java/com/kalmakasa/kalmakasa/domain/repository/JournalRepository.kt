@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface JournalRepository {
     suspend fun getJournals(): Flow<Resource<List<Journal>>>
-    suspend fun getJournalDetail(id: String): Flow<Resource<Journal>>
 
     suspend fun createJournal(
         id: String,

@@ -22,7 +22,10 @@ import com.kalmakasa.kalmakasa.presentation.component.AppBottomBar
 import com.kalmakasa.kalmakasa.presentation.component.ConsultantBottomBar
 import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
+import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.appointment_detail.DetailAppointmentScreen
+import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.appointment_detail.DetailAppointmentViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.appointment_list.ListAppointmentScreen
+import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.appointment_list.ListAppointmentViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.patient_list.ListPatientScreen
 import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailScreen
 import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailViewModel
@@ -73,7 +76,7 @@ fun KalmakasaApp() {
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Launcher.route,
+            startDestination = Screen.ConsultantGraph.route,
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(Screen.Launcher.route) {
@@ -140,12 +143,60 @@ fun KalmakasaApp() {
 
             // CONSULTANT GRAPH
             navigation(Screen.ListAppointment.route, Screen.ConsultantGraph.route) {
+                composable(Screen.ProfileConsultant.route) {
+                    val viewModel: ProfileViewModel = hiltViewModel()
+                    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+                    ProfileScreen(
+                        uiState = uiState,
+                        onLogoutClicked = {
+                            viewModel.logout {
+                                navController.navigate(Screen.AuthGraph.route) {
+                                    popUpTo(Screen.ConsultantGraph.route) { inclusive = true }
+                                }
+                            }
+                        },
+                    )
+                }
+
                 composable(Screen.ListAppointment.route) {
-                    ListAppointmentScreen()
+                    val viewModel: ListAppointmentViewModel = hiltViewModel()
+
+                    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                    ListAppointmentScreen(
+                        uiState,
+                        onAppointmentClicked = {
+                            navController.navigate(Screen.DetailAppointment.createRoute(it))
+                        }
+                    )
                 }
 
                 composable(Screen.ListPatient.route) {
                     ListPatientScreen()
+                }
+
+                composable(
+                    Screen.DetailAppointment.route,
+                    arguments = listOf(navArgument("id") { type = NavType.StringType })
+                ) {
+                    val viewModel: DetailAppointmentViewModel = hiltViewModel()
+
+                    val id = it.arguments?.getString("id") ?: ""
+                    LaunchedEffect(true) {
+                        viewModel.getAppointmentDetail(id)
+                    }
+
+                    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+                    DetailAppointmentScreen(
+                        reservation = uiState.reservation,
+                        reportState = uiState.reportState,
+                        onAnswerChange = viewModel::updateAnswer,
+                        uploadReport = { viewModel.uploadReport(id) },
+                        prevStep = viewModel::previousQuestion,
+                        nextStep = viewModel::nextQuestion,
+                        navUp = { navController.navigateUp() }
+                    )
                 }
             }
 

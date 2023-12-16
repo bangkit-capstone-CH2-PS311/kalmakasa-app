@@ -8,11 +8,15 @@ import com.kalmakasa.kalmakasa.data.network.response.ConsultantsResponse
 import com.kalmakasa.kalmakasa.data.network.response.CreateReservationResponse
 import com.kalmakasa.kalmakasa.data.network.response.JournalsResponse
 import com.kalmakasa.kalmakasa.data.network.response.ReservationResponse
+import okhttp3.RequestBody
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     @FormUrlEncoded
@@ -31,7 +35,9 @@ interface ApiService {
     ): AuthResponse
 
     @GET("consultants")
-    suspend fun getListConsultants(): ConsultantsResponse
+    suspend fun getListConsultants(
+        @Query("limit") limit: Int = 999,
+    ): ConsultantsResponse
 
     @GET("consultants/{id}")
     suspend fun getConsultantDetail(
@@ -39,12 +45,9 @@ interface ApiService {
     ): ApiConsultant
 
     @GET("journals")
-    suspend fun getJournals(): JournalsResponse
-
-    @GET("journals/{id}")
-    suspend fun getJournalDetail(
-        @Path("id") id: String,
-    ): ApiJournal
+    suspend fun getJournals(
+        @Query("limit") limit: Int = 999,
+    ): JournalsResponse
 
     @FormUrlEncoded
     @POST("journals")
@@ -66,7 +69,15 @@ interface ApiService {
     ): CreateReservationResponse
 
     @GET("reservations")
-    suspend fun getReservations(): ReservationResponse
+    suspend fun getReservations(
+        @Query("limit") limit: Int = 999,
+    ): ReservationResponse
+
+    @PATCH("reservations/{id}")
+    suspend fun createReservationReport(
+        @Path("id") id: String,
+        @Body requestBody: RequestBody,
+    ): ApiReservation
 
     @GET("reservations/{id}")
     suspend fun getReservationDetail(

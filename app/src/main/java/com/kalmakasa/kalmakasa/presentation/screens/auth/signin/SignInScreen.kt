@@ -28,11 +28,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
-import com.kalmakasa.kalmakasa.common.Resource
-import com.kalmakasa.kalmakasa.presentation.screens.auth.common.EmailTextField
-import com.kalmakasa.kalmakasa.presentation.screens.auth.common.PasswordTextField
 import com.kalmakasa.kalmakasa.presentation.screens.auth.common.AuthButton
 import com.kalmakasa.kalmakasa.presentation.screens.auth.common.AuthTitle
+import com.kalmakasa.kalmakasa.presentation.screens.auth.common.EmailTextField
+import com.kalmakasa.kalmakasa.presentation.screens.auth.common.PasswordTextField
+import com.kalmakasa.kalmakasa.presentation.screens.auth.register.AuthState
 import com.kalmakasa.kalmakasa.presentation.state.EmailState
 import com.kalmakasa.kalmakasa.presentation.state.EmailStateSaver
 import com.kalmakasa.kalmakasa.presentation.state.PasswordState
@@ -41,7 +41,7 @@ import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 
 @Composable
 fun SignInScreen(
-    loginState: Resource<String>,
+    loginState: AuthState,
     onSubmitted: (String, String) -> Unit,
     onSignInSuccess: () -> Unit,
     onForgotPasswordClicked: () -> Unit,
@@ -67,25 +67,21 @@ fun SignInScreen(
 
     val context = LocalContext.current
     LaunchedEffect(loginState) {
-        when (loginState) {
-            is Resource.Error -> {
-                Toast.makeText(
-                    context,
-                    loginState.error,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+        if (loginState.isError) {
+            Toast.makeText(
+                context,
+                loginState.message,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
 
-            is Resource.Success -> {
-                Toast.makeText(
-                    context,
-                    loginState.data,
-                    Toast.LENGTH_SHORT
-                ).show()
-                onSignInSuccess()
-            }
-
-            else -> {}
+        if (!loginState.isError && loginState.message.isNotBlank()) {
+            Toast.makeText(
+                context,
+                loginState.message,
+                Toast.LENGTH_SHORT
+            ).show()
+            onSignInSuccess()
         }
     }
 
@@ -143,7 +139,7 @@ fun SignInScreen(
             AuthButton(
                 authState = loginState,
                 onClick = onSubmit,
-                isEnabled = isValidated && loginState != Resource.Loading,
+                isEnabled = isValidated && !loginState.isLoading,
                 text = stringResource(R.string.sign_in)
             )
         }
@@ -156,7 +152,7 @@ fun SignInScreen(
 fun SignInPreview() {
     KalmakasaTheme {
         SignInScreen(
-            loginState = Resource.None,
+            loginState = AuthState(),
             onForgotPasswordClicked = {},
             onSignInSuccess = {},
             onSubmitted = { _, _ -> },

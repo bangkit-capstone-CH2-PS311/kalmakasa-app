@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
@@ -30,34 +31,65 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.kalmakasa.kalmakasa.common.ReservationStatus
+import com.kalmakasa.kalmakasa.common.Resource
+import com.kalmakasa.kalmakasa.domain.model.Reservation
+import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
+import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.StatusChip
-import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 
 @Composable
-fun ListAppointmentScreen() {
+fun ListAppointmentScreen(
+    uiState: Resource<List<Reservation>>,
+    onAppointmentClicked: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Scaffold { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .padding(paddingValues)
-                .padding(horizontal = 24.dp),
-            contentPadding = PaddingValues(vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            items(50) {
-                AppointmentCard(
-                    reservationId = "",
-                    patientName = "Dzaky Nashshar",
-                    imageUrl = "",
-                    status = ReservationStatus.Pending,
-                    date = "Senin, 22 Desember 2022",
-                    time = "19.00 - 20.00",
-                    onAppointmentClicked = {}
+        when (uiState) {
+            Resource.Loading -> {
+                LoadingScreen(modifier.padding(paddingValues))
+            }
+
+            is Resource.Error -> {
+                ErrorScreen(modifier = modifier.padding(paddingValues), uiState.error)
+            }
+
+            is Resource.Success -> {
+                ListAppointmentContent(
+                    appointments = uiState.data,
+                    onAppointmentClicked = onAppointmentClicked,
+                    modifier.padding(paddingValues)
                 )
             }
+        }
+
+    }
+}
+
+@Composable
+fun ListAppointmentContent(
+    appointments: List<Reservation>,
+    onAppointmentClicked: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier
+            .padding(horizontal = 24.dp),
+        contentPadding = PaddingValues(vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(appointments, key = { it.id }) { appointment ->
+            AppointmentCard(
+                reservationId = appointment.id,
+                patientName = appointment.patient.name,
+                imageUrl = appointment.consultant.imageUrl,
+                status = appointment.status,
+                date = appointment.date,
+                time = appointment.time,
+                onAppointmentClicked = onAppointmentClicked
+            )
         }
     }
 }
@@ -152,13 +184,5 @@ fun AppointmentCard(
                 }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun ListAppointmentPreview() {
-    KalmakasaTheme {
-        ListAppointmentScreen()
     }
 }

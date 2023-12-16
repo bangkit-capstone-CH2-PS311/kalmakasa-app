@@ -40,7 +40,12 @@ sealed class Screen(val route: String) {
 
     object ConsultantGraph : Screen("consultant-graph")
     object ListAppointment : Screen("appointment-list")
+    object DetailAppointment : Screen("appointment-detail/{id}") {
+        fun createRoute(id: String) = "appointment-detail/$id"
+    }
+
     object ListPatient : Screen("patients-list")
+    object ProfileConsultant : Screen("profile-consultant")
 
     companion object {
         val withBottomBar = listOf(
@@ -52,7 +57,8 @@ sealed class Screen(val route: String) {
 
         val consultantBottomBar = listOf(
             ListAppointment.route,
-            ListPatient.route
+            ListPatient.route,
+            ProfileConsultant.route,
         )
     }
 

@@ -106,5 +106,12 @@
     <string name="questionnaire">Questionnaire</string>
     <string name="new_journal">New Journal</string>
     <string name="reservation_created_successfully">Reservation Created Successfully</string>
+    <string name="discard">Discard</string>
+    <string name="cancel">Cancel</string>
+    <string name="discard_draft">Discard Draft?</string>
+    <string name="insert_here">Insert here…</string>
+    <string name="appointment_detail">Appointment Detail</string>
+    <string name="patient_note">Patient Note</string>
+    <string name="create_report">Create Report</string>
 
 </resources>

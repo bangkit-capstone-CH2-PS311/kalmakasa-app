@@ -29,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
-import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.presentation.screens.auth.common.AuthButton
 import com.kalmakasa.kalmakasa.presentation.screens.auth.common.AuthTitle
 import com.kalmakasa.kalmakasa.presentation.screens.auth.common.EmailTextField
@@ -44,7 +43,7 @@ import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 
 @Composable
 fun RegisterScreen(
-    registerState: Resource<String>,
+    registerState: AuthState,
     onGotoSignInButtonClicked: () -> Unit,
     onSubmitted: (String, String, String) -> Unit,
     onRegisterSuccess: () -> Unit,
@@ -75,27 +74,22 @@ fun RegisterScreen(
             onSubmitted(nameState.text, emailState.text, passwordState.text)
         }
     }
-
     LaunchedEffect(registerState) {
-        when (registerState) {
-            is Resource.Error -> {
-                Toast.makeText(
-                    context,
-                    registerState.error,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+        if (registerState.isError) {
+            Toast.makeText(
+                context,
+                registerState.message,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
 
-            is Resource.Success -> {
-                Toast.makeText(
-                    context,
-                    registerState.data,
-                    Toast.LENGTH_SHORT
-                ).show()
-                onRegisterSuccess()
-            }
-
-            else -> {}
+        if (!registerState.isError && registerState.message.isNotBlank()) {
+            Toast.makeText(
+                context,
+                registerState.message,
+                Toast.LENGTH_SHORT
+            ).show()
+            onRegisterSuccess()
         }
     }
 
@@ -162,7 +156,7 @@ fun RegisterScreen(
             AuthButton(
                 authState = registerState,
                 onClick = onSubmit,
-                isEnabled = isValidated && registerState != Resource.Loading,
+                isEnabled = isValidated && !registerState.isLoading,
                 text = stringResource(R.string.register)
             )
         }
@@ -175,7 +169,7 @@ fun RegisterScreen(
 fun RegisterPreview() {
     KalmakasaTheme {
         RegisterScreen(
-            registerState = Resource.Success("Successful"),
+            registerState = AuthState(),
             onRegisterSuccess = { },
             onSubmitted = { _, _, _ -> },
             onGotoSignInButtonClicked = { }

@@ -22,6 +22,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -35,6 +39,7 @@ import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.common.DateUtil
+import com.kalmakasa.kalmakasa.presentation.component.DiscardDialog
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
 
 @Composable
@@ -50,12 +55,25 @@ fun CheckoutDialog(
             onDismissRequest = onDismissRequest,
         ) {
             val context = LocalContext.current
+            var enable by rememberSaveable { mutableStateOf(false) }
+
+            DiscardDialog(
+                enable = enable,
+                onDismissRequest = {
+                    enable = false
+                },
+                onConfirmation = {
+                    onDismissRequest()
+                }
+            )
 
             Scaffold(
                 topBar = {
                     TitleTopAppBar(
                         title = stringResource(R.string.reservation_summary),
-                        onBackButtonClicked = onDismissRequest
+                        onBackButtonClicked = {
+                            enable = true
+                        }
                     )
                 }
             ) { paddingValues ->

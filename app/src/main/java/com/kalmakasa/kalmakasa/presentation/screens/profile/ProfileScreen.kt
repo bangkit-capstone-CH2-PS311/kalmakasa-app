@@ -33,13 +33,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
+import com.kalmakasa.kalmakasa.common.Role
 import com.kalmakasa.kalmakasa.domain.model.User
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 
 @Composable
 fun ProfileScreen(
     uiState: User,
-    onQuestionerClicked: () -> Unit,
+    onQuestionerClicked: () -> Unit = {},
     onLogoutClicked: () -> Unit,
 ) {
     Column(
@@ -88,11 +89,13 @@ fun ProfileScreen(
             onClick = {},
             enabled = false,
         )
-        ProfileOptionCard(
-            icon = Icons.Default.HealthAndSafety,
-            title = stringResource(R.string.my_health_test_result),
-            onClick = onQuestionerClicked,
-        )
+        if (uiState.role == Role.User.role) {
+            ProfileOptionCard(
+                icon = Icons.Default.HealthAndSafety,
+                title = stringResource(R.string.my_health_test_result),
+                onClick = onQuestionerClicked,
+            )
+        }
         ProfileOptionCard(
             icon = Icons.Default.Logout,
             title = stringResource(R.string.logout),

@@ -10,4 +10,12 @@ data class Reservation(
     val time: String,
     val status: ReservationStatus,
     val notes: String = "",
+    val report: ReservationReport? = null,
+)
+
+data class ReservationReport(
+    val commonIssues: String,
+    val psychologicalDynamics: String,
+    val recommendation: String,
+    val triggers: String,
 )

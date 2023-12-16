@@ -9,11 +9,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.kalmakasa.kalmakasa.common.Resource
+import com.kalmakasa.kalmakasa.presentation.screens.auth.register.AuthState
 
 @Composable
 fun AuthButton(
-    authState: Resource<String>,
+    authState: AuthState,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean,
@@ -26,7 +26,7 @@ fun AuthButton(
             .height(48.dp),
         enabled = isEnabled
     ) {
-        if (authState == Resource.Loading) {
+        if (authState.isLoading) {
             CircularProgressIndicator(
                 modifier = Modifier
                     .size(20.dp),
