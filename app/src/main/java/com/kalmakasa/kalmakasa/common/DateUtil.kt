@@ -20,12 +20,12 @@ object DateUtil {
         R.string.saturday_short,
     )
 
-    fun formatApiDate(apiDate: String): String {
+    fun formatApiDate(apiDate: String, pattern: String = "EEEE, dd MMMM yyyy"): String {
         val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         val date = inputFormat.parse(apiDate)
 
         return if (date != null) {
-            val outputFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault())
+            val outputFormat = SimpleDateFormat(pattern, Locale.getDefault())
             outputFormat.format(date)
         } else {
             apiDate

@@ -41,7 +41,7 @@
     <string name="consultation">Consultation</string>
     <string name="profile">Profile</string>
 
-    <string name="my_health_test_result">My Health Test Result</string>
+    <string name="health_test_history">Health Test History</string>
     <string name="profile_picture">Profile Picture</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="history">History</string>
@@ -113,5 +113,42 @@
     <string name="appointment_detail">Appointment Detail</string>
     <string name="patient_note">Patient Note</string>
     <string name="create_report">Create Report</string>
+    <string name="article_for_you">Articles For You</string>
 
+    <string name="normal">Normal</string>
+    <string name="mild">Mild</string>
+    <string name="moderate">Moderate</string>
+    <string name="severe">Severe</string>
+    <string name="extremely_severe">Extremely Severe</string>
+    <string name="unknown_value">Unknown Value</string>
+
+    <string name="stress">Stress</string>
+    <string name="anxiety">Anxiety</string>
+    <string name="depression">Depression</string>
+
+    <string name="health_test_detail">Health Test Detail</string>
+    <string name="health_test_desc">The results of this test are for informational purposes only. It is advisable to consult these results with a mental health professional for further evaluation.</string>
+
+    <!-- DASS21 Questions-->
+    <string name="question1">I found it hard to wind down</string>
+    <string name="question2">I was aware of dryness of my mouth</string>
+    <string name="question3">I couldn’t seem to experience any positive feeling at all</string>
+    <string name="question4">I experienced breathing difficulty (e.g. excessively rapid breathing, breathlessness in the absence of physical exertion)</string>
+    <string name="question5">I found it difficult to work up the initiative to do things</string>
+    <string name="question6">I tended to over-react to situations</string>
+    <string name="question7">I experienced trembling (e.g. in the hands)</string>
+    <string name="question8">I felt that I was using a lot of nervous energy</string>
+    <string name="question9">I was worried about situations in which I might panic and make a fool of myself</string>
+    <string name="question10">I felt that I had nothing to look forward to</string>
+    <string name="question11">I found myself getting agitated</string>
+    <string name="question12">I found it difficult to relax</string>
+    <string name="question13">I felt down-hearted and blue</string>
+    <string name="question14">I was intolerant of anything that kept me from getting on with what I was doing</string>
+    <string name="question15">I felt I was close to panic</string>
+    <string name="question16">I was unable to become enthusiastic about anything</string>
+    <string name="question17">I felt I wasn’t worth much as a person</string>
+    <string name="question18">I felt that I was rather touchy</string>
+    <string name="question19">I was aware of the action of my heart in the absence of physical exertion (e.g. sense of heart rate increase, heart missing a beat)</string>
+    <string name="question20">I felt scared without any good reason</string>
+    <string name="question21">I felt that life was meaningless</string>
 </resources>

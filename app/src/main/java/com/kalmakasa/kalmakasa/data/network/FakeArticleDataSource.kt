@@ -1,5 +1,6 @@
 package com.kalmakasa.kalmakasa.data.network
 
+import com.kalmakasa.kalmakasa.common.Tag
 import com.kalmakasa.kalmakasa.domain.model.Article
 
 object FakeArticleDataSource {
@@ -14,49 +15,60 @@ object FakeArticleDataSource {
             id = "article-1",
             imageUrl = sampleImageUrl,
             title = "Sample Article",
-            description = DESC
+            description = DESC,
+            tags = listOf(Tag.ANXIETY, Tag.CAREER)
         ),
         Article(
             id = "article-2",
             imageUrl = sampleImageUrl,
             title = "Sample Article",
-            description = DESC
+            description = DESC,
+            tags = listOf(Tag.DEPRESSION, Tag.STRESS)
+
         ),
         Article(
             id = "article-3",
             imageUrl = sampleImageUrl,
             title = "Sample Article",
-            description = DESC
+            description = DESC,
+            tags = listOf(Tag.STRESS)
         ),
         Article(
             id = "article-4",
             imageUrl = sampleImageUrl,
             title = "Sample Article",
-            description = DESC
+            description = DESC,
+            tags = listOf(Tag.CAREER)
         ),
         Article(
             id = "article-5",
             imageUrl = sampleImageUrl,
             title = "Sample Article",
-            description = DESC
+            description = DESC,
+            tags = listOf(Tag.ANXIETY, Tag.RELATIONSHIP)
         ),
         Article(
             id = "article-6",
             imageUrl = sampleImageUrl,
             title = "Sample Article",
-            description = DESC
+            description = DESC,
+            tags = listOf(Tag.CAREER)
+
         ),
         Article(
             id = "article-7",
             imageUrl = sampleImageUrl,
             title = "Sample Article",
-            description = DESC
+            description = DESC,
+            tags = listOf(Tag.DEPRESSION, Tag.STRESS)
+
         ),
         Article(
             id = "article-8",
             imageUrl = sampleImageUrl,
             title = "Sample Article",
-            description = DESC
+            description = DESC,
+            tags = listOf(Tag.ANXIETY, Tag.STRESS)
         )
     )
 }

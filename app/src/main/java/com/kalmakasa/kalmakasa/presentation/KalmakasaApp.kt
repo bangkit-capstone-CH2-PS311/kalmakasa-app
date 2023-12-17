@@ -40,6 +40,10 @@ import com.kalmakasa.kalmakasa.presentation.screens.consultant_detail.DetailCons
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_detail.DetailDoctorViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_list.ListConsultantScreen
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_list.ListDoctorViewModel
+import com.kalmakasa.kalmakasa.presentation.screens.health_test_detail.DetailHealthTestScreen
+import com.kalmakasa.kalmakasa.presentation.screens.health_test_detail.DetailHealthTestViewModel
+import com.kalmakasa.kalmakasa.presentation.screens.health_test_list.ListHealthTestScreen
+import com.kalmakasa.kalmakasa.presentation.screens.health_test_list.ListHealthTestViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.home.HomeScreen
 import com.kalmakasa.kalmakasa.presentation.screens.home.HomeViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.journal_add.AddJournalScreen
@@ -76,7 +80,7 @@ fun KalmakasaApp() {
     ) { paddingValues ->
         NavHost(
             navController = navController,
-            startDestination = Screen.ConsultantGraph.route,
+            startDestination = Screen.Launcher.route,
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(Screen.Launcher.route) {
@@ -257,8 +261,8 @@ fun KalmakasaApp() {
                             }
                         }
                     },
-                    onQuestionerClicked = {
-                        navController.navigate(Screen.Question.createRoute(false))
+                    onHealthTestHistoryClicked = {
+                        navController.navigate(Screen.ListHealthTestResult.route)
                     }
                 )
             }
@@ -272,16 +276,23 @@ fun KalmakasaApp() {
                 val questionScreenData by viewModel.uiState.collectAsStateWithLifecycle()
 
                 val context = LocalContext.current
+
                 val isSkippable = it.arguments?.getBoolean("isSkippable") ?: false
                 QuestionScreen(
                     questionData = questionScreenData,
                     onPreviousQuestion = viewModel::previousQuestion,
                     onNextQuestion = viewModel::nextQuestion,
                     onSubmit = {
-                        Toast.makeText(context, "Submitted", Toast.LENGTH_SHORT).show()
-                        navController.navigate(Screen.Home.route) {
-                            popUpTo(Screen.Question.route) { inclusive = true }
-                        }
+                        viewModel.uploadAnswer(
+                            onSuccessCallback = {
+                                navController.navigate(Screen.Home.route) {
+                                    popUpTo(Screen.Question.route) { inclusive = true }
+                                }
+                            },
+                            onErrorCallback = {
+                                Toast.makeText(context, "Summit Failed", Toast.LENGTH_SHORT).show()
+                            }
+                        )
                     },
                     onNavUp = {
                         navController.navigateUp()
@@ -293,6 +304,46 @@ fun KalmakasaApp() {
                     options = viewModel.options,
                     questions = viewModel.questions,
                     isSkippable = isSkippable,
+                )
+            }
+
+            // Health Test Features
+            composable(Screen.ListHealthTestResult.route) {
+                val viewModel: ListHealthTestViewModel = hiltViewModel()
+
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                ListHealthTestScreen(
+                    uiState = uiState,
+                    onItemClicked = {
+                        navController.navigate(Screen.DetailHealthTestResult.createRoute(it))
+                    },
+                    navUp = {
+                        navController.navigateUp()
+                    },
+                    navigateToAssessment = {
+                        navController.navigate(Screen.Question.createRoute(false))
+                    },
+                )
+            }
+
+            composable(
+                route = Screen.DetailHealthTestResult.route,
+                arguments = listOf(navArgument("id") { type = NavType.StringType }),
+            ) {
+                val viewModel: DetailHealthTestViewModel = hiltViewModel()
+                val id = it.arguments?.getString("id") ?: ""
+                LaunchedEffect(true) {
+                    viewModel.getHealthTestDetail(id)
+                }
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                val articles by viewModel.article.collectAsStateWithLifecycle()
+                DetailHealthTestScreen(
+                    uiState = uiState,
+                    navUp = { navController.navigateUp() },
+                    article = articles,
+                    onArticleClicked = { articleId ->
+                        navController.navigate(Screen.DetailArticle.createRoute(articleId))
+                    }
                 )
             }
 

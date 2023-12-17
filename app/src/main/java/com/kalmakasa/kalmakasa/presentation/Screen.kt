@@ -18,6 +18,12 @@ sealed class Screen(val route: String) {
         fun createRoute(isSkippable: Boolean) = "question/$isSkippable"
     }
 
+    object ListHealthTestResult : Screen("health-test-list")
+    object DetailHealthTestResult : Screen("health-test-detail/{id}") {
+        fun createRoute(id: String) = "health-test-detail/$id"
+    }
+
+
     object ListConsultant : Screen("list-consultant")
     object ConsultantDetail : Screen("consultant-detail/{id}") {
         fun createRoute(id: String) = "consultant-detail/$id"

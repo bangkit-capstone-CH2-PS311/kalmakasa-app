@@ -1,17 +1,21 @@
 package com.kalmakasa.kalmakasa.presentation.screens.article_list
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.kalmakasa.kalmakasa.R
+import com.kalmakasa.kalmakasa.common.Tag
 import com.kalmakasa.kalmakasa.domain.model.Article
 import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
@@ -79,6 +84,7 @@ fun ListArticleContent(
                 imageUrl = article.imageUrl,
                 title = article.title,
                 description = article.description,
+                tags = article.tags,
                 onClick = { onArticleClicked(article.id) }
             )
         }
@@ -93,11 +99,12 @@ fun ArticleCard(
     description: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    tags: List<Tag>,
 ) {
     Card(
         onClick = onClick,
         modifier = modifier
-            .height(160.dp)
+            .height(180.dp)
     ) {
         AsyncImage(
             model = imageUrl,
@@ -112,6 +119,20 @@ fun ArticleCard(
                 .fillMaxWidth()
                 .padding(vertical = 8.dp, horizontal = 12.dp)
         ) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.horizontalScroll(rememberScrollState()),
+            ) {
+                tags.forEach {
+                    OutlinedCard(shape = MaterialTheme.shapes.small) {
+                        Text(
+                            text = it.text,
+                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 2.dp),
+                            style = MaterialTheme.typography.labelSmall,
+                        )
+                    }
+                }
+            }
             Text(
                 text = title,
                 style = MaterialTheme.typography.labelLarge,

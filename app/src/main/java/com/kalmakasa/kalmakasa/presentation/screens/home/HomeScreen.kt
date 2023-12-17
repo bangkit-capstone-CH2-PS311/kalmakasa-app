@@ -224,7 +224,8 @@ fun CreateJournalButton(
 @Composable
 fun HomeArticles(
     articles: List<Article>,
-    navigateToArticleList: () -> Unit,
+    title: String = stringResource(R.string.article),
+    navigateToArticleList: (() -> Unit)? = null,
     onArticleClicked: (String) -> Unit,
 ) {
     Row(
@@ -234,15 +235,17 @@ fun HomeArticles(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        TitleText(text = stringResource(R.string.article), Modifier)
-        Text(
-            stringResource(R.string.see_more),
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier
-                .clickable { navigateToArticleList() }
-                .padding(vertical = 8.dp)
-        )
+        TitleText(text = title, Modifier)
+        if (navigateToArticleList != null) {
+            Text(
+                stringResource(R.string.see_more),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .clickable { navigateToArticleList() }
+                    .padding(vertical = 8.dp)
+            )
+        }
     }
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -257,16 +260,18 @@ fun HomeArticles(
                     title = first.title,
                     description = first.description,
                     onClick = { onArticleClicked(first.id) },
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f),
+                    tags = first.tags
                 )
                 Spacer(modifier = Modifier.width(18.dp))
                 if (sec != null) {
                     ArticleCard(
-                        imageUrl = first.imageUrl,
+                        imageUrl = sec.imageUrl,
                         title = sec.title,
                         description = sec.description,
                         onClick = { onArticleClicked(sec.id) },
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        tags = sec.tags
                     )
                 } else {
                     Spacer(

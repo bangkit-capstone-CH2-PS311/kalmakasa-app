@@ -13,11 +13,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,12 +37,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
+import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 
 @Composable
 fun QuestionScreen(
     questionData: QuestionScreenData,
-    questions: List<String>,
+    questions: List<Int>,
     @StringRes options: List<Int>,
     onNavUp: () -> Unit,
     onSubmit: () -> Unit,
@@ -91,9 +94,17 @@ fun QuestionScreen(
                         if (questionData.lastQuestion) onSubmit() else onNextQuestion()
                     },
                     modifier = Modifier.weight(1f),
-                    enabled = answer != null
+                    enabled = (answer != null) &&
+                            (questionData.uploadState == null || questionData.uploadState !is Resource.Loading)
                 ) {
-                    if (questionData.lastQuestion) {
+                    if (questionData.uploadState is Resource.Loading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .size(20.dp),
+                            strokeWidth = 2.5.dp
+                        )
+
+                    } else if (questionData.lastQuestion) {
                         Text(stringResource(R.string.done))
                     } else {
                         Text(stringResource(R.string.next))
@@ -122,7 +133,7 @@ fun QuestionScreen(
                 progress = progressAnimation,
                 modifier = Modifier.fillMaxWidth()
             )
-            QuestionBox(question)
+            QuestionBox(stringResource(question))
             options.forEach { option ->
                 OptionBox(
                     option = stringResource(option),
@@ -216,15 +227,15 @@ fun QuestionPreview() {
     KalmakasaTheme {
         QuestionScreen(
             questionData = QuestionScreenData(),
-            questions = listOf("a", "b", "c", "d"),
+            questions = listOf(1, 2, 3, 4),
             options = emptyList(),
             onNavUp = {},
-            onPreviousQuestion = { },
             onSubmit = {},
             onNextQuestion = {},
+            onPreviousQuestion = { },
+            onSkipAssessment = {},
             updateAnswer = { _ -> },
             isSkippable = false,
-            onSkipAssessment = {},
         )
     }
 }

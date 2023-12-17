@@ -41,7 +41,7 @@
     <string name="consultation">Konsultasi</string>
     <string name="profile">Profil</string>
 
-    <string name="my_health_test_result">Hasil Tes Kesehatan Saya</string>
+    <string name="health_test_history">Riwayat Tes Kesehatan</string>
     <string name="profile_picture">Foto Profil</string>
     <string name="edit_profile">Edit Profil</string>
     <string name="history">Riwayat</string>
@@ -106,4 +106,55 @@
     <string name="questionnaire">Kuesioner</string>
     <string name="new_journal">Jurnal Baru</string>
     <string name="reservation_created_successfully">Reservasi Berhasil Dibuat</string>
+
+
+    Certainly! Here is the translation of the provided English strings to Indonesian:
+
+    <string name="discard">Buang</string>
+    <string name="cancel">Batal</string>
+    <string name="discard_draft">Hapus Draft?</string>
+    <string name="insert_here">Masukkan di sini…</string>
+    <string name="appointment_detail">Detail Janji</string>
+    <string name="patient_note">Catatan Pasien</string>
+    <string name="create_report">Buat Laporan</string>
+    <string name="health_test_desc">Hasil dari test ini hanya untuk gambaran sederhana. Sebaiknya konsultasikan hasil ini dengan profesional kesehatan mental untuk evaluasi lebih lanjut.</string>
+    <string name="article_for_you">Artikel Untuk Anda</string>
+
+    <!--  DASS Level  -->
+    <string name="normal">Normal</string>
+    <string name="mild">Ringan</string>
+    <string name="moderate">Sedang</string>
+    <string name="severe">Akut</string>
+    <string name="extremely_severe">Sangat Akut</string>
+    <string name="unknown_value">Nilai Tidak Diketahui</string>
+
+    <string name="stress">Stres</string>
+    <string name="anxiety">Kecemasan</string>
+    <string name="depression">Depresi</string>
+
+    <string name="health_test_detail">Detail Tes Kesehatan</string>
+
+    <!--  DASS21  -->
+    <string name="question1">Saya merasa sulit untuk bersantai</string>
+    <string name="question2">Saya sadar akan kekeringan di mulut saya</string>
+    <string name="question3">Saya sepertinya tidak bisa merasakan perasaan positif sama sekali</string>
+    <string name="question4">Saya mengalami kesulitan bernapas (misalnya, bernapas terlalu cepat, sesak napas tanpa aktivitas fisik)</string>
+    <string name="question5">Saya merasa sulit untuk mengumpulkan inisiatif untuk melakukan sesuatu</string>
+    <string name="question6">Saya cenderung berlebihan merespon situasi</string>
+    <string name="question7">Saya merasa gemetar (misalnya, pada tangan)</string>
+    <string name="question8">Saya merasa menggunakan banyak energi saraf</string>
+    <string name="question9">Saya khawatir tentang situasi di mana saya mungkin panik dan membuat diri saya menjadi bodoh</string>
+    <string name="question10">Saya merasa bahwa saya tidak punya sesuatu untuk dinantikan</string>
+    <string name="question11">Saya merasa agitasi</string>
+    <string name="question12">Saya merasa sulit untuk rileks</string>
+    <string name="question13">Saya merasa down-hearted dan muram</string>
+    <string name="question14">Saya tidak toleran terhadap hal-hal yang menghentikan saya dari melakukan apa yang saya lakukan</string>
+    <string name="question15">Saya merasa saya hampir panik</string>
+    <string name="question16">Saya tidak bisa menjadi antusias tentang apapun</string>
+    <string name="question17">Saya merasa bahwa saya tidak berharga banyak sebagai seorang individu</string>
+    <string name="question18">Saya merasa bahwa saya agak mudah tersinggung</string>
+    <string name="question19">Saya sadar akan tindakan jantung saya tanpa aktivitas fisik (misalnya, sensasi peningkatan detak jantung, jantung berdetak tidak beraturan)</string>
+    <string name="question20">Saya merasa takut tanpa alasan yang baik</string>
+    <string name="question21">Saya merasa bahwa hidup tidak memiliki arti</string>
+
 </resources>
