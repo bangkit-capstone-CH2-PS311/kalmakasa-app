@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.outlined.Article
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.MenuBook
+import androidx.compose.material.icons.outlined.SmartToy
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
@@ -64,6 +65,7 @@ fun HomeScreen(
     isNewUser: Boolean,
     modifier: Modifier = Modifier,
     journal: Journal? = null,
+    navigateToChatBot: () -> Unit,
 ) {
 
     when (sessionState) {
@@ -92,6 +94,7 @@ fun HomeScreen(
                     navigateToAddJournal = navigateToAddJournal,
                     navigateToArticleList = navigateToArticleList,
                     navigateToJournalList = navigateToJournalList,
+                    navigateToChatBot = navigateToChatBot,
                     modifier = modifier,
                     journal = journal
                 )
@@ -110,6 +113,7 @@ fun HomeContent(
     navigateToAddJournal: () -> Unit,
     navigateToArticleList: () -> Unit,
     navigateToJournalList: () -> Unit,
+    navigateToChatBot: () -> Unit,
     modifier: Modifier = Modifier,
     journal: Journal? = null,
 ) {
@@ -135,6 +139,11 @@ fun HomeContent(
                 icon = Icons.Outlined.Article,
                 title = stringResource(R.string.article),
                 onClick = navigateToArticleList,
+            ),
+            Feature(
+                icon = Icons.Outlined.SmartToy,
+                title = "Kalmbot",
+                onClick = navigateToChatBot,
             )
         )
 
@@ -358,7 +367,9 @@ fun HomePreview() {
             navigateToArticleList = {},
             navigateToJournalList = {},
             isNewUser = false,
-        )
+        ) {
+
+        }
     }
 }
 

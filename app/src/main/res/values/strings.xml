@@ -151,4 +151,5 @@
     <string name="question19">I was aware of the action of my heart in the absence of physical exertion (e.g. sense of heart rate increase, heart missing a beat)</string>
     <string name="question20">I felt scared without any good reason</string>
     <string name="question21">I felt that life was meaningless</string>
+    <string name="type_a_message">Type a message…</string>
 </resources>

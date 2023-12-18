@@ -36,6 +36,8 @@ import com.kalmakasa.kalmakasa.presentation.screens.auth.register.RegisterViewMo
 import com.kalmakasa.kalmakasa.presentation.screens.auth.signin.SignInScreen
 import com.kalmakasa.kalmakasa.presentation.screens.auth.signin.SignInViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.auth.welcome.WelcomeScreen
+import com.kalmakasa.kalmakasa.presentation.screens.chatbot.ChatbotScreen
+import com.kalmakasa.kalmakasa.presentation.screens.chatbot.ChatbotViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_detail.DetailConsultantScreen
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_detail.DetailDoctorViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.consultant_list.ListConsultantScreen
@@ -238,12 +240,15 @@ fun KalmakasaApp() {
                     navigateToArticleList = {
                         navController.navigate(Screen.ListArticle.route)
                     },
-                    onArticleClicked = { id ->
-                        navController.navigate(Screen.DetailArticle.createRoute(id))
+                    navigateToChatBot = {
+                        navController.navigate(Screen.Chatbot.route)
                     },
                     navigateToJournalList = {
                         navController.navigate(Screen.ListJournal.route)
-                    }
+                    },
+                    onArticleClicked = { id ->
+                        navController.navigate(Screen.DetailArticle.createRoute(id))
+                    },
                 )
             }
 
@@ -264,6 +269,17 @@ fun KalmakasaApp() {
                     onHealthTestHistoryClicked = {
                         navController.navigate(Screen.ListHealthTestResult.route)
                     }
+                )
+            }
+
+            // Chatbot Feature
+            composable(Screen.Chatbot.route) {
+                val viewModel: ChatbotViewModel = hiltViewModel()
+
+                val uiState by viewModel.messageState.collectAsStateWithLifecycle()
+                val messages by viewModel.messages.collectAsStateWithLifecycle()
+                ChatbotScreen(
+                    messages, uiState, viewModel::sendMessage
                 )
             }
 

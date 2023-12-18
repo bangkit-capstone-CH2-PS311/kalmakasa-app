@@ -14,6 +14,8 @@ sealed class Screen(val route: String) {
 
     object Profile : Screen("profile")
 
+    object Chatbot : Screen("chatbot")
+
     object Question : Screen("question/{isSkippable}") {
         fun createRoute(isSkippable: Boolean) = "question/$isSkippable"
     }

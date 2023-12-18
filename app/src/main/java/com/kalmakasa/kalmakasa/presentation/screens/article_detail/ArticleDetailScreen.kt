@@ -1,14 +1,18 @@
 package com.kalmakasa.kalmakasa.presentation.screens.article_detail
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -65,6 +69,19 @@ fun ArticleDetailScreen(
                 .padding(horizontal = 24.dp, vertical = 16.dp)
                 .fillMaxWidth(),
         ) {
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                items(article.tags) {
+                    Card {
+                        Text(
+                            text = it.text,
+                            modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                    }
+                }
+            }
             Text(
                 text = article.title,
                 style = MaterialTheme.typography.headlineLarge

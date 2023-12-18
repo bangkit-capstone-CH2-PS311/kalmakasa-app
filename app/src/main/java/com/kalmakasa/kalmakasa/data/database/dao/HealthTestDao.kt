@@ -1,4 +1,4 @@
-package com.kalmakasa.kalmakasa.data.database
+package com.kalmakasa.kalmakasa.data.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

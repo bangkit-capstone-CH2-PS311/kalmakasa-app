@@ -2,7 +2,7 @@ package com.kalmakasa.kalmakasa.data.repository
 
 import com.kalmakasa.kalmakasa.common.HealthTestType
 import com.kalmakasa.kalmakasa.common.Resource
-import com.kalmakasa.kalmakasa.data.database.HealthTestDao
+import com.kalmakasa.kalmakasa.data.database.dao.HealthTestDao
 import com.kalmakasa.kalmakasa.data.database.entity.HealthTestResultEntity
 import com.kalmakasa.kalmakasa.domain.model.HealthTestResult
 import com.kalmakasa.kalmakasa.domain.repository.HealthTestRepository
