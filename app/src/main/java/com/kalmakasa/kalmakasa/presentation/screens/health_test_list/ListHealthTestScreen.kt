@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.common.HealthTestLevel
 import com.kalmakasa.kalmakasa.common.HealthTestType
-import com.kalmakasa.kalmakasa.common.HealthTestType.Companion.getHealthTestScoring
+import com.kalmakasa.kalmakasa.common.HealthTestType.Companion.getHealthTestLevel
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.HealthTestResult
 import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
@@ -120,18 +120,18 @@ fun HealthTestListItem(
         ) {
             HealthTestChip(
                 name = stringResource(R.string.stress),
-                healthTestLevel = getHealthTestScoring(stress),
+                healthTestLevel = getHealthTestLevel(stress),
                 modifier = Modifier.weight(1f)
             )
             HealthTestChip(
                 name = stringResource(R.string.anxiety),
-                healthTestLevel = getHealthTestScoring(anxiety),
+                healthTestLevel = getHealthTestLevel(anxiety),
                 modifier = Modifier.weight(1f)
 
             )
             HealthTestChip(
                 name = stringResource(R.string.depression),
-                healthTestLevel = getHealthTestScoring(depression),
+                healthTestLevel = getHealthTestLevel(depression),
                 modifier = Modifier.weight(1f)
             )
         }

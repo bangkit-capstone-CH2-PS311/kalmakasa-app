@@ -279,7 +279,10 @@ fun KalmakasaApp() {
                 val uiState by viewModel.messageState.collectAsStateWithLifecycle()
                 val messages by viewModel.messages.collectAsStateWithLifecycle()
                 ChatbotScreen(
-                    messages, uiState, viewModel::sendMessage
+                    messages = messages,
+                    messageState = uiState,
+                    onSendMessage = viewModel::sendMessage,
+                    navUp = { navController.navigateUp() }
                 )
             }
 
@@ -300,8 +303,8 @@ fun KalmakasaApp() {
                     onNextQuestion = viewModel::nextQuestion,
                     onSubmit = {
                         viewModel.uploadAnswer(
-                            onSuccessCallback = {
-                                navController.navigate(Screen.Home.route) {
+                            onSuccessCallback = { id ->
+                                navController.navigate(Screen.DetailHealthTestResult.createRoute(id)) {
                                     popUpTo(Screen.Question.route) { inclusive = true }
                                 }
                             },
@@ -406,7 +409,10 @@ fun KalmakasaApp() {
 
                 ListJournalScreen(
                     uiState = uiState,
-                    navUp = { navController.navigateUp() }
+                    navUp = { navController.navigateUp() },
+                    navigateToAddJournal = {
+                        navController.navigate(Screen.AddJournal.route)
+                    }
                 )
             }
             composable(route = Screen.AddJournal.route) {

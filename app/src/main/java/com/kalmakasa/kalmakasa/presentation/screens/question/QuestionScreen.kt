@@ -2,7 +2,6 @@ package com.kalmakasa.kalmakasa.presentation.screens.question
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.annotation.StringRes
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -44,13 +43,13 @@ import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 fun QuestionScreen(
     questionData: QuestionScreenData,
     questions: List<Int>,
-    @StringRes options: List<Int>,
+    options: List<Option>,
     onNavUp: () -> Unit,
     onSubmit: () -> Unit,
     onNextQuestion: () -> Unit,
     onPreviousQuestion: () -> Unit,
     onSkipAssessment: () -> Unit,
-    updateAnswer: (String) -> Unit,
+    updateAnswer: (Int) -> Unit,
     isSkippable: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -136,7 +135,7 @@ fun QuestionScreen(
             QuestionBox(stringResource(question))
             options.forEach { option ->
                 OptionBox(
-                    option = stringResource(option),
+                    option = option,
                     currentValue = answer,
                     onOptionClicked = updateAnswer
                 )
@@ -195,15 +194,15 @@ fun QuestionBox(
 
 @Composable
 fun OptionBox(
-    option: String,
-    currentValue: String?,
-    onOptionClicked: (String) -> Unit,
+    option: Option,
+    currentValue: Int?,
+    onOptionClicked: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
             .clickable {
-                onOptionClicked(option)
+                onOptionClicked(option.value)
             }
             .border(
                 width = 1.dp,
@@ -215,8 +214,8 @@ fun OptionBox(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = option)
-        Checkbox(checked = currentValue == option, onCheckedChange = null)
+        Text(text = stringResource(option.string))
+        Checkbox(checked = currentValue == option.value, onCheckedChange = null)
     }
 }
 

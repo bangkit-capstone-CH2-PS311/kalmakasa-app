@@ -2,6 +2,7 @@ package com.kalmakasa.kalmakasa.presentation.screens.health_test_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kalmakasa.kalmakasa.common.HealthTestType
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.Article
 import com.kalmakasa.kalmakasa.domain.model.HealthTestResult
@@ -16,14 +17,15 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailHealthTestViewModel @Inject constructor(
     private val healthTestRepository: HealthTestRepository,
-    private val  articleRepository: ArticleRepository,
+    private val articleRepository: ArticleRepository,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<Resource<HealthTestResult>> =
         MutableStateFlow(Resource.Loading)
 
     val uiState = _uiState.asStateFlow()
-    private val _article: MutableStateFlow<Resource<List<Article>>> = MutableStateFlow(Resource.Loading)
+    private val _article: MutableStateFlow<Resource<List<Article>>> =
+        MutableStateFlow(Resource.Loading)
     val article = _article.asStateFlow()
 
     fun getHealthTestDetail(id: String) {
@@ -31,8 +33,24 @@ class DetailHealthTestViewModel @Inject constructor(
             healthTestRepository.getHealthTestDetail(id).collect { result ->
                 _uiState.value = result
                 if (result is Resource.Success) {
-                    articleRepository.getListArticles().collect {
-                        _article.value = it
+                    articleRepository.getListArticles().collect { articles ->
+                        if (articles is Resource.Success) {
+                            val tags = HealthTestType.getHealthTestActiveTag(
+                                result.data.depression,
+                                result.data.anxiety,
+                                result.data.stress
+                            )
+                            val filtered = articles.data.filter { article ->
+                                article.tags.map { it.text }.any { it in tags }
+                            }
+                            if (filtered.isEmpty()) {
+                                _article.value = articles
+                            } else {
+                                _article.value = Resource.Success(filtered)
+                            }
+                        } else {
+                            _article.value = articles
+                        }
                     }
                 }
             }

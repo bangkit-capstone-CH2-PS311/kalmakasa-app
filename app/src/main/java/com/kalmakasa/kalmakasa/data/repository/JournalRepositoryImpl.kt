@@ -50,11 +50,11 @@ class JournalRepositoryImpl(
     override suspend fun createJournal(
         id: String,
         date: String,
-        title: String,
         content: String,
+        emoticonScale: Int,
     ): Flow<Resource<Journal>> = flow {
         emit(Resource.Loading)
-        val response = apiService.createJournal(id, date, title, content)
+        val response = apiService.createJournal(id, date, content, emoticonScale)
         emit(Resource.Success(response.toJournal()))
     }.catch {
         when (it) {

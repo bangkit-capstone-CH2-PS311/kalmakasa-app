@@ -38,5 +38,4 @@ class ConsultantRepositoryImpl(
             else -> emit(Resource.Error(it.localizedMessage ?: "Unknown error occurred"))
         }
     }
-
 }

@@ -18,3 +18,9 @@ val EXPERTISES = listOf(
     Tag.FAMILY.text,
     Tag.RELATIONSHIP.text,
 )
+
+val INCLUDED_LEVEL = listOf(
+    HealthTestLevel.Severe,
+    HealthTestLevel.ExtremelySevere,
+    HealthTestLevel.Moderate
+)

@@ -24,6 +24,7 @@ class ArticleRepositoryImpl : ArticleRepository {
 
     override fun getArticleById(id: String): Flow<Resource<Article>> = flow {
         val article = FakeArticleDataSource.articles.find { it.id == id }
+
         article?.let {
             emit(Resource.Success(it))
         } ?: emit(Resource.Error("Article Not Found"))

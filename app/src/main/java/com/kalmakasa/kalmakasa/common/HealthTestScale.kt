@@ -24,7 +24,7 @@ sealed class HealthTestType(
     )
 
     companion object {
-        fun getHealthTestScoring(type: HealthTestType): HealthTestLevel {
+        fun getHealthTestLevel(type: HealthTestType): HealthTestLevel {
             return when (type) {
                 is Anxiety -> {
                     when (type.score) {
@@ -59,6 +59,25 @@ sealed class HealthTestType(
                     }
                 }
             }
+        }
+
+        fun getHealthTestActiveTag(
+            depression: Depression,
+            anxiety: Anxiety,
+            stress: Stress,
+        ): List<String> {
+            val tagList = mutableListOf<String>()
+            if (INCLUDED_LEVEL.contains(getHealthTestLevel(depression))) {
+                tagList.add(Tag.DEPRESSION.text)
+            }
+            if (INCLUDED_LEVEL.contains(getHealthTestLevel(anxiety))) {
+                tagList.add(Tag.ANXIETY.text)
+            }
+            if (INCLUDED_LEVEL.contains(getHealthTestLevel(stress))) {
+                tagList.add(Tag.STRESS.text)
+            }
+
+            return tagList
         }
     }
 }

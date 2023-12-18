@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName
 import com.kalmakasa.kalmakasa.common.DateUtil
 import com.kalmakasa.kalmakasa.common.Mood
 import com.kalmakasa.kalmakasa.domain.model.Journal
-import kotlin.random.Random
 
 data class JournalsResponse(
 
@@ -32,8 +31,8 @@ data class ApiJournal(
     @field:SerializedName("id")
     val id: String,
 
-    @field:SerializedName("title")
-    val title: String,
+    @field:SerializedName("emotionScale")
+    val emotionScale: Int = 2,
 
     @field:SerializedName("userId")
     val userId: String,
@@ -44,7 +43,7 @@ data class ApiJournal(
 
 fun ApiJournal.toJournal() = Journal(
     id = id,
-    mood = Mood.intToMood(Random.nextInt(6)), // TODO : Belom ada di API 1 - 5
+    mood = Mood.intToMood(emotionScale),
     date = DateUtil.formatApiDate(date),
     description = content,
 )

@@ -1,11 +1,13 @@
 package com.kalmakasa.kalmakasa.data.network.retrofit
 
 import com.kalmakasa.kalmakasa.data.network.response.ApiConsultant
+import com.kalmakasa.kalmakasa.data.network.response.ApiHealthTestResult
 import com.kalmakasa.kalmakasa.data.network.response.ApiJournal
 import com.kalmakasa.kalmakasa.data.network.response.ApiReservation
 import com.kalmakasa.kalmakasa.data.network.response.AuthResponse
 import com.kalmakasa.kalmakasa.data.network.response.ConsultantsResponse
 import com.kalmakasa.kalmakasa.data.network.response.CreateReservationResponse
+import com.kalmakasa.kalmakasa.data.network.response.HealthTestResponse
 import com.kalmakasa.kalmakasa.data.network.response.JournalsResponse
 import com.kalmakasa.kalmakasa.data.network.response.ReservationResponse
 import okhttp3.RequestBody
@@ -54,8 +56,8 @@ interface ApiService {
     suspend fun createJournal(
         @Field("userId") id: String,
         @Field("date") date: String,
-        @Field("title") title: String = "",
         @Field("content") content: String = "",
+        @Field("emotionScale") emotionScale: Int,
     ): ApiJournal
 
     @FormUrlEncoded
@@ -83,4 +85,17 @@ interface ApiService {
     suspend fun getReservationDetail(
         @Path("id") id: String,
     ): ApiReservation
+
+    @GET("dassresults")
+    suspend fun getHealthTest(): HealthTestResponse
+
+    @GET("dassresults/{id}")
+    suspend fun getHealthTestDetail(
+        @Path("id") id: String,
+    ): ApiHealthTestResult
+
+    @POST("dassresults")
+    suspend fun createHealthTestResult(
+        @Body requestBody: RequestBody,
+    ): ApiHealthTestResult
 }

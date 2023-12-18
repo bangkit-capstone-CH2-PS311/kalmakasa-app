@@ -42,6 +42,7 @@ fun ChatbotScreen(
     messages: List<Message>,
     messageState: Resource<Boolean>,
     onSendMessage: (String) -> Unit,
+    navUp: () -> Unit,
 ) {
     var textValue by rememberSaveable { mutableStateOf("") }
 
@@ -49,7 +50,7 @@ fun ChatbotScreen(
         topBar = {
             TitleTopAppBar(
                 title = "Kalmbot Chat Room",
-                onBackButtonClicked = {},
+                onBackButtonClicked = navUp,
             )
         },
         bottomBar = {

@@ -76,8 +76,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideHealthTestRepository(roomDatabase: KalmakasaRoomDatabase): HealthTestRepository {
-        return HealthTestRepositoryImpl(roomDatabase.healthTestDao())
+    fun provideHealthTestRepository(
+        roomDatabase: KalmakasaRoomDatabase,
+        apiService: ApiService,
+    ): HealthTestRepository {
+        return HealthTestRepositoryImpl(roomDatabase.healthTestDao(), apiService)
     }
 
     @Provides

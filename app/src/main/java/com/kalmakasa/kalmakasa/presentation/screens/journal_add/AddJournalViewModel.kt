@@ -72,8 +72,8 @@ class AddJournalViewModel @Inject constructor(
                     journalRepository.createJournal(
                         user.id,
                         DateUtil.getCurrentDateInISO(),
-                        "testing title",
-                        _journalValue.value
+                        _journalValue.value,
+                        (_sliderValue.value.toInt() + 1)
                     ).collect {
                         when (it) {
                             Resource.Loading -> {

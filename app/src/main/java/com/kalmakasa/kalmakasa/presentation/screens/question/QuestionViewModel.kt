@@ -1,17 +1,19 @@
 package com.kalmakasa.kalmakasa.presentation.screens.question
 
-import android.util.Log
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.data.network.DassDataSource
 import com.kalmakasa.kalmakasa.domain.repository.HealthTestRepository
+import com.kalmakasa.kalmakasa.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -20,6 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class QuestionViewModel @Inject constructor(
     private val healthTestRepository: HealthTestRepository,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
 
     val questions = DassDataSource.questions
@@ -27,14 +30,14 @@ class QuestionViewModel @Inject constructor(
     private val uploadState: MutableStateFlow<Resource<String>?> = MutableStateFlow(null)
 
     val options = listOf(
-        R.string.strongly_agree,
-        R.string.agree,
-        R.string.disagree,
-        R.string.strongly_disagree,
+        Option(R.string.strongly_agree, 3),
+        Option(R.string.agree, 2),
+        Option(R.string.disagree, 1),
+        Option(R.string.strongly_disagree, 0),
     )
     private val _currentQuestionIndex = MutableStateFlow(1)
 
-    private val _answers = MutableStateFlow(emptyMap<Int, String>())
+    private val _answers = MutableStateFlow(emptyMap<Int, Int>())
 
     val uiState: StateFlow<QuestionScreenData> =
         combine(
@@ -69,7 +72,7 @@ class QuestionViewModel @Inject constructor(
         }
     }
 
-    fun updateAnswer(answer: String) {
+    fun updateAnswer(answer: Int) {
         _answers.update { answers ->
             val newAnswers = answers.toMutableMap()
             newAnswers[_currentQuestionIndex.value] = answer
@@ -78,11 +81,14 @@ class QuestionViewModel @Inject constructor(
     }
 
     fun uploadAnswer(
-        onSuccessCallback: () -> Unit,
+        onSuccessCallback: (String) -> Unit,
         onErrorCallback: (() -> Unit)? = null,
     ) {
         viewModelScope.launch {
-            healthTestRepository.createHealthTest().collect {
+
+            val userId = userRepository.getSession().first().id
+            val answer = _answers.value.values.toList()
+            healthTestRepository.createHealthTest(userId, answer).collect {
                 when (it) {
                     is Resource.Error -> {
                         uploadState.value = it
@@ -93,12 +99,11 @@ class QuestionViewModel @Inject constructor(
 
                     Resource.Loading -> {
                         uploadState.value = Resource.Loading
-                        Log.d("tag", "Loading")
                     }
 
                     is Resource.Success -> {
                         uploadState.value = Resource.Success("Success")
-                        onSuccessCallback()
+                        onSuccessCallback(it.data.id)
                     }
                 }
             }
@@ -110,8 +115,13 @@ class QuestionViewModel @Inject constructor(
 data class QuestionScreenData(
     val currentQuestionIndex: Int = 1,
     val currentQuestion: Int = R.string.question1,
-    val currentAnswer: String? = null,
+    val currentAnswer: Int? = null,
     val progress: Float = 0F,
     val lastQuestion: Boolean = false,
     val uploadState: Resource<String>? = null,
+)
+
+data class Option(
+    @StringRes val string: Int,
+    val value: Int,
 )

@@ -127,7 +127,7 @@ fun DetailHealthTestContent(
 fun HealthScale(
     healthTestType: HealthTestType,
 ) {
-    val level = HealthTestType.getHealthTestScoring(healthTestType)
+    val level = HealthTestType.getHealthTestLevel(healthTestType)
     Column {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -138,7 +138,7 @@ fun HealthScale(
                 style = MaterialTheme.typography.bodyMedium
             )
             Text(
-                text = stringResource(HealthTestType.getHealthTestScoring(healthTestType).desc),
+                text = stringResource(HealthTestType.getHealthTestLevel(healthTestType).desc),
                 style = MaterialTheme.typography.bodyMedium
             )
         }

@@ -6,11 +6,13 @@ import com.kalmakasa.kalmakasa.common.EXPERTISES
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.Consultant
 import com.kalmakasa.kalmakasa.domain.repository.ConsultantRepository
+import com.kalmakasa.kalmakasa.domain.repository.HealthTestRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -20,11 +22,13 @@ import javax.inject.Inject
 @HiltViewModel
 class ListDoctorViewModel @Inject constructor(
     private val consultantRepository: ConsultantRepository,
+    private val healthTestRepository: HealthTestRepository,
 ) : ViewModel() {
 
     private val _listConsultant = MutableStateFlow<Resource<List<Consultant>>>(Resource.Loading)
     private val _filterChip = MutableStateFlow(EXPERTISES.associateWith { false })
     private val _searchQuery = MutableStateFlow("")
+    private val _forMeEnable = MutableStateFlow(false)
 
     val uiState: StateFlow<ListConsultantState> =
         combine(_listConsultant, _searchQuery, _filterChip) { listConsultant, query, filtersValue ->
@@ -82,12 +86,23 @@ class ListDoctorViewModel @Inject constructor(
 
     init {
         getListConsultant()
+        getHealthTestResult()
     }
 
     private fun getListConsultant() {
         viewModelScope.launch {
             consultantRepository.getListConsultant().collect {
                 _listConsultant.value = it
+            }
+        }
+    }
+
+    private fun getHealthTestResult() {
+        viewModelScope.launch {
+            healthTestRepository.getHealthTests().collect {
+                if (it is Resource.Success) {
+                    _forMeEnable.value = it.data.isNotEmpty()
+                }
             }
         }
     }
@@ -105,11 +120,12 @@ class ListDoctorViewModel @Inject constructor(
     }
 
     fun onForMeClicked() {
-        // TODO : REMOVE THIS AFTER DASS DONE
-        val userTag = listOf("Stress")
-        _filterChip.update {
-            EXPERTISES.associateWith {
-                userTag.contains(it)
+        viewModelScope.launch {
+            val userTag = healthTestRepository.getHealthTestTag().first()
+            _filterChip.update {
+                EXPERTISES.associateWith {
+                    userTag.contains(it)
+                }
             }
         }
     }

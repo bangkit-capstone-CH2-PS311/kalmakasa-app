@@ -15,7 +15,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
@@ -41,6 +45,7 @@ fun ListJournalScreen(
     uiState: ListJournalState,
     navUp: () -> Unit,
     modifier: Modifier = Modifier,
+    navigateToAddJournal: () -> Unit,
 ) {
     Scaffold(
         modifier = modifier,
@@ -50,6 +55,14 @@ fun ListJournalScreen(
                 onBackButtonClicked = navUp
             )
         },
+        floatingActionButton = {
+            FloatingActionButton(onClick = navigateToAddJournal) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null
+                )
+            }
+        }
     ) { paddingValues ->
         if (uiState.isLoading) {
             LoadingScreen(Modifier.padding(paddingValues))
@@ -144,7 +157,8 @@ fun ListJournalPreview() {
     KalmakasaTheme {
         ListJournalScreen(
             ListJournalState(),
-            navUp = {}
+            navUp = {},
+            navigateToAddJournal = {},
         )
     }
 

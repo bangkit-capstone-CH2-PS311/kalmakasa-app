@@ -10,4 +10,5 @@ data class HealthTestResult(
     val anxiety: HealthTestType.Anxiety,
     val stress: HealthTestType.Stress,
     val date: String,
+    val activeTag: List<String> = emptyList(),
 )

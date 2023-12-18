@@ -10,8 +10,8 @@ interface JournalRepository {
     suspend fun createJournal(
         id: String,
         date: String,
-        title: String,
         content: String,
+        emoticonScale: Int,
     ): Flow<Resource<Journal>>
 
     suspend fun getTodayJournal(): Flow<Resource<Journal>>
