@@ -11,7 +11,6 @@ import com.kalmakasa.kalmakasa.data.network.response.toHealthTestResult
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
 import com.kalmakasa.kalmakasa.domain.model.HealthTestResult
 import com.kalmakasa.kalmakasa.domain.repository.HealthTestRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -61,7 +60,6 @@ class HealthTestRepositoryImpl @Inject constructor(
         questionScore: List<Int>,
     ): Flow<Resource<HealthTestResult>> = flow {
         emit(Resource.Loading)
-        delay(2000)
         val response = apiService.createHealthTestResult(createRequestBody(userId, questionScore))
         healthTestDao.deleteAll()
         healthTestDao.insert(response.toEntity())

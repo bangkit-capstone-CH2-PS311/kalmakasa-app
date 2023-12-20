@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.kalmakasa.kalmakasa.domain.repository.UserRepository
 import com.kalmakasa.kalmakasa.presentation.state.SessionState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -17,7 +16,6 @@ class LauncherViewModel @Inject constructor(
 ) : ViewModel() {
 
     val sessionState = userRepository.getSession().map {
-        delay(2000)
         if (it.isLogin) SessionState.LoggedIn(it) else SessionState.NotLoggedIn
     }.stateIn(
         scope = viewModelScope,

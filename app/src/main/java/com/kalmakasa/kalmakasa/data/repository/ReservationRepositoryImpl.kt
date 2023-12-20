@@ -9,7 +9,6 @@ import com.kalmakasa.kalmakasa.domain.model.Patient
 import com.kalmakasa.kalmakasa.domain.model.Reservation
 import com.kalmakasa.kalmakasa.domain.model.ReservationReport
 import com.kalmakasa.kalmakasa.domain.repository.ReservationRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -109,7 +108,6 @@ class ReservationRepositoryImpl(
         recommendation: String,
     ): Flow<Resource<Reservation>> = flow {
         emit(Resource.Loading)
-        delay(5000)
         val requestBody =
             createRequestBody(commonIssues, psychologicalDynamics, triggers, recommendation)
 
