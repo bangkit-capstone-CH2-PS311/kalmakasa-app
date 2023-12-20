@@ -46,7 +46,6 @@ class HealthTestRepositoryImpl @Inject constructor(
 
     override suspend fun getHealthTestDetail(id: String): Flow<Resource<HealthTestResult>> = flow {
         emit(Resource.Loading)
-        delay(2000)
         val response = apiService.getHealthTestDetail(id)
         emit(Resource.Success(response.toHealthTestResult()))
     }.catch {
