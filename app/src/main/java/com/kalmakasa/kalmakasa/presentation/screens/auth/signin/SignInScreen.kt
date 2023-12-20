@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
+import com.kalmakasa.kalmakasa.common.Role
 import com.kalmakasa.kalmakasa.presentation.screens.auth.common.AuthButton
 import com.kalmakasa.kalmakasa.presentation.screens.auth.common.AuthTitle
 import com.kalmakasa.kalmakasa.presentation.screens.auth.common.EmailTextField
@@ -43,7 +44,7 @@ import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
 fun SignInScreen(
     loginState: AuthState,
     onSubmitted: (String, String) -> Unit,
-    onSignInSuccess: () -> Unit,
+    onSignInSuccess: (Role) -> Unit,
     onForgotPasswordClicked: () -> Unit,
     onGotoRegisterButtonClicked: () -> Unit,
     modifier: Modifier = Modifier,
@@ -81,7 +82,9 @@ fun SignInScreen(
                 loginState.message,
                 Toast.LENGTH_SHORT
             ).show()
-            onSignInSuccess()
+            loginState.role?.let {
+                onSignInSuccess(it)
+            }
         }
     }
 

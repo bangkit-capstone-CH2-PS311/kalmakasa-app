@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -39,12 +40,14 @@ import androidx.compose.ui.window.DialogProperties
 import coil.compose.AsyncImage
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.common.DateUtil
+import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.presentation.component.DiscardDialog
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
 
 @Composable
 fun CheckoutDialog(
     showDialog: Boolean,
+    bookState: Resource<String>?,
     checkoutData: CheckoutData,
     onDismissRequest: () -> Unit,
     onCheckout: (CheckoutData) -> Unit = {},
@@ -66,6 +69,34 @@ fun CheckoutDialog(
                     onDismissRequest()
                 }
             )
+
+            LaunchedEffect(bookState) {
+                if (bookState != null) {
+
+                    when (bookState) {
+                        is Resource.Error -> {
+                            Toast.makeText(
+                                context,
+                                bookState.error,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+
+                        Resource.Loading -> {
+                            // Loading
+                        }
+
+                        is Resource.Success -> {
+                            Toast.makeText(
+                                context,
+                                bookState.data,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            onDismissRequest()
+                        }
+                    }
+                }
+            }
 
             Scaffold(
                 topBar = {
@@ -151,12 +182,6 @@ fun CheckoutDialog(
                     Button(
                         onClick = {
                             onCheckout(checkoutData)
-                            onDismissRequest()
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.reservation_created_successfully),
-                                Toast.LENGTH_SHORT
-                            ).show()
                         },
                         modifier = Modifier
                             .padding(top = 16.dp)

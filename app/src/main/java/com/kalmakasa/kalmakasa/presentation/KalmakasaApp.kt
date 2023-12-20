@@ -18,6 +18,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import com.kalmakasa.kalmakasa.common.Role
 import com.kalmakasa.kalmakasa.presentation.component.AppBottomBar
 import com.kalmakasa.kalmakasa.presentation.component.ConsultantBottomBar
 import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
@@ -26,7 +27,10 @@ import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.appointment_d
 import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.appointment_detail.DetailAppointmentViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.appointment_list.ListAppointmentScreen
 import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.appointment_list.ListAppointmentViewModel
+import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.patient_appointment_list.ListPatientAppointmentScreen
+import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.patient_appointment_list.ListPatientAppointmentViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.patient_list.ListPatientScreen
+import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.patient_list.ListPatientViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailScreen
 import com.kalmakasa.kalmakasa.presentation.screens.article_detail.ArticleDetailViewModel
 import com.kalmakasa.kalmakasa.presentation.screens.article_list.ListArticleScreen
@@ -119,9 +123,15 @@ fun KalmakasaApp() {
                         onForgotPasswordClicked = {
                             navController.navigate(Screen.Home.route)
                         },
-                        onSignInSuccess = {
-                            navController.navigate(Screen.Home.route) {
-                                popUpTo(Screen.AuthGraph.route) { inclusive = true }
+                        onSignInSuccess = { role ->
+                            if (role is Role.Consultant) {
+                                navController.navigate(Screen.ConsultantGraph.route) {
+                                    popUpTo(Screen.AuthGraph.route) { inclusive = true }
+                                }
+                            } else {
+                                navController.navigate(Screen.Home.route) {
+                                    popUpTo(Screen.AuthGraph.route) { inclusive = true }
+                                }
                             }
                         }
                     )
@@ -178,7 +188,38 @@ fun KalmakasaApp() {
                 }
 
                 composable(Screen.ListPatient.route) {
-                    ListPatientScreen()
+                    val viewModel: ListPatientViewModel = hiltViewModel()
+
+                    val uiState by viewModel.patientState.collectAsStateWithLifecycle()
+                    ListPatientScreen(
+                        patientState = uiState,
+                        navigateToAppointmentList = { id ->
+                            navController.navigate(Screen.ListPatientAppointment.createRoute(id))
+                        }
+                    )
+                }
+
+                composable(
+                    route = Screen.ListPatientAppointment.route,
+                    arguments = listOf(navArgument("id") { type = NavType.StringType })
+                ) {
+                    val viewModel: ListPatientAppointmentViewModel = hiltViewModel()
+
+                    val id = it.arguments?.getString("id") ?: ""
+                    LaunchedEffect(true) {
+                        viewModel.getAppointment(id)
+                    }
+
+                    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                    ListPatientAppointmentScreen(
+                        uiState,
+                        onAppointmentClicked = { appointmentId ->
+                            navController.navigate(
+                                Screen.DetailAppointment.createRoute(appointmentId)
+                            )
+                        },
+                        navUp = { navController.navigateUp() }
+                    )
                 }
 
                 composable(
@@ -373,8 +414,10 @@ fun KalmakasaApp() {
 
                 ListConsultantScreen(
                     uiState = uiState,
-                    onConsultantClicked = { doctor ->
-                        navController.navigate(Screen.ConsultantDetail.createRoute(doctor.id))
+                    onConsultantClicked = { consultant ->
+                        navController.navigate(
+                            Screen.ConsultantDetail.createRoute(consultant.profileId)
+                        )
                     },
                     onQueryChange = viewModel::onQueryChange,
                     onFilterClicked = viewModel::onFilterClicked,

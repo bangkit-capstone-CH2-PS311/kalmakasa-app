@@ -1,6 +1,5 @@
 package com.kalmakasa.kalmakasa.presentation.screens.profile
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.domain.model.User
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
@@ -57,8 +57,11 @@ fun ProfileScreen(
                 Modifier.padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Image(
-                    painter = painterResource(R.drawable.placeholder_consultant_img),
+                AsyncImage(
+                    model = null,
+                    error = if (uiState.role == "consultant")
+                        painterResource(R.drawable.placeholder_consultant_img)
+                    else painterResource(R.drawable.user_profile_placeholder),
                     contentDescription = stringResource(R.string.profile_picture),
                     modifier = Modifier
                         .padding(end = 8.dp)

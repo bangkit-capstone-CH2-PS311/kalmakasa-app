@@ -89,7 +89,7 @@ fun ListDoctorContent(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp)
     ) {
-        items(listConsultant, { it.id }) { consultant ->
+        items(listConsultant) { consultant ->
             ConsultantCard(
                 consultant = consultant,
                 onConsultantClicked = onConsultantClicked

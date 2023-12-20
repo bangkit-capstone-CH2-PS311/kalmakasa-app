@@ -1,59 +1,64 @@
 package com.kalmakasa.kalmakasa.presentation
 
 sealed class Screen(val route: String) {
-    object AuthGraph : Screen("auth-graph")
-    object Welcome : Screen("welcome")
-    object SignIn : Screen("sign-in")
+    data object AuthGraph : Screen("auth-graph")
+    data object Welcome : Screen("welcome")
+    data object SignIn : Screen("sign-in")
 
-    object Launcher : Screen("launcher")
-    object Register : Screen("register")
+    data object Launcher : Screen("launcher")
+    data object Register : Screen("register")
 
-    object Home : Screen("home?isNewUser={isNewUser}") {
+    data object Home : Screen("home?isNewUser={isNewUser}") {
         fun createRoute(isNewUser: Boolean = false) = "home?isNewUser=$isNewUser"
     }
 
-    object Profile : Screen("profile")
+    data object Profile : Screen("profile")
 
-    object Chatbot : Screen("chatbot")
+    data object Chatbot : Screen("chatbot")
 
-    object Question : Screen("question/{isSkippable}") {
+    data object Question : Screen("question/{isSkippable}") {
         fun createRoute(isSkippable: Boolean) = "question/$isSkippable"
     }
 
-    object ListHealthTestResult : Screen("health-test-list")
-    object DetailHealthTestResult : Screen("health-test-detail/{id}") {
+    data object ListHealthTestResult : Screen("health-test-list")
+    data object DetailHealthTestResult : Screen("health-test-detail/{id}") {
         fun createRoute(id: String) = "health-test-detail/$id"
     }
 
 
-    object ListConsultant : Screen("list-consultant")
-    object ConsultantDetail : Screen("consultant-detail/{id}") {
+    data object ListConsultant : Screen("list-consultant")
+    data object ConsultantDetail : Screen("consultant-detail/{id}") {
         fun createRoute(id: String) = "consultant-detail/$id"
     }
 
-    object ListJournal : Screen("journal-list")
-    object AddJournal : Screen("journal-add")
+    data object ListJournal : Screen("journal-list")
+    data object AddJournal : Screen("journal-add")
 
-    object ListArticle : Screen("article-list")
+    data object ListArticle : Screen("article-list")
 
-    object DetailArticle : Screen("article-detail/{id}") {
+    data object DetailArticle : Screen("article-detail/{id}") {
         fun createRoute(id: String) = "article-detail/$id"
 
     }
 
-    object ListReservation : Screen("Reservation-list")
-    object DetailReservation : Screen("Reservation-detail/{id}") {
+    data object ListReservation : Screen("Reservation-list")
+    data object DetailReservation : Screen("Reservation-detail/{id}") {
         fun createRoute(id: String) = "reservation-detail/$id"
     }
 
-    object ConsultantGraph : Screen("consultant-graph")
-    object ListAppointment : Screen("appointment-list")
-    object DetailAppointment : Screen("appointment-detail/{id}") {
+    data object ConsultantGraph : Screen("consultant-graph")
+    data object ListAppointment : Screen("appointment-list")
+    data object DetailAppointment : Screen("appointment-detail/{id}") {
         fun createRoute(id: String) = "appointment-detail/$id"
     }
 
-    object ListPatient : Screen("patients-list")
-    object ProfileConsultant : Screen("profile-consultant")
+    data object ListPatient : Screen("patients-list")
+    data object ListPatientAppointment : Screen("patients-appointment-list/{id}") {
+        fun createRoute(id: String) = "patients-appointment-list/$id"
+
+    }
+
+    data object ProfileConsultant : Screen("profile-consultant")
 
     companion object {
         val withBottomBar = listOf(

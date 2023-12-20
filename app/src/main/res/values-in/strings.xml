@@ -157,5 +157,10 @@
     <string name="question20">Saya merasa takut tanpa alasan yang baik</string>
     <string name="question21">Saya merasa bahwa hidup tidak memiliki arti</string>
     <string name="type_a_message">tulis pesan anda…</string>
+    <string name="common_issues">Permasalahan Umum</string>
+    <string name="psychological_dynamics">Dinamika Psikologis</string>
+    <string name="triggers">Pemicu</string>
+    <string name="recommendation">Rekomendasi</string>
+    <string name="appointment_list">Daftar Janji Pasien</string>
 
 </resources>

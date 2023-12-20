@@ -54,7 +54,8 @@ data class ApiConsultant(
 )
 
 fun ApiConsultant.toConsultant() = Consultant(
-    id = id,
+    id = userId,
+    profileId = id,
     name = name,
     speciality = "Template Speciality",
     expertise = speciality,

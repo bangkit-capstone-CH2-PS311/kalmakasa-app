@@ -71,7 +71,7 @@ fun ApiUser.toPatient() = Patient(
     id = id,
     name = name,
     email = email,
-    isEmailVerified = isEmailVerified
+    isEmailVerified = isEmailVerified,
 )
 
 

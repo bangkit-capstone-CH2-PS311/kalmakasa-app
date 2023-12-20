@@ -3,6 +3,7 @@ package com.kalmakasa.kalmakasa.presentation.screens.auth.signin
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kalmakasa.kalmakasa.common.Resource
+import com.kalmakasa.kalmakasa.common.Role
 import com.kalmakasa.kalmakasa.domain.repository.UserRepository
 import com.kalmakasa.kalmakasa.presentation.screens.auth.register.AuthState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,14 +22,16 @@ class SignInViewModel @Inject constructor(
     private val _isLoading = MutableStateFlow(false)
     private val _isError = MutableStateFlow(false)
     private val _message = MutableStateFlow("")
+    private val _role: MutableStateFlow<Role?> = MutableStateFlow(null)
 
-    val loginState = combine(_isLoading, _isError, _message) { loading, error, message ->
-        AuthState(loading, error, message)
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = AuthState()
-    )
+    val loginState =
+        combine(_isLoading, _isError, _message, _role) { loading, error, message, role ->
+            AuthState(loading, error, message, role)
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = AuthState()
+        )
 
     fun login(email: String, password: String) {
         viewModelScope.launch {
@@ -49,7 +52,8 @@ class SignInViewModel @Inject constructor(
                     is Resource.Success -> {
                         _isLoading.value = false
                         _isError.value = false
-                        _message.value = result.data
+                        _message.value = "Sign In Success"
+                        _role.value = result.data
                     }
                 }
             }

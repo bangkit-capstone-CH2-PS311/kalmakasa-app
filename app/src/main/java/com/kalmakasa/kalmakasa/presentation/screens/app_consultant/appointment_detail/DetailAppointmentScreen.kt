@@ -130,8 +130,8 @@ fun DetailAppointmentContent(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     AsyncImage(
-                        model = reservation.patient.name,
-                        error = painterResource(R.drawable.placeholder_consultant_img),
+                        model = reservation.patient.imageUrl,
+                        error = painterResource(id = R.drawable.user_profile_placeholder),
                         contentDescription = null,
                         modifier = Modifier
                             .size(64.dp)
@@ -226,19 +226,19 @@ fun DetailAppointmentContent(
         }
         if (reservation.report != null) {
             ReportCard(
-                title = "Common Issues",
+                title = stringResource(R.string.common_issues),
                 content = reservation.report.commonIssues
             )
             ReportCard(
-                title = "Psychological Dynamics",
+                title = stringResource(R.string.psychological_dynamics),
                 content = reservation.report.psychologicalDynamics
             )
             ReportCard(
-                title = "Triggers",
+                title = stringResource(R.string.triggers),
                 content = reservation.report.triggers
             )
             ReportCard(
-                title = "Recommendation",
+                title = stringResource(R.string.recommendation),
                 content = reservation.report.recommendation
             )
             Button(

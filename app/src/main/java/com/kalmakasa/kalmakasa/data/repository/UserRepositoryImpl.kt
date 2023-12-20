@@ -1,6 +1,7 @@
 package com.kalmakasa.kalmakasa.data.repository
 
 import com.kalmakasa.kalmakasa.common.Resource
+import com.kalmakasa.kalmakasa.common.Role
 import com.kalmakasa.kalmakasa.data.UserPreferences
 import com.kalmakasa.kalmakasa.data.network.response.toUser
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
@@ -21,7 +22,8 @@ class UserRepositoryImpl(
         emit(Resource.Loading)
         val response = apiService.login(email, password)
         pref.setSession(response.toUser())
-        emit(Resource.Success("Sign In Success"))
+        val role = if (response.user.role == "consultant") Role.Consultant else Role.User
+        emit(Resource.Success(role))
     }.catch {
         when (it) {
             is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))

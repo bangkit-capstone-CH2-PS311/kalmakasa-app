@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.kalmakasa.kalmakasa.R
+import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.Consultant
 import com.kalmakasa.kalmakasa.domain.model.ConsultationDate
 import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
@@ -94,6 +95,7 @@ fun DetailConsultantScreen(
                     uiState.timeSlots,
                     uiState.currentTime,
                     uiState.dates,
+                    uiState.bookState,
                     onAppointmentBooked,
                     Modifier.padding(paddingValues)
                 )
@@ -109,6 +111,7 @@ fun DetailConsultantContent(
     timeSlots: List<String>,
     currentTime: Long,
     dates: List<ConsultationDate>,
+    bookState: Resource<String>?,
     onAppointmentBooked: (CheckoutData) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -131,6 +134,7 @@ fun DetailConsultantContent(
     CheckoutDialog(
         checkoutData = checkoutData,
         showDialog = isCheckout,
+        bookState = bookState,
         onDismissRequest = { isCheckout = false },
         onCheckout = onAppointmentBooked,
     )
@@ -431,6 +435,7 @@ fun DetailDoctorPreview() {
                     yearExperience = 2,
                     patientCount = 110,
                     biography = "lorem test",
+                    profileId = ""
                 ),
                 timeSlots = listOf("08.00", "09.00", "10.00", "11.00", "12.00"),
                 dates = listOf()

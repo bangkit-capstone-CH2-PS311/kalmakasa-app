@@ -3,6 +3,7 @@ package com.kalmakasa.kalmakasa.presentation.screens.auth.register
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kalmakasa.kalmakasa.common.Resource
+import com.kalmakasa.kalmakasa.common.Role
 import com.kalmakasa.kalmakasa.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -60,4 +61,5 @@ data class AuthState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
     val message: String = "",
+    val role: Role? = null,
 )

@@ -34,23 +34,22 @@ class DetailDoctorViewModel @Inject constructor(
 
     private val _isLoading = MutableStateFlow(false)
     private val _isError = MutableStateFlow(false)
-    private val _isBooked = MutableStateFlow(false)
+    private val bookState: MutableStateFlow<Resource<String>?> = MutableStateFlow(null)
     private val _consultant: MutableStateFlow<Consultant?> = MutableStateFlow(null)
 
-    //    private val _uiState = MutableStateFlow(DetailConsultantState())
     val uiState: StateFlow<DetailConsultantState> =
         combine(
             _isLoading,
             _isError,
-            _isBooked,
+            bookState,
             _consultant
-        ) { loading, error, isBooked, consultant ->
+        ) { loading, error, bookState, consultant ->
             DetailConsultantState(
                 consultant,
                 currentTime,
                 timeSlots,
                 getDates(),
-                isBooked,
+                bookState,
                 loading,
                 error
             )
@@ -89,26 +88,13 @@ class DetailDoctorViewModel @Inject constructor(
             reservationRepository.createReservation(
                 userId = userId,
                 consultantId = checkoutData.consultant.id,
+                profileId = checkoutData.consultant.profileId,
                 date = DateUtil.millisToApi(checkoutData.dateInMillis),
                 startTime = checkoutData.selectedTime,
                 endTime = getEndTime(checkoutData.selectedTime),
                 note = "note",
             ).collect { reservation ->
-                when (reservation) {
-                    is Resource.Loading -> {
-                        _isLoading.value = true
-                    }
-
-                    is Resource.Success -> {
-                        _isLoading.value = false
-                        _isBooked.value = true
-                    }
-
-                    else -> {
-                        _isLoading.value = false
-                        _isError.value = true
-                    }
-                }
+                bookState.value = reservation
             }
         }
     }
@@ -147,7 +133,7 @@ data class DetailConsultantState(
     val currentTime: Long = 0,
     val timeSlots: List<String> = emptyList(),
     val dates: List<ConsultationDate> = emptyList(),
-    val isBooked: Boolean = false,
+    val bookState: Resource<String>? = null,
     val isLoading: Boolean = false,
     val isError: Boolean = false,
 )

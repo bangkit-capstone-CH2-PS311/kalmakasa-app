@@ -65,6 +65,7 @@ interface ApiService {
     suspend fun createReservation(
         @Field("userId") id: String,
         @Field("consultantId") consultantId: String,
+        @Field("consultant") profileId: String,
         @Field("date") date: String,
         @Field("startTime") startTime: String,
         @Field("endTime") endTime: String,

@@ -59,7 +59,7 @@ class AddJournalViewModel @Inject constructor(
         viewModelScope.launch {
             when (journalStep[_currentStepIndex.value]) {
                 JournalStep.Journal -> {
-                    // Send and get emotion
+                    // TODO : Send and get emotion
                     _isLoading.value = true
                     delay(2000)
                     _isLoading.value = false

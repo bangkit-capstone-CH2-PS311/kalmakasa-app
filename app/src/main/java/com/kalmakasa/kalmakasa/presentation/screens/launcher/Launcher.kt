@@ -32,7 +32,10 @@ fun Launcher(
 
                 when (state.session.role) {
                     Role.Consultant.role -> {
-
+                        navController.navigate(Screen.ConsultantGraph.route) {
+                            popUpTo(Screen.Launcher.route) { inclusive = true }
+                            launchSingleTop = true
+                        }
                     }
                     
                     else -> {

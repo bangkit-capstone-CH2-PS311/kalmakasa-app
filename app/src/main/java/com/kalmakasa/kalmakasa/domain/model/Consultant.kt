@@ -2,6 +2,7 @@ package com.kalmakasa.kalmakasa.domain.model
 
 data class Consultant(
     val id: String,
+    val profileId: String,
     val name: String = "",
     val speciality: String = "",
     val imageUrl: String = "https://www.pacificsantacruzvet.com/files/santa_cruz_vet/female-placeholder.jpg",

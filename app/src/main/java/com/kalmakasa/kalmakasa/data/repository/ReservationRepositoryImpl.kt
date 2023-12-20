@@ -5,6 +5,7 @@ import com.kalmakasa.kalmakasa.common.DateUtil
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.data.network.response.toReservation
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
+import com.kalmakasa.kalmakasa.domain.model.Patient
 import com.kalmakasa.kalmakasa.domain.model.Reservation
 import com.kalmakasa.kalmakasa.domain.model.ReservationReport
 import com.kalmakasa.kalmakasa.domain.repository.ReservationRepository
@@ -36,6 +37,37 @@ class ReservationRepositoryImpl(
         }
     }
 
+    override fun getReservationsPatients(): Flow<Resource<List<Patient>>> = flow {
+        emit(Resource.Loading)
+        val response = apiService.getReservations()
+        val reservations = response.results.sortedBy {
+            DateUtil.apiToDate(it.date)
+        }.map { it.toReservation().patient }.toSet().toList()
+        emit(Resource.Success(reservations))
+    }.catch {
+        when (it) {
+            is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
+            is IOException -> emit(Resource.Error(it.localizedMessage ?: "No Internet"))
+            else -> emit(Resource.Error(it.localizedMessage ?: "Unknown error occurred"))
+        }
+    }
+
+    override fun getReservationByPatient(id: String): Flow<Resource<List<Reservation>>> = flow {
+        emit(Resource.Loading)
+        val response = apiService.getReservations()
+        val reservations = response.results
+            .filter { it.patient.id == id }
+            .sortedBy { DateUtil.apiToDate(it.date) }
+            .map { it.toReservation() }
+        emit(Resource.Success(reservations))
+    }.catch {
+        when (it) {
+            is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
+            is IOException -> emit(Resource.Error(it.localizedMessage ?: "No Internet"))
+            else -> emit(Resource.Error(it.localizedMessage ?: "Unknown error occurred"))
+        }
+    }
+
     override suspend fun getReservationDetail(id: String): Flow<Resource<Reservation>> = flow {
         emit(Resource.Loading)
         val response = apiService.getReservationDetail(id)
@@ -48,16 +80,18 @@ class ReservationRepositoryImpl(
         }
     }
 
-    override suspend fun createReservation(
+    override fun createReservation(
         userId: String,
         consultantId: String,
+        profileId: String,
         date: String,
         startTime: String,
         endTime: String,
         note: String,
     ): Flow<Resource<String>> = flow {
         emit(Resource.Loading)
-        val response = apiService.createReservation(userId, consultantId, date, startTime, endTime)
+        val response =
+            apiService.createReservation(userId, consultantId, profileId, date, startTime, endTime)
         emit(Resource.Success(response.msg))
     }.catch {
         when (it) {

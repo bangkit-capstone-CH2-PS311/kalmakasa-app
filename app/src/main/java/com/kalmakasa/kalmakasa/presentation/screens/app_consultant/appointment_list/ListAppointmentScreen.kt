@@ -30,9 +30,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.common.ReservationStatus
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.Reservation
@@ -84,7 +86,7 @@ fun ListAppointmentContent(
             AppointmentCard(
                 reservationId = appointment.id,
                 patientName = appointment.patient.name,
-                imageUrl = appointment.consultant.imageUrl,
+                imageUrl = appointment.patient.imageUrl,
                 status = appointment.status,
                 date = appointment.date,
                 time = appointment.time,
@@ -124,6 +126,7 @@ fun AppointmentCard(
             ) {
                 AsyncImage(
                     model = imageUrl,
+                    error = painterResource(id = R.drawable.user_profile_placeholder),
                     contentDescription = null,
                     modifier = Modifier
                         .clip(CircleShape)
