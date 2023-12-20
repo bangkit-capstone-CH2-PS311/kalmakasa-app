@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kalmakasa.kalmakasa.common.DateUtil
 import com.kalmakasa.kalmakasa.common.Resource
+import com.kalmakasa.kalmakasa.common.translatePredictToSliderValue
 import com.kalmakasa.kalmakasa.domain.model.Article
 import com.kalmakasa.kalmakasa.domain.repository.ArticleRepository
 import com.kalmakasa.kalmakasa.domain.repository.JournalRepository
@@ -31,7 +32,7 @@ class AddJournalViewModel @Inject constructor(
     private val _journalValue = MutableStateFlow("")
     private val _recommendationContent = MutableStateFlow(emptyList<Article>())
     private val _isLoading = MutableStateFlow(false)
-    private val _prediction = MutableStateFlow("")
+    val prediction = MutableStateFlow("")
 
     val uiState: StateFlow<AddJournalState> =
         combine(
@@ -74,8 +75,10 @@ class AddJournalViewModel @Inject constructor(
 
                                 is Resource.Success -> {
                                     _isLoading.value = false
-                                    _sliderValue.value = prediction.data.sliderValue.toFloat()
-                                    _prediction.value = prediction.data.prediction
+                                    _sliderValue.value =
+                                        translatePredictToSliderValue(prediction.data.value)
+                                    this@AddJournalViewModel.prediction.value =
+                                        prediction.data.value
                                     _currentStepIndex.value++
 
                                 }
@@ -151,7 +154,7 @@ class AddJournalViewModel @Inject constructor(
                         _isLoading.value = false
                         val filtered = articles.data.filter {
                             it.tags.any { tag ->
-                                tag.text.lowercase(Locale.getDefault()) == _prediction.value
+                                tag.text.lowercase(Locale.getDefault()) == prediction.value
                             }
                         }
                         _recommendationContent.value = filtered.ifEmpty { articles.data }

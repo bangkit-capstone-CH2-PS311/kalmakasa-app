@@ -470,9 +470,11 @@ fun KalmakasaApp() {
                 val viewModel: AddJournalViewModel = hiltViewModel()
 
                 val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                val predictedText by viewModel.prediction.collectAsStateWithLifecycle()
 
                 AddJournalScreen(
                     uiState = uiState,
+                    predictedMood = predictedText,
                     navUp = {
                         navController.navigateUp()
                     },

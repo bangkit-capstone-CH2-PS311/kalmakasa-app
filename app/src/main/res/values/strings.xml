@@ -166,4 +166,6 @@
     <string name="create">Create</string>
     <string name="create_event_in_google_calendar">Create Event in Google Calendar?</string>
     <string name="create_gmeet_link">Create Gmeet Link</string>
+    <string name="kalmbot_chat_room">Kalmbot Chat Room</string>
+    <string name="based_on_your_reason_are_you_feeling">Based on your reason, are you feeling \"%1$s\"</string>
 </resources>

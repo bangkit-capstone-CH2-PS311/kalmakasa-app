@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
@@ -23,8 +24,10 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -36,6 +39,7 @@ import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.Message
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
+import kotlinx.coroutines.launch
 
 @Composable
 fun ChatbotScreen(
@@ -45,11 +49,13 @@ fun ChatbotScreen(
     navUp: () -> Unit,
 ) {
     var textValue by rememberSaveable { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
+    val scrollState = rememberLazyListState()
 
     Scaffold(
         topBar = {
             TitleTopAppBar(
-                title = "Kalmbot Chat Room",
+                title = stringResource(R.string.kalmbot_chat_room),
                 onBackButtonClicked = navUp,
             )
         },
@@ -83,6 +89,9 @@ fun ChatbotScreen(
                         if (textValue.isNotBlank()) {
                             onSendMessage(textValue)
                             textValue = ""
+                            scope.launch {
+                                scrollState.animateScrollToItem(0)
+                            }
                         }
                     },
                 ) {
@@ -96,13 +105,24 @@ fun ChatbotScreen(
             }
         }
     ) { paddingValues ->
+
+        LaunchedEffect(true) {
+            if (messages.isNotEmpty()) {
+                scrollState.animateScrollToItem(messages.size - 1)
+            }
+        }
+
         LazyColumn(
             modifier = Modifier
                 .padding(paddingValues),
             contentPadding = PaddingValues(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            state = scrollState,
+            reverseLayout = true
         ) {
+
             items(messages) {
+
                 MessageBubble(it.msg, it.isUser)
             }
             if (messageState is Resource.Loading) {

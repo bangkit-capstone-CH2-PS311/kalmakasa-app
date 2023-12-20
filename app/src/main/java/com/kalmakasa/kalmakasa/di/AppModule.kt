@@ -7,6 +7,7 @@ import com.kalmakasa.kalmakasa.data.UserPreferences
 import com.kalmakasa.kalmakasa.data.dataStore
 import com.kalmakasa.kalmakasa.data.database.KalmakasaRoomDatabase
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
+import com.kalmakasa.kalmakasa.data.network.retrofit.MachineLearningService
 import com.kalmakasa.kalmakasa.data.network.retrofit.RetrofitFactory
 import com.kalmakasa.kalmakasa.data.repository.ArticleRepositoryImpl
 import com.kalmakasa.kalmakasa.data.repository.ConsultantRepositoryImpl
@@ -42,8 +43,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideFakeApiService(pref: UserPreferences): ApiService {
-        return RetrofitFactory.makeRetrofitService(pref)
+    fun provideApiService(pref: UserPreferences): ApiService {
+        return RetrofitFactory.makeBackend(pref)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMLService(): MachineLearningService {
+        return RetrofitFactory.makeMachineLearning()
     }
 
     @Provides
@@ -55,6 +62,7 @@ object AppModule {
             .fallbackToDestructiveMigration()
             .build()
     }
+
 
     @Provides
     @Singleton
@@ -87,15 +95,18 @@ object AppModule {
     @Singleton
     fun provideMessageRepository(
         roomDatabase: KalmakasaRoomDatabase,
-        apiService: ApiService,
+        apiService: MachineLearningService,
     ): MessageRepository {
         return MessageRepositoryImpl(roomDatabase.messageDao(), apiService)
     }
 
     @Provides
     @Singleton
-    fun provideJournalRepository(apiService: ApiService): JournalRepository {
-        return JournalRepositoryImpl(apiService)
+    fun provideJournalRepository(
+        apiService: ApiService,
+        mlService: MachineLearningService,
+    ): JournalRepository {
+        return JournalRepositoryImpl(apiService, mlService)
     }
 
     @Provides

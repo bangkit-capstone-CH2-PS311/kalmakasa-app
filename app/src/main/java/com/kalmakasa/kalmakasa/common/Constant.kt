@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 
 const val BASE_URL = "http://10.0.2.2:8080/v1/"
+const val ML_URL = "https://kalmakasa-ml-hvdw7bfzla-et.a.run.app/"
 
 val MOODS = listOf(
     Mood.VERY_SAD,
@@ -34,3 +35,4 @@ fun linkIntent(link: String, context: Context) {
     val intent = Intent(Intent.ACTION_VIEW, url)
     context.startActivity(intent)
 }
+

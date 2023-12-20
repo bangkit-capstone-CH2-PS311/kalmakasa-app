@@ -168,4 +168,6 @@
     <string name="create">Buat</string>
     <string name="create_event_in_google_calendar">Buat Acara di Google Calendar?</string>
     <string name="create_gmeet_link">Buat Tautan Gmeet</string>
+    <string name="kalmbot_chat_room">Kalmbot Chat Room</string>
+    <string name="based_on_your_reason_are_you_feeling">Berdasarkan alasan Anda, apakah Anda merasa \"%1$s\"</string>
 </resources>

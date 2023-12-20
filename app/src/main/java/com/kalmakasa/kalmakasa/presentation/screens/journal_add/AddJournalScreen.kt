@@ -39,11 +39,13 @@ import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
 import com.kalmakasa.kalmakasa.presentation.screens.home.HomeArticles
 import com.kalmakasa.kalmakasa.presentation.theme.KalmakasaTheme
+import java.util.Locale
 import kotlin.math.roundToInt
 
 @Composable
 fun AddJournalScreen(
     uiState: AddJournalState,
+    predictedMood: String,
     nextStep: () -> Unit,
     prevStep: () -> Unit,
     onSliderChange: (Float) -> Unit,
@@ -114,6 +116,7 @@ fun AddJournalScreen(
                 JournalStep.Emotion -> MoodSlider(
                     sliderValue = uiState.sliderValue,
                     onSliderChange = onSliderChange,
+                    predictedMood = predictedMood,
                     modifier = Modifier.padding(paddingValues)
                 )
 
@@ -223,6 +226,7 @@ fun MoodJournal(
 
 @Composable
 fun MoodSlider(
+    predictedMood: String,
     sliderValue: Float,
     onSliderChange: (Float) -> Unit,
     modifier: Modifier = Modifier,
@@ -236,6 +240,14 @@ fun MoodSlider(
         Column(verticalArrangement = Arrangement.Center) {
 
             val emoticonIndex = sliderValue.roundToInt()
+
+            Text(
+                text = stringResource(
+                    R.string.based_on_your_reason_are_you_feeling,
+                    predictedMood.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }),
+                style = MaterialTheme.typography.titleLarge,
+                textAlign = TextAlign.Center
+            )
 
             Image(
                 painter = painterResource(MOODS[emoticonIndex].iconRes),
@@ -262,6 +274,7 @@ fun AddJournalPreview() {
     KalmakasaTheme {
         AddJournalScreen(
             AddJournalState(isLoading = false),
+            "",
             {},
             {},
             { _ -> },
