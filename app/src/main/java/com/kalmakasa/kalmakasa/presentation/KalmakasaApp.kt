@@ -234,12 +234,20 @@ fun KalmakasaApp() {
                     }
 
                     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                    val consentState by viewModel.consentState.collectAsStateWithLifecycle()
+                    val linkState by viewModel.linkState.collectAsStateWithLifecycle()
 
                     DetailAppointmentScreen(
+                        consentState = consentState,
+                        linkState = linkState,
                         reservation = uiState.reservation,
                         reportState = uiState.reportState,
                         onAnswerChange = viewModel::updateAnswer,
                         uploadReport = { viewModel.uploadReport(id) },
+                        onGenerateLink = { reservation -> viewModel.generateLink(reservation) },
+                        onGenerateConsent = {
+                            viewModel.generateConsentLink()
+                        },
                         prevStep = viewModel::previousQuestion,
                         nextStep = viewModel::nextQuestion,
                         navUp = { navController.navigateUp() }

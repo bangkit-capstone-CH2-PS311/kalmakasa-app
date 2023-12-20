@@ -9,13 +9,13 @@ sealed class ReservationStatus(
     val containerColor: Color,
     val contentColor: Color,
 ) {
-    object Pending : ReservationStatus(
+    data object Pending : ReservationStatus(
         "Pending",
         Color(0xFFF3D878),
         Color(0xFF9B7D11)
     )
 
-    object Completed : ReservationStatus(
+    data object Completed : ReservationStatus(
         "Completed",
         Positive,
         OnPositive

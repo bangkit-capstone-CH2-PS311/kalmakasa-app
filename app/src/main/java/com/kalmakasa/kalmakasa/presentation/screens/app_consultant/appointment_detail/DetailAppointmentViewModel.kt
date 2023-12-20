@@ -2,6 +2,7 @@ package com.kalmakasa.kalmakasa.presentation.screens.app_consultant.appointment_
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kalmakasa.kalmakasa.common.DateUtil
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.Reservation
 import com.kalmakasa.kalmakasa.domain.repository.ReservationRepository
@@ -55,6 +56,11 @@ class DetailAppointmentViewModel @Inject constructor(
         initialValue = PatientReportState()
     )
 
+    val linkState: MutableStateFlow<Resource<String>?> = MutableStateFlow(null)
+    val consentState: MutableStateFlow<Resource<String>?> = MutableStateFlow(null)
+
+    private val appointmentId: MutableStateFlow<String?> = MutableStateFlow(null)
+
     val reservation: MutableStateFlow<Resource<Reservation>> = MutableStateFlow(Resource.Loading)
 
     val uiState: StateFlow<DetailAppointmentState> = combine(reportState, reservation)
@@ -68,8 +74,40 @@ class DetailAppointmentViewModel @Inject constructor(
 
     fun getAppointmentDetail(id: String) {
         viewModelScope.launch {
+            appointmentId.value = id
             reservationRepository.getReservationDetail(id).collect {
                 reservation.value = it
+            }
+        }
+    }
+
+    fun generateLink(reservation: Reservation) {
+        viewModelScope.launch {
+            val times = reservation.time.split(" - ")
+            val startTime = times[0]
+            val endTime = times[1]
+            reservationRepository.createReservationLink(
+                reservation.id,
+                DateUtil.localToApiDate(reservation.date),
+                startTime,
+                endTime,
+                reservation.patient.id,
+                reservation.consultant.id
+            ).collect {
+                linkState.value = it
+                if (it is Resource.Success) {
+                    appointmentId.value?.let { id ->
+                        getAppointmentDetail(id)
+                    }
+                }
+            }
+        }
+    }
+
+    fun generateConsentLink() {
+        viewModelScope.launch {
+            reservationRepository.getConsentLink().collect {
+                consentState.value = it
             }
         }
     }

@@ -2,15 +2,19 @@ package com.kalmakasa.kalmakasa.data.repository
 
 import com.kalmakasa.kalmakasa.common.DateUtil
 import com.kalmakasa.kalmakasa.common.Resource
+import com.kalmakasa.kalmakasa.common.Tag
+import com.kalmakasa.kalmakasa.data.network.response.JournalPredictionResponse
 import com.kalmakasa.kalmakasa.data.network.response.toJournal
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
 import com.kalmakasa.kalmakasa.domain.model.Journal
 import com.kalmakasa.kalmakasa.domain.repository.JournalRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import java.io.IOException
+import kotlin.random.Random
 
 class JournalRepositoryImpl(
     private val apiService: ApiService,
@@ -64,4 +68,21 @@ class JournalRepositoryImpl(
 
         }
     }
+
+    override fun predictJournalMood(journal: String): Flow<Resource<JournalPredictionResponse>> =
+        flow {
+            emit(Resource.Loading)
+            // TODO : Uncomment kalo dah selesai prediction
+//            val response = apiService.getMoodPrediction(journal)
+            delay(2000)
+            val response = JournalPredictionResponse(Random.nextInt(5), Tag.DEPRESSION.text)
+            emit(Resource.Success(response))
+        }.catch {
+            when (it) {
+                is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
+                is IOException -> emit(Resource.Error(it.localizedMessage ?: "No Internet"))
+                else -> emit(Resource.Error(it.localizedMessage ?: "Unknown error occurred"))
+
+            }
+        }
 }

@@ -5,6 +5,7 @@ import com.kalmakasa.kalmakasa.common.DateUtil
 import com.kalmakasa.kalmakasa.common.ReservationStatus
 import com.kalmakasa.kalmakasa.domain.model.Reservation
 import com.kalmakasa.kalmakasa.domain.model.ReservationReport
+import java.util.Locale
 
 data class ReservationResponse(
 
@@ -64,6 +65,9 @@ data class ApiReservation(
 
     @field:SerializedName("triggers")
     val triggers: String? = null,
+
+    @field:SerializedName("meetingLink")
+    val meetingLink: String? = null,
 )
 
 fun ApiReservation.toReservation(): Reservation {
@@ -73,9 +77,7 @@ fun ApiReservation.toReservation(): Reservation {
         this.psychologicalDynamics != null &&
         this.triggers != null
     ) {
-        ReservationReport(
-            commonIssues, psychologicalDynamics, recommendation, triggers
-        )
+        ReservationReport(commonIssues, psychologicalDynamics, recommendation, triggers)
     } else null
     return Reservation(
         id = id,
@@ -83,8 +85,9 @@ fun ApiReservation.toReservation(): Reservation {
         time = "$startTime - $endTime",
         patient = patient.toPatient(),
         consultant = consultantProfile.toConsultant(),
-        status = ReservationStatus.getStatus(status),
+        status = ReservationStatus.getStatus(status.lowercase(Locale.getDefault())),
         notes = notes ?: "there is no note",
         report = report,
+        meetingLink = meetingLink
     )
 }

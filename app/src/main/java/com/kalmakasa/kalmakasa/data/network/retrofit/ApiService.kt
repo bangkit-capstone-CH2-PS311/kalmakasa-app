@@ -5,9 +5,12 @@ import com.kalmakasa.kalmakasa.data.network.response.ApiHealthTestResult
 import com.kalmakasa.kalmakasa.data.network.response.ApiJournal
 import com.kalmakasa.kalmakasa.data.network.response.ApiReservation
 import com.kalmakasa.kalmakasa.data.network.response.AuthResponse
+import com.kalmakasa.kalmakasa.data.network.response.ChatbotResponse
+import com.kalmakasa.kalmakasa.data.network.response.ConsentResponse
 import com.kalmakasa.kalmakasa.data.network.response.ConsultantsResponse
 import com.kalmakasa.kalmakasa.data.network.response.CreateReservationResponse
 import com.kalmakasa.kalmakasa.data.network.response.HealthTestResponse
+import com.kalmakasa.kalmakasa.data.network.response.JournalPredictionResponse
 import com.kalmakasa.kalmakasa.data.network.response.JournalsResponse
 import com.kalmakasa.kalmakasa.data.network.response.ReservationResponse
 import okhttp3.RequestBody
@@ -51,6 +54,11 @@ interface ApiService {
         @Query("limit") limit: Int = 999,
     ): JournalsResponse
 
+    @GET("journal-predict")
+    suspend fun getMoodPrediction(
+        @Field("journal") journal: String,
+    ): JournalPredictionResponse
+
     @FormUrlEncoded
     @POST("journals")
     suspend fun createJournal(
@@ -59,6 +67,7 @@ interface ApiService {
         @Field("content") content: String = "",
         @Field("emotionScale") emotionScale: Int,
     ): ApiJournal
+
 
     @FormUrlEncoded
     @POST("reservations")
@@ -81,6 +90,26 @@ interface ApiService {
         @Path("id") id: String,
         @Body requestBody: RequestBody,
     ): ApiReservation
+
+    @GET("reservations/google/login")
+    suspend fun getConsentLink(): ConsentResponse
+
+    // TODO: JIKA UDH ADA ENDPOINT SI CHATBOT
+    @GET("chatbot")
+    suspend fun getChatBotResponse(
+        @Field("query") query: String,
+    ): ChatbotResponse
+
+    @FormUrlEncoded
+    @POST("reservations/google/create/{reservationId}")
+    suspend fun generateLink(
+        @Path("reservationId") reservationId: String,
+        @Field("date") date: String,
+        @Field("startTime") startTime: String,
+        @Field("endTime") endTime: String,
+        @Field("userId") userId: String,
+        @Field("consultantId") consultantId: String,
+    ): ConsentResponse
 
     @GET("reservations/{id}")
     suspend fun getReservationDetail(

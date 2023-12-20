@@ -1,6 +1,7 @@
 package com.kalmakasa.kalmakasa.domain.repository
 
 import com.kalmakasa.kalmakasa.common.Resource
+import com.kalmakasa.kalmakasa.data.network.response.JournalPredictionResponse
 import com.kalmakasa.kalmakasa.domain.model.Journal
 import kotlinx.coroutines.flow.Flow
 
@@ -13,6 +14,8 @@ interface JournalRepository {
         content: String,
         emoticonScale: Int,
     ): Flow<Resource<Journal>>
+
+    fun predictJournalMood(journal: String): Flow<Resource<JournalPredictionResponse>>
 
     suspend fun getTodayJournal(): Flow<Resource<Journal>>
 }

@@ -1,5 +1,9 @@
 package com.kalmakasa.kalmakasa.common
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+
 const val BASE_URL = "http://10.0.2.2:8080/v1/"
 
 val MOODS = listOf(
@@ -24,3 +28,9 @@ val INCLUDED_LEVEL = listOf(
     HealthTestLevel.ExtremelySevere,
     HealthTestLevel.Moderate
 )
+
+fun linkIntent(link: String, context: Context) {
+    val url = Uri.parse(link)
+    val intent = Intent(Intent.ACTION_VIEW, url)
+    context.startActivity(intent)
+}

@@ -160,4 +160,10 @@
     <string name="recommendation">Recommendation</string>
 
     <string name="appointment_list">Appointment List</string>
+    <string name="edit_report">Edit Report</string>
+
+    <string name="dismiss">Dismiss</string>
+    <string name="create">Create</string>
+    <string name="create_event_in_google_calendar">Create Event in Google Calendar?</string>
+    <string name="create_gmeet_link">Create Gmeet Link</string>
 </resources>

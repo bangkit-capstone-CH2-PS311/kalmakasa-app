@@ -163,4 +163,9 @@
     <string name="recommendation">Rekomendasi</string>
     <string name="appointment_list">Daftar Janji Pasien</string>
 
+    <string name="edit_report">Edit Laporan</string>
+    <string name="dismiss">Tutup</string>
+    <string name="create">Buat</string>
+    <string name="create_event_in_google_calendar">Buat Acara di Google Calendar?</string>
+    <string name="create_gmeet_link">Buat Tautan Gmeet</string>
 </resources>

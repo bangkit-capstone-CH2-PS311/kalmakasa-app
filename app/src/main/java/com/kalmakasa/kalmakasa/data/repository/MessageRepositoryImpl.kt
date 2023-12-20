@@ -4,6 +4,7 @@ import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.data.database.dao.MessageDao
 import com.kalmakasa.kalmakasa.data.database.entity.MessageEntity
 import com.kalmakasa.kalmakasa.data.database.entity.toMessage
+import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
 import com.kalmakasa.kalmakasa.domain.model.Message
 import com.kalmakasa.kalmakasa.domain.repository.MessageRepository
 import kotlinx.coroutines.delay
@@ -15,6 +16,7 @@ import javax.inject.Inject
 
 class MessageRepositoryImpl @Inject constructor(
     private val messageDao: MessageDao,
+    private val apiService: ApiService,
 ) : MessageRepository {
     override fun getMessages(): Flow<List<Message>> {
         return messageDao.getAllMessages().map { listMessage ->
@@ -33,13 +35,14 @@ class MessageRepositoryImpl @Inject constructor(
         )
         // TODO : FETCH API TO GET KALMBOT RESPONSE
         emit(Resource.Loading)
+//        val response = apiService.getChatBotResponse(message)
         val responseTime = Calendar.getInstance().timeInMillis
-        delay(5_000)
         val response = MessageEntity(
-            msg = "this is bot response",
+            msg = "This is Response",
             isUser = false,
             timestamp = responseTime
         )
+        delay(5_000)
         messageDao.insert(response)
         emit(Resource.Success(true))
     }

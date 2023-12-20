@@ -123,6 +123,40 @@ class ReservationRepositoryImpl(
         }
     }
 
+    override fun createReservationLink(
+        reservationId: String,
+        date: String,
+        startTime: String,
+        endTime: String,
+        userId: String,
+        consultantId: String,
+    ): Flow<Resource<String>> = flow {
+        emit(Resource.Loading)
+        val response =
+            apiService.generateLink(reservationId, date, startTime, endTime, userId, consultantId)
+        emit(Resource.Success(response.url))
+    }.catch {
+        when (it) {
+            is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
+            is IOException -> emit(Resource.Error(it.localizedMessage ?: "No Internet"))
+            else -> emit(Resource.Error(it.localizedMessage ?: "Unknown error occurred"))
+        }
+    }
+
+    override fun getConsentLink(): Flow<Resource<String>> = flow {
+        emit(Resource.Loading)
+        val response = apiService.getConsentLink()
+        emit(Resource.Success(response.url))
+    }.catch {
+        when (it) {
+            is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
+            is IOException -> emit(Resource.Error(it.localizedMessage ?: "No Internet"))
+            else -> {
+                emit(Resource.Error(it.localizedMessage ?: "Unknown error occurred"))
+            }
+        }
+    }
+
     private fun createRequestBody(
         commonIssues: String,
         psychologicalDynamics: String,

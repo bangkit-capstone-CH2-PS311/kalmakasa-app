@@ -9,7 +9,6 @@ import com.kalmakasa.kalmakasa.domain.repository.ArticleRepository
 import com.kalmakasa.kalmakasa.domain.repository.JournalRepository
 import com.kalmakasa.kalmakasa.domain.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +16,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,6 +31,7 @@ class AddJournalViewModel @Inject constructor(
     private val _journalValue = MutableStateFlow("")
     private val _recommendationContent = MutableStateFlow(emptyList<Article>())
     private val _isLoading = MutableStateFlow(false)
+    private val _prediction = MutableStateFlow("")
 
     val uiState: StateFlow<AddJournalState> =
         combine(
@@ -59,11 +60,27 @@ class AddJournalViewModel @Inject constructor(
         viewModelScope.launch {
             when (journalStep[_currentStepIndex.value]) {
                 JournalStep.Journal -> {
-                    // TODO : Send and get emotion
-                    _isLoading.value = true
-                    delay(2000)
-                    _isLoading.value = false
-                    _currentStepIndex.value++
+                    journalRepository.predictJournalMood(_journalValue.value)
+                        .collect { prediction ->
+                            when (prediction) {
+                                is Resource.Error -> {
+                                    _isLoading.value = false
+                                }
+
+                                Resource.Loading -> {
+                                    _isLoading.value = true
+
+                                }
+
+                                is Resource.Success -> {
+                                    _isLoading.value = false
+                                    _sliderValue.value = prediction.data.sliderValue.toFloat()
+                                    _prediction.value = prediction.data.prediction
+                                    _currentStepIndex.value++
+
+                                }
+                            }
+                        }
                 }
 
                 JournalStep.Emotion -> {
@@ -81,6 +98,7 @@ class AddJournalViewModel @Inject constructor(
                             }
 
                             is Resource.Success -> {
+                                _isLoading.value = false
                                 _currentStepIndex.value++
                                 loadRecommendation()
                             }
@@ -131,7 +149,12 @@ class AddJournalViewModel @Inject constructor(
 
                     is Resource.Success -> {
                         _isLoading.value = false
-                        _recommendationContent.value = articles.data.take(4)
+                        val filtered = articles.data.filter {
+                            it.tags.any { tag ->
+                                tag.text.lowercase(Locale.getDefault()) == _prediction.value
+                            }
+                        }
+                        _recommendationContent.value = filtered.ifEmpty { articles.data }
                     }
 
                     else -> {

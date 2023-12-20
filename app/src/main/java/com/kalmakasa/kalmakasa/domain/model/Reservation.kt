@@ -11,6 +11,7 @@ data class Reservation(
     val status: ReservationStatus,
     val notes: String = "",
     val report: ReservationReport? = null,
+    val meetingLink: String? = null,
 )
 
 data class ReservationReport(
@@ -18,4 +19,5 @@ data class ReservationReport(
     val psychologicalDynamics: String,
     val recommendation: String,
     val triggers: String,
+    val status: String = ReservationStatus.Completed.status,
 )

@@ -85,8 +85,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMessageRepository(roomDatabase: KalmakasaRoomDatabase): MessageRepository {
-        return MessageRepositoryImpl(roomDatabase.messageDao())
+    fun provideMessageRepository(
+        roomDatabase: KalmakasaRoomDatabase,
+        apiService: ApiService,
+    ): MessageRepository {
+        return MessageRepositoryImpl(roomDatabase.messageDao(), apiService)
     }
 
     @Provides

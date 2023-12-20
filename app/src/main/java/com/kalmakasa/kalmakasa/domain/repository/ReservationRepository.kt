@@ -12,7 +12,7 @@ interface ReservationRepository {
     suspend fun getReservationDetail(id: String): Flow<Resource<Reservation>>
 
     fun getReservationByPatient(id: String): Flow<Resource<List<Reservation>>>
-    
+
     fun createReservation(
         userId: String,
         consultantId: String,
@@ -30,5 +30,16 @@ interface ReservationRepository {
         triggers: String,
         recommendation: String,
     ): Flow<Resource<Reservation>>
+
+    fun createReservationLink(
+        reservationId: String,
+        date: String,
+        startTime: String,
+        endTime: String,
+        userId: String,
+        consultantId: String,
+    ): Flow<Resource<String>>
+
+    fun getConsentLink(): Flow<Resource<String>>
 
 }

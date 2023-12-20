@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -35,15 +36,20 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kalmakasa.kalmakasa.R
+import com.kalmakasa.kalmakasa.common.ReservationStatus
+import com.kalmakasa.kalmakasa.common.linkIntent
 import com.kalmakasa.kalmakasa.domain.model.Reservation
 import com.kalmakasa.kalmakasa.presentation.component.StatusChip
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
+import com.kalmakasa.kalmakasa.presentation.screens.app_consultant.appointment_detail.ReportCard
 
 @Composable
 fun DetailReservationScreen(
     reservation: Reservation,
     navUp: () -> Unit,
 ) {
+    val context = LocalContext.current
+
     Scaffold(
         topBar = {
             TitleTopAppBar(
@@ -182,17 +188,28 @@ fun DetailReservationScreen(
                     Spacer(modifier = Modifier.height(4.dp))
                     Button(
                         onClick = {
-                            // TODO: Join Google Meet
+                            if (reservation.meetingLink != null) {
+                                linkIntent(reservation.meetingLink, context)
+                            }
                         },
                         modifier = Modifier
                             .height(48.dp)
-                            .fillMaxWidth()
+                            .fillMaxWidth(),
+                        enabled = (reservation.status is ReservationStatus.Pending) &&
+                                (reservation.meetingLink != null)
                     ) {
                         Text(
                             text = stringResource(R.string.join_meet),
                         )
                     }
                 }
+            }
+
+            if (reservation.report != null) {
+                ReportCard(
+                    title = stringResource(R.string.recommendation),
+                    content = reservation.report.recommendation
+                )
             }
         }
     }
