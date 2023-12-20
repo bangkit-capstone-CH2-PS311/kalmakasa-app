@@ -27,8 +27,18 @@ class ListArticleViewModel @Inject constructor(
     val uiState: StateFlow<ListArticleState> = combine(
         _articles, _query, _isLoading, _isError
     ) { article, query, isLoading, isError ->
+        val listArticle = if (_query.value.isNotBlank()) {
+            article.filter {
+                it.title.contains(
+                    _query.value,
+                    ignoreCase = true
+                )
+            }
+        } else {
+            article
+        }
         ListArticleState(
-            isLoading, isError, article, query
+            isLoading, isError, listArticle, query
         )
     }.stateIn(
         scope = viewModelScope,
