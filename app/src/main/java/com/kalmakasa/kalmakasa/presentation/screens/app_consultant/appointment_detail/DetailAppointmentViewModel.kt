@@ -7,6 +7,7 @@ import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.Reservation
 import com.kalmakasa.kalmakasa.domain.repository.ReservationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -104,10 +105,16 @@ class DetailAppointmentViewModel @Inject constructor(
         }
     }
 
-    fun generateConsentLink() {
+    fun generateConsentLink(callback: (String) -> Unit) {
         viewModelScope.launch {
             reservationRepository.getConsentLink().collect {
-                consentState.value = it
+                if (it is Resource.Success) {
+                    callback(it.data)
+                    delay(1000)
+                    consentState.value = it
+                } else {
+                    consentState.value = it
+                }
             }
         }
     }

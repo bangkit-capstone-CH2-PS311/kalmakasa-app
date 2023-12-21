@@ -132,7 +132,7 @@ fun SignInScreen(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                TextButton(onClick = onForgotPasswordClicked) {
+                TextButton(onClick = onForgotPasswordClicked, enabled = false) {
                     Text(text = stringResource(R.string.forgot_password))
                 }
             }

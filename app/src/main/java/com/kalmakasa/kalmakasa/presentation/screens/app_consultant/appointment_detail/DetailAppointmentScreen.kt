@@ -1,7 +1,5 @@
 package com.kalmakasa.kalmakasa.presentation.screens.app_consultant.appointment_detail
 
-import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -137,15 +135,7 @@ fun DetailAppointmentContent(
 ) {
 
     var openDialog by rememberSaveable { mutableStateOf(false) }
-
     val context = LocalContext.current
-    LaunchedEffect(consentState) {
-        if (consentState is Resource.Success) {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(consentState.data))
-            context.startActivity(intent)
-            openDialog = true
-        }
-    }
 
     LaunchedEffect(linkState) {
         if (linkState != null) {

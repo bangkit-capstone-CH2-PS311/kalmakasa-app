@@ -66,7 +66,7 @@ fun ListPatientAppointmentContent(
         contentPadding = PaddingValues(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(appointments, key = { it.id }) { appointment ->
+        items(appointments.sortedBy { it.status }, key = { it.id }) { appointment ->
             AppointmentCard(
                 reservationId = appointment.id,
                 patientName = appointment.patient.name,

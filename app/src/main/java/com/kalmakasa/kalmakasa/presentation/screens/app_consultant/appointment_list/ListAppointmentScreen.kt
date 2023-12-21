@@ -24,13 +24,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -41,6 +48,7 @@ import com.kalmakasa.kalmakasa.domain.model.Reservation
 import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.StatusChip
+import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
 
 @Composable
 fun ListAppointmentScreen(
@@ -48,7 +56,29 @@ fun ListAppointmentScreen(
     onAppointmentClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Scaffold { paddingValues ->
+
+    val tabs = ReservationStatus.entries
+    var tabIndex by rememberSaveable { mutableIntStateOf(0) }
+
+    Scaffold(
+        topBar = {
+            Column {
+                TitleTopAppBar(title = stringResource(R.string.appointment))
+                TabRow(
+                    selectedTabIndex = tabIndex,
+                    Modifier.background(Color.Red)
+                ) {
+                    tabs.forEachIndexed { index, status ->
+                        Tab(
+                            text = { Text(text = status.status) },
+                            selected = tabIndex == index,
+                            onClick = { tabIndex = index }
+                        )
+                    }
+                }
+            }
+        }
+    ) { paddingValues ->
         when (uiState) {
             Resource.Loading -> {
                 LoadingScreen(modifier.padding(paddingValues))
@@ -62,7 +92,8 @@ fun ListAppointmentScreen(
                 ListAppointmentContent(
                     appointments = uiState.data,
                     onAppointmentClicked = onAppointmentClicked,
-                    modifier.padding(paddingValues)
+                    status = tabs[tabIndex],
+                    modifier = modifier.padding(paddingValues)
                 )
             }
         }
@@ -73,6 +104,7 @@ fun ListAppointmentScreen(
 @Composable
 fun ListAppointmentContent(
     appointments: List<Reservation>,
+    status: ReservationStatus,
     onAppointmentClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -82,7 +114,10 @@ fun ListAppointmentContent(
         contentPadding = PaddingValues(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(appointments, key = { it.id }) { appointment ->
+        items(
+            items = appointments.filter { it.status == status },
+            key = { it.id }
+        ) { appointment ->
             AppointmentCard(
                 reservationId = appointment.id,
                 patientName = appointment.patient.name,

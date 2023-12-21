@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -29,13 +30,18 @@ import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.Patient
 import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
+import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
 
 @Composable
 fun ListPatientScreen(
     patientState: Resource<List<Patient>>,
     navigateToAppointmentList: (String) -> Unit,
 ) {
-    Scaffold { paddingValues ->
+    Scaffold(
+        topBar = {
+            TitleTopAppBar(title = stringResource(R.string.patient))
+        }
+    ) { paddingValues ->
         when (patientState) {
             is Resource.Error -> {
                 ErrorScreen(Modifier.padding(paddingValues))

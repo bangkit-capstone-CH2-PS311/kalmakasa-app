@@ -19,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.kalmakasa.kalmakasa.common.Role
+import com.kalmakasa.kalmakasa.common.linkIntent
 import com.kalmakasa.kalmakasa.presentation.component.AppBottomBar
 import com.kalmakasa.kalmakasa.presentation.component.ConsultantBottomBar
 import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
@@ -237,6 +238,8 @@ fun KalmakasaApp() {
                     val consentState by viewModel.consentState.collectAsStateWithLifecycle()
                     val linkState by viewModel.linkState.collectAsStateWithLifecycle()
 
+                    val context = LocalContext.current
+
                     DetailAppointmentScreen(
                         consentState = consentState,
                         linkState = linkState,
@@ -246,7 +249,9 @@ fun KalmakasaApp() {
                         uploadReport = { viewModel.uploadReport(id) },
                         onGenerateLink = { reservation -> viewModel.generateLink(reservation) },
                         onGenerateConsent = {
-                            viewModel.generateConsentLink()
+                            viewModel.generateConsentLink { url ->
+                                linkIntent(url, context)
+                            }
                         },
                         prevStep = viewModel::previousQuestion,
                         nextStep = viewModel::nextQuestion,

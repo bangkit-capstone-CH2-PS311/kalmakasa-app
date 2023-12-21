@@ -90,7 +90,15 @@ class ReservationRepositoryImpl(
     ): Flow<Resource<String>> = flow {
         emit(Resource.Loading)
         val response =
-            apiService.createReservation(userId, consultantId, profileId, date, startTime, endTime)
+            apiService.createReservation(
+                userId,
+                consultantId,
+                profileId,
+                date,
+                startTime,
+                endTime,
+                note
+            )
         emit(Resource.Success(response.msg))
     }.catch {
         when (it) {

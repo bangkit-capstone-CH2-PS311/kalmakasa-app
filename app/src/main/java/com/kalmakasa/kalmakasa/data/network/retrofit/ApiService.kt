@@ -72,6 +72,7 @@ interface ApiService {
         @Field("date") date: String,
         @Field("startTime") startTime: String,
         @Field("endTime") endTime: String,
+        @Field("notes") notes: String,
     ): CreateReservationResponse
 
     @GET("reservations")
