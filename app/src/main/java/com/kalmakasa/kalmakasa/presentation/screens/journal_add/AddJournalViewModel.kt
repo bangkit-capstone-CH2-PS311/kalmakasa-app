@@ -1,11 +1,12 @@
 package com.kalmakasa.kalmakasa.presentation.screens.journal_add
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kalmakasa.kalmakasa.common.DateUtil
 import com.kalmakasa.kalmakasa.common.Resource
-import com.kalmakasa.kalmakasa.common.translatePredictToSliderValue
 import com.kalmakasa.kalmakasa.domain.model.Article
+import com.kalmakasa.kalmakasa.domain.model.JournalPrediction
 import com.kalmakasa.kalmakasa.domain.repository.ArticleRepository
 import com.kalmakasa.kalmakasa.domain.repository.JournalRepository
 import com.kalmakasa.kalmakasa.domain.repository.UserRepository
@@ -17,7 +18,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,7 +32,7 @@ class AddJournalViewModel @Inject constructor(
     private val _journalValue = MutableStateFlow("")
     private val _recommendationContent = MutableStateFlow(emptyList<Article>())
     private val _isLoading = MutableStateFlow(false)
-    val prediction = MutableStateFlow("")
+    val predictionState = MutableStateFlow(JournalPrediction())
 
     val uiState: StateFlow<AddJournalState> =
         combine(
@@ -75,12 +75,9 @@ class AddJournalViewModel @Inject constructor(
 
                                 is Resource.Success -> {
                                     _isLoading.value = false
-                                    _sliderValue.value =
-                                        translatePredictToSliderValue(prediction.data.value)
-                                    this@AddJournalViewModel.prediction.value =
-                                        prediction.data.value
+                                    predictionState.value = prediction.data
+                                    _sliderValue.value = prediction.data.sliderValue
                                     _currentStepIndex.value++
-
                                 }
                             }
                         }
@@ -153,10 +150,9 @@ class AddJournalViewModel @Inject constructor(
                     is Resource.Success -> {
                         _isLoading.value = false
                         val filtered = articles.data.filter {
-                            it.tags.any { tag ->
-                                tag.text.lowercase(Locale.getDefault()) == prediction.value
-                            }
+                            it.tags.any { tag -> tag == predictionState.value.tag }
                         }
+                        Log.d("filter", "$filtered ${predictionState.value.tag}")
                         _recommendationContent.value = filtered.ifEmpty { articles.data }
                     }
 

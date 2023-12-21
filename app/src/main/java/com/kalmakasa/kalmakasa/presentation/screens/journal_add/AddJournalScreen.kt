@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.kalmakasa.kalmakasa.R
 import com.kalmakasa.kalmakasa.common.MOODS
 import com.kalmakasa.kalmakasa.domain.model.Article
+import com.kalmakasa.kalmakasa.domain.model.JournalPrediction
 import com.kalmakasa.kalmakasa.presentation.component.LoadingScreen
 import com.kalmakasa.kalmakasa.presentation.component.TitleTopAppBar
 import com.kalmakasa.kalmakasa.presentation.screens.home.HomeArticles
@@ -45,7 +46,7 @@ import kotlin.math.roundToInt
 @Composable
 fun AddJournalScreen(
     uiState: AddJournalState,
-    predictedMood: String,
+    prediction: JournalPrediction,
     nextStep: () -> Unit,
     prevStep: () -> Unit,
     onSliderChange: (Float) -> Unit,
@@ -116,7 +117,7 @@ fun AddJournalScreen(
                 JournalStep.Emotion -> MoodSlider(
                     sliderValue = uiState.sliderValue,
                     onSliderChange = onSliderChange,
-                    predictedMood = predictedMood,
+                    predictedMood = prediction.moodText,
                     modifier = Modifier.padding(paddingValues)
                 )
 
@@ -274,7 +275,7 @@ fun AddJournalPreview() {
     KalmakasaTheme {
         AddJournalScreen(
             AddJournalState(isLoading = false),
-            "",
+            JournalPrediction(),
             {},
             {},
             { _ -> },

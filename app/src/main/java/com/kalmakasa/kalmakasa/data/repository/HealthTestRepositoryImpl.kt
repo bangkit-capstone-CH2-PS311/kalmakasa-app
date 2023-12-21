@@ -98,11 +98,9 @@ class HealthTestRepositoryImpl @Inject constructor(
 }
 
 data class HealthTestRequest(
-
     @field:SerializedName("userId")
     val userId: String,
 
     @field:SerializedName("questionScore")
     val questionScore: List<Int>,
-
-    )
+)

@@ -12,11 +12,12 @@ fun createPredictRequestBody(text: String, model: String): RequestBody {
 }
 
 enum class Model(val modelName: String) {
-    Journal("twitter"),
+    Mood("twitter"),
     Chatbot("chatbot"),
+    Journal("reddit")
 }
 
-fun translatePredictToSliderValue(predict: String): Float {
+fun predictToSliderValue(predict: String): Float {
     return when (predict) {
         "anger" -> 0f
         "fear" -> 1f
@@ -24,6 +25,17 @@ fun translatePredictToSliderValue(predict: String): Float {
         "love" -> 4f
         "happy" -> 3f
         else -> 2f
+    }
+}
+
+fun predictToTag(predict: String): Tag? {
+    return when (predict) {
+        "Stress" -> Tag.STRESS
+        "Depression" -> Tag.DEPRESSION
+        "Anxiety" -> Tag.ANXIETY
+        "Bipolar" -> Tag.BIPOLAR
+        "Personality disorder" -> Tag.PERSONALITY
+        else -> null
     }
 }
 

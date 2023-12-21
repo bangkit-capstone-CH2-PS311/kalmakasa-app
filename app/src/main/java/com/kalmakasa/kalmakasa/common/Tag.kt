@@ -7,4 +7,6 @@ enum class Tag(val text: String) {
     CAREER("Career"),
     FAMILY("Family"),
     RELATIONSHIP("Relationship"),
+    BIPOLAR("Bipolar"),
+    PERSONALITY("Personality Disorder")
 }

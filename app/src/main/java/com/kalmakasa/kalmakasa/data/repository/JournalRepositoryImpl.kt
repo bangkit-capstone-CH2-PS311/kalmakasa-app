@@ -4,11 +4,13 @@ import com.kalmakasa.kalmakasa.common.DateUtil
 import com.kalmakasa.kalmakasa.common.Model
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.common.createPredictRequestBody
-import com.kalmakasa.kalmakasa.data.network.response.PredictResponse
+import com.kalmakasa.kalmakasa.common.predictToSliderValue
+import com.kalmakasa.kalmakasa.common.predictToTag
 import com.kalmakasa.kalmakasa.data.network.response.toJournal
 import com.kalmakasa.kalmakasa.data.network.retrofit.ApiService
 import com.kalmakasa.kalmakasa.data.network.retrofit.MachineLearningService
 import com.kalmakasa.kalmakasa.domain.model.Journal
+import com.kalmakasa.kalmakasa.domain.model.JournalPrediction
 import com.kalmakasa.kalmakasa.domain.repository.JournalRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -70,11 +72,20 @@ class JournalRepositoryImpl(
         }
     }
 
-    override fun predictJournalMood(journal: String): Flow<Resource<PredictResponse>> = flow {
+    override fun predictJournalMood(journal: String): Flow<Resource<JournalPrediction>> = flow {
         emit(Resource.Loading)
-        val requestBody = createPredictRequestBody(journal, Model.Journal.modelName)
-        val response = mlService.getPrediction(requestBody)
-        emit(Resource.Success(response))
+        val requestMood = createPredictRequestBody(journal, Model.Mood.modelName)
+        val requestJournal = createPredictRequestBody(journal, Model.Journal.modelName)
+        val responseMood = mlService.getPrediction(requestMood)
+        val responseJournal = mlService.getPrediction(requestJournal)
+
+        val prediction = JournalPrediction(
+            responseMood.value,
+            predictToSliderValue(responseMood.value),
+            predictToTag(responseJournal.value),
+        )
+
+        emit(Resource.Success(prediction))
     }.catch {
         when (it) {
             is HttpException -> emit(Resource.Error(it.localizedMessage ?: "Unknown Error"))
