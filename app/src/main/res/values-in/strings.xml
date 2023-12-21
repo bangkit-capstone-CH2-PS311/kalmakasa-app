@@ -170,4 +170,6 @@
     <string name="create_gmeet_link">Buat Tautan Gmeet</string>
     <string name="kalmbot_chat_room">Kalmbot Chat Room</string>
     <string name="based_on_your_reason_are_you_feeling">Berdasarkan alasan Anda, apakah Anda merasa \"%1$s\"</string>
+    <string name="appointment">Appointment</string>
+    <string name="patient">Pasien</string>
 </resources>
