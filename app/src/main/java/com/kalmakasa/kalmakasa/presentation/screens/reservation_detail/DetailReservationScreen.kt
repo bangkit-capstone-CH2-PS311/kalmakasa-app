@@ -195,7 +195,7 @@ fun DetailReservationScreen(
                         modifier = Modifier
                             .height(48.dp)
                             .fillMaxWidth(),
-                        enabled = (reservation.status is ReservationStatus.Pending) &&
+                        enabled = (reservation.status == ReservationStatus.Pending) &&
                                 (reservation.meetingLink != null)
                     ) {
                         Text(

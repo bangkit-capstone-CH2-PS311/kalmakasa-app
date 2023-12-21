@@ -92,7 +92,7 @@ class DetailDoctorViewModel @Inject constructor(
                 date = DateUtil.millisToApi(checkoutData.dateInMillis),
                 startTime = checkoutData.selectedTime,
                 endTime = getEndTime(checkoutData.selectedTime),
-                note = "note",
+                note = checkoutData.userNote,
             ).collect { reservation ->
                 bookState.value = reservation
             }

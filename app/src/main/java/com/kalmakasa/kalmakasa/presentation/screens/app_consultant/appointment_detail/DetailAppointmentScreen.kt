@@ -316,7 +316,7 @@ fun DetailAppointmentContent(
                         modifier = Modifier
                             .height(48.dp)
                             .fillMaxWidth(),
-                        enabled = reservation.status is ReservationStatus.Pending
+                        enabled = reservation.status == ReservationStatus.Pending
                     ) {
                         Text(
                             text = stringResource(R.string.join_meet),

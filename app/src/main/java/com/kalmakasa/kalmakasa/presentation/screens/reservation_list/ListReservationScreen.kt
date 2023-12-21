@@ -23,8 +23,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,6 +39,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.kalmakasa.kalmakasa.R
+import com.kalmakasa.kalmakasa.common.ReservationStatus
 import com.kalmakasa.kalmakasa.common.Resource
 import com.kalmakasa.kalmakasa.domain.model.Reservation
 import com.kalmakasa.kalmakasa.presentation.component.ErrorScreen
@@ -45,11 +52,26 @@ fun ListReservationScreen(
     uiState: Resource<List<Reservation>>,
     onReservationClicked: (String) -> Unit,
 ) {
+    val tabs = ReservationStatus.entries
+    var tabIndex by rememberSaveable { mutableIntStateOf(0) }
+
     Scaffold(
         topBar = {
-            TitleTopAppBar(
-                title = stringResource(R.string.reservations)
-            )
+            Column {
+                TitleTopAppBar(title = stringResource(R.string.reservations))
+                TabRow(
+                    selectedTabIndex = tabIndex,
+                    Modifier.background(Color.Red)
+                ) {
+                    tabs.forEachIndexed { index, status ->
+                        Tab(
+                            text = { Text(text = status.status) },
+                            selected = tabIndex == index,
+                            onClick = { tabIndex = index }
+                        )
+                    }
+                }
+            }
         }
     ) { paddingValues ->
         when (uiState) {
@@ -59,8 +81,9 @@ fun ListReservationScreen(
 
             is Resource.Success -> {
                 ListReservationContent(
-                    Modifier.padding(paddingValues),
+                    modifier = Modifier.padding(paddingValues),
                     reservations = uiState.data,
+                    status = tabs[tabIndex],
                     onReservationClicked = onReservationClicked,
                 )
             }
@@ -68,30 +91,30 @@ fun ListReservationScreen(
             is Resource.Error -> {
                 ErrorScreen(Modifier.padding(paddingValues))
             }
-
-            else -> {}
         }
     }
 }
 
 @Composable
 fun ListReservationContent(
+    status: ReservationStatus,
+    onReservationClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
     reservations: List<Reservation> = emptyList(),
-    onReservationClicked: (String) -> Unit,
 ) {
-
     LazyColumn(
         modifier = modifier.padding(horizontal = 24.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(vertical = 16.dp)
     ) {
-        items(reservations, key = { it.id }) { reservation ->
+        items(
+            reservations.filter { it.status == status },
+            key = { it.id }
+        ) { reservation ->
             ReservationCard(
                 reservation = reservation,
                 onReservationClicked = onReservationClicked
             )
-
         }
     }
 }

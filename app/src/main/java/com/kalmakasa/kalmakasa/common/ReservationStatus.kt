@@ -4,22 +4,21 @@ import androidx.compose.ui.graphics.Color
 import com.kalmakasa.kalmakasa.presentation.theme.OnPositive
 import com.kalmakasa.kalmakasa.presentation.theme.Positive
 
-sealed class ReservationStatus(
+enum class ReservationStatus(
     val status: String,
     val containerColor: Color,
     val contentColor: Color,
 ) {
-    data object Pending : ReservationStatus(
+    Pending(
         "Pending",
         Color(0xFFF3D878),
         Color(0xFF9B7D11)
-    )
-
-    data object Completed : ReservationStatus(
+    ),
+    Completed(
         "Completed",
         Positive,
         OnPositive
-    )
+    );
 
     companion object {
         fun getStatus(status: String): ReservationStatus =

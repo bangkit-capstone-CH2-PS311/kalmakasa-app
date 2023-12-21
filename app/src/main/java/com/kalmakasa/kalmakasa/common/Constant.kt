@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 
-const val BASE_URL = "http://10.0.2.2:8080/v1/"
+const val BASE_URL = "http://192.168.0.119:8080/v1/"
 const val ML_URL = "https://kalmakasa-ml-hvdw7bfzla-et.a.run.app/"
 
 val MOODS = listOf(
