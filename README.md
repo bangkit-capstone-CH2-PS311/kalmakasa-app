@@ -1,10 +1,10 @@
 # Kalmakasa App
 
-Kalmakasa is a Android app built entirely with Kotlin and Jetpack Compose. It tries to follow Android design, development best practices, and Clean Architecture.
+Kalmakasa is a Android app built entirely with Kotlin and Jetpack Compose. It tries to follow the official architecture guidance, development best practices, and Clean Architecture.
 
 # Architecture
 
-The **Kalmakasa** app tries to follow Google Architecture Guidelines, MVVM design Patterns, and Clean Architecture.
+The **Kalmakasa** app tries to follow [official architecture guidance](https://developer.android.com/topic/architecture), MVVM design Patterns, and Clean Architecture.
 
 # Getting Started
 
