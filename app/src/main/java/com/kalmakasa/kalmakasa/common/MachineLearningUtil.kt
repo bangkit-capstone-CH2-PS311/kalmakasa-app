@@ -24,6 +24,7 @@ fun predictToSliderValue(predict: String): Float {
         "sadness" -> 1f
         "love" -> 4f
         "happy" -> 3f
+        "joy" -> 3f
         else -> 2f
     }
 }
